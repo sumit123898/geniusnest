@@ -17,22 +17,28 @@
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
       color: #333;
       line-height: 1.6;
+      background-image: url('https://i.ibb.co/MyrzW3Ns/360-F-305459609-qq-NT6-Sk6-DZGhc-Eexc-Abs9xfq2i-I3yl2e.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      min-height: 100vh;
     }
 
     /* Top Navigation */
     .top-nav {
-      background-color: #333;
+      background-color: rgba(51, 51, 51, 0.8); /* Semi-transparent background */
       color: #fff;
-      padding: 1rem 5%;
+      padding: 0 5%; /* Reduced padding for smaller height */
       display: flex;
       align-items: center;
+      justify-content: space-between; /* Space between brand and login button */
       position: fixed;
       width: 100%;
       top: 0;
       z-index: 1000;
+      height: 50px; /* Reduced height for the top navigation */
     }
 
     .brand {
@@ -40,12 +46,31 @@
       align-items: center;
       font-size: 1.5rem;
       font-weight: bold;
+      gap: 1rem; /* Added gap between logo and brand name */
     }
 
     .logo {
       width: 2rem;
       height: 2rem;
-      margin-right: 0.5rem;
+    }
+
+    /* Login Button */
+    .login-button {
+      padding: 0.5rem 1.25rem; /* Adjusted padding for smaller button */
+      background-color: #ff4444; /* Red color for the login button */
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      transition: background-color 0.3s ease;
+      display: flex;
+      align-items: center; /* Center text vertically */
+      justify-content: center; /* Center text horizontally */
+      margin-right: 5rem; /* Increased margin to move it further from the right corner */
+    }
+
+    .login-button:hover {
+      background-color: #cc0000; /* Darker red on hover */
     }
 
     /* Main Content Sections */
@@ -57,27 +82,40 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      position: relative;
+      background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+      border-radius: 10px;
+      margin: 2rem auto;
+      max-width: 1200px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 
+    /* Home Section */
     #home {
-      background-color: #e2f3f5;
+      background-color: transparent; /* Remove background color for home section */
     }
 
-    #about {
-      background-color: #f5e2e2;
+    #home::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5); /* 50% opacity black overlay */
+      z-index: 0;
     }
 
-    #services {
-      background-color: #e2f5e2;
-    }
-
-    #contact {
-      background-color: #f5f5e2;
+    #home h1,
+    #home p {
+      position: relative;
+      z-index: 1; /* Ensure content is above the overlay */
+      color: #fff; /* White text for better contrast */
     }
 
     /* Bottom Navigation */
     .bottom-nav {
-      background-color: #333;
+      background-color: rgba(51, 51, 51, 0.8); /* Semi-transparent background */
       display: flex;
       justify-content: space-around;
       align-items: center;
@@ -93,6 +131,8 @@
       text-decoration: none;
       text-align: center;
       font-size: 0.9rem;
+      position: relative;
+      padding: 0.5rem 1rem; /* Padding for better click area */
     }
 
     .nav-item i {
@@ -101,8 +141,28 @@
       margin-bottom: 0.3rem;
     }
 
+    /* Hexagonal Hover Effect */
+    .nav-item::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 60px; /* Size of the hexagon */
+      height: 60px;
+      background-color: #e9ff09; /* Yellow color */
+      transform: translate(-50%, -50%) rotate(45deg); /* Rotate to create a diamond shape */
+      opacity: 0; /* Initially hidden */
+      transition: opacity 0.3s ease;
+      z-index: -1; /* Place behind the text */
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); /* Hexagon shape */
+    }
+
+    .nav-item:hover::before {
+      opacity: 1; /* Show the hexagon on hover */
+    }
+
     .nav-item:hover {
-      color: #ffcc00;
+      color: #333; /* Dark text for better contrast on yellow */
     }
 
     /* Buttons */
@@ -182,6 +242,8 @@
       <img src="https://i.ibb.co/QjQBrfZ0/Genius-Nest.png" alt="GeniusNest Logo" class="logo">
       GeniusNest
     </div>
+    <!-- Login Button -->
+    <a href="login.html" class="login-button">Login</a>
   </nav>
 
   <!-- Main Content Sections -->
@@ -218,7 +280,7 @@
       <span>Home</span>
     </a>
     <a href="#about" class="nav-item">
-      <i class="fas fa-info-circle"></i>
+     <i class="fa-solid fa-paperclip"></i>
       <span>About</span>
     </a>
     <a href="#services" class="nav-item">
