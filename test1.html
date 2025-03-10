@@ -2,12 +2,20 @@
 <html>
 <head>
 <title>Sharp Profile and Chatbot</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
   body {
     font-family: sans-serif;
     text-align: center;
-    margin-top: 20px;
+    margin: 0;
+    padding: 20px;
     background-color: #f4f4f9;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    box-sizing: border-box;
   }
 
   .profile-container {
@@ -36,9 +44,10 @@
   }
 
   #chat-container {
-    width: 300px;
+    width: 100%;
+    max-width: 400px;
     border: 1px solid #ccc;
-    height: 400px;
+    height: 300px;
     overflow-y: scroll;
     padding: 10px;
     display: flex;
@@ -79,7 +88,8 @@
   #input-container {
     display: flex;
     justify-content: center;
-    width: 300px;
+    width: 100%;
+    max-width: 400px;
     margin: 0 auto;
   }
 
@@ -97,6 +107,7 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    margin-left: 10px;
   }
 
   .typing-indicator {
@@ -114,14 +125,40 @@
     50% { opacity: 1; }
   }
 
+  #clear-button {
+    margin-top: 10px;
+    padding: 8px 15px;
+    background-color: #ff4444;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
   @media (max-width: 600px) {
     #chat-container {
-      width: 90%;
-      height: 300px;
+      height: 250px;
     }
 
-    #input-container {
-      width: 90%;
+    .profile-container {
+      padding: 8px 16px;
+    }
+
+    .profile-image {
+      width: 40px;
+      height: 40px;
+    }
+
+    .profile-name {
+      font-size: 16px;
+    }
+
+    #user-input {
+      padding: 6px;
+    }
+
+    #send-button, #clear-button {
+      padding: 6px 12px;
     }
   }
 </style>
@@ -136,8 +173,7 @@
 
 <!-- Chat Container -->
 <div id="chat-container">
-  <div class="bot-message">Welcome to Sharp's support! How can I help you?  i am very happy to see you here . you can ask question like course , pricing and anything else 
- have your mind .............</div>
+  <div class="bot-message">Welcome to Sharp's support! How can I help you? I am very happy to see you here. You can ask questions like course, pricing, and anything else you have in mind.............</div>
 </div>
 
 <!-- Input Container -->
@@ -147,7 +183,7 @@
 </div>
 
 <!-- Clear Chat Button -->
-<button id="clear-button" style="margin-top: 10px;">Clear Chat</button>
+<button id="clear-button">Clear Chat</button>
 
 <script>
   const chatContainer = document.getElementById('chat-container');
@@ -203,7 +239,7 @@
 
     // Check if the message has been asked before
     if (userMessages.includes(message.toLowerCase())) {
-      response = "Looks like you have already asked this question that I have already answered you.if you think the answer was not relevant for your question then please send us mail <a href='mailto:help.geniusnest@gmail.com'>help.geniusnest@gmail.com</a> ";
+      response = "Looks like you have already asked this question that I have already answered you. If you think the answer was not relevant for your question, then please send us an email at <a href='mailto:help.geniusnest@gmail.com'>help.geniusnest@gmail.com</a>.";
     } else {
       // Add the message to the tracked list
       userMessages.push(message.toLowerCase());
@@ -237,12 +273,12 @@
           response = "You can contact us at <a href='mailto:support@sharptech.com'>support@sharptech.com</a>.";
         } else if (message.toLowerCase().includes('pr')) {
           response = "Our courses start at $49.99. <a href='https://www.sumit2.online' target='_blank'>Visit our website</a> for detailed pricing.";
-        }  else if (message.toLowerCase().includes('hi')) {
-          response = " hello how can i help you.";
-        }  else if (message.toLowerCase().includes('hello')) {
-          response = " hello how can i help you.";
+        } else if (message.toLowerCase().includes('hi')) {
+          response = "Hello! How can I help you?";
+        } else if (message.toLowerCase().includes('hello')) {
+          response = "Hello! How can I help you?";
         } else {
-          response = "I'm still under development, and I'm learning to understand everything. Could you rephrase your request? can you help us by sending us your query that i am fail to solve . plese fill this from to develop my knowledge <a href='https://forms.gle/uJgqfVM2LmSThyhp6' target='_blank'>click here</a> ";
+          response = "I'm still under development, and I'm learning to understand everything. Could you rephrase your request? Can you help us by sending us your query that I failed to solve? Please fill out this form to develop my knowledge: <a href='https://forms.gle/uJgqfVM2LmSThyhp6' target='_blank'>click here</a>.";
         }
 
         addBotMessage(response);
