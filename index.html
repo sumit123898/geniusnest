@@ -7,6 +7,10 @@
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link rel="icon" type="image/png" href="https://i.ibb.co/QjQBrfZ0/Genius-Nest.png">
+  <!-- Web App Manifest -->
+  <link rel="manifest" href="/manifest.json">
+  <!-- Theme Color for Mobile Browsers -->
+  <meta name="theme-color" content="#007bff">
   <style>
     /* Base Font Size */
     html {
@@ -211,7 +215,8 @@
     .gradient-button:hover {
       background: linear-gradient(90deg, #0056b3, #00cc77);
     }
-/* Floating Button */
+
+    /* Floating Button */
     .floating-button {
       position: fixed;
       bottom: 80px; /* Position above the bottom navigation */
@@ -247,6 +252,7 @@
         transform: translateY(-10px); /* Move up and down */
       }
     }
+
     /* Media Queries for Responsive Design */
     @media (min-width: 600px) {
       .button-container {
@@ -280,10 +286,12 @@
     <!-- Login Button -->
     <a href="login.html" class="login-button">Login</a>
   </nav>
-<!-- Floating Button -->
+
+  <!-- Floating Button -->
   <button class="floating-button" onclick="window.location.href='test1.html'">
     <img src="https://i.ibb.co/mr9t5Hdp/Screenshot-2025-03-08-105425.png" alt="Floating Button">
   </button>
+
   <!-- Main Content Sections -->
   <section id="home" class="section">
     <h1>Welcome to GeniusNest</h1>
@@ -318,7 +326,7 @@
       <span>Home</span>
     </a>
     <a href="#about" class="nav-item">
-     <i class="fa-solid fa-paperclip"></i>
+      <i class="fa-solid fa-paperclip"></i>
       <span>About</span>
     </a>
     <a href="#services" class="nav-item">
@@ -330,5 +338,72 @@
       <span>Contact</span>
     </a>
   </nav>
+
+  <script>
+    // Register the Service Worker
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js')
+          .then((registration) => {
+            console.log('Service Worker registered: ', registration);
+          })
+          .catch((error) => {
+            console.log('Service Worker registration failed: ', error);
+          });
+      });
+    }
+  </script>
+  <script>
+    {
+  "short_name": "GeniusNest",
+  "name": "GeniusNest - Creativity and Innovation",
+  "icons": [
+    {
+      "src": "https://i.ibb.co/QjQBrfZ0/Genius-Nest.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "https://i.ibb.co/QjQBrfZ0/Genius-Nest.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "scope": "/",
+  "theme_color": "#007bff"
+}
+  </script>
+  <script>
+    const CACHE_NAME = 'geniusnest-v1';
+const ASSETS = [
+  '/',
+  '/index.html',
+  '/styles.css',
+  'https://i.ibb.co/QjQBrfZ0/Genius-Nest.png',
+  'https://i.ibb.co/MyrzW3Ns/360-F-305459609-qq-NT6-Sk6-DZGhc-Eexc-Abs9xfq2i-I3yl2e.jpg',
+  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css'
+];
+
+// Install the service worker and cache assets
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => {
+      return cache.addAll(ASSETS);
+    })
+  );
+});
+
+// Fetch cached assets or fetch from the network
+self.addEventListener('fetch', (event) => {
+  event.respondWith(
+    caches.match(event.request).then((response) => {
+      return response || fetch(event.request);
+    })
+  );
+});
+  </script>
 </body>
 </html>
