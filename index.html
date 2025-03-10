@@ -211,7 +211,42 @@
     .gradient-button:hover {
       background: linear-gradient(90deg, #0056b3, #00cc77);
     }
+/* Floating Button */
+    .floating-button {
+      position: fixed;
+      bottom: 80px; /* Position above the bottom navigation */
+      right: 20px; /* Position in the bottom-right corner */
+      width: 60px; /* Size of the button */
+      height: 60px;
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      z-index: 1001; /* Ensure it's above other elements */
+      animation: float 3s ease-in-out infinite; /* Floating animation */
+      box-shadow: 0 0 15px 5px rgba(255, 223, 0, 0.7); /* Glowing effect */
+      border-radius: 50%; /* Make the button circular */
+      transition: box-shadow 0.3s ease; /* Smooth transition for hover effect */
+    }
 
+    .floating-button:hover {
+      box-shadow: 0 0 25px 10px rgba(255, 223, 0, 0.9); /* Enhanced glow on hover */
+    }
+
+    .floating-button img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%; /* Make the image circular */
+    }
+
+    /* Floating Animation */
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-10px); /* Move up and down */
+      }
+    }
     /* Media Queries for Responsive Design */
     @media (min-width: 600px) {
       .button-container {
@@ -245,7 +280,10 @@
     <!-- Login Button -->
     <a href="login.html" class="login-button">Login</a>
   </nav>
-
+<!-- Floating Button -->
+  <button class="floating-button" onclick="window.location.href='test1.html'">
+    <img src="https://i.ibb.co/mr9t5Hdp/Screenshot-2025-03-08-105425.png" alt="Floating Button">
+  </button>
   <!-- Main Content Sections -->
   <section id="home" class="section">
     <h1>Welcome to GeniusNest</h1>
