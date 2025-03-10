@@ -127,6 +127,8 @@
       );
 
       if (isValid) {
+        // Store a token in session storage
+        sessionStorage.setItem('authToken', 'validToken');
         // Redirect to admin.html
         window.location.href = 'admin.html';
       } else {
