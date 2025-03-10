@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GeniusNest</title>
+  <link rel="stylesheet" href="styles.css">
+  <!-- Add icon library (e.g., FontAwesome for icons) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- Add favicon -->
+  <link rel="icon" type="image/png" href="https://i.ibb.co/QjQBrfZ0/Genius-Nest.png">
+  <style>
+  /* General Styles */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  color: #333;
+}
+
+/* Top Navigation */
+.top-nav {
+  background-color: #333;
+  color: #fff;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.logo {
+  width: 30px; /* Adjust the size of the logo */
+  height: 30px; /* Adjust the size of the logo */
+  margin-right: 10px; /* Space between logo and text */
+}
+
+/* Main Content Sections */
+.section {
+  padding: 80px 20px;
+  text-align: center;
+  min-height: 100vh;
+}
+
+#home {
+  background-color: #e2f3f5;
+}
+
+#about {
+  background-color: #f5e2e2;
+}
+
+#services {
+  background-color: #e2f5e2;
+}
+
+#contact {
+  background-color: #f5f5e2;
+}
+
+/* Bottom Navigation */
+.bottom-nav {
+  background-color: #333;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  padding: 10px 0;
+  z-index: 1000;
+}
+
+.nav-item {
+  color: #fff;
+  text-decoration: none;
+  text-align: center;
+  font-size: 14px;
+}
+
+.nav-item i {
+  display: block;
+  font-size: 20px;
+  margin-bottom: 5px;
+}
+
+.nav-item:hover {
+  color: #ffcc00;
+}
+.redirect-button {
+  display: inline-block;
+  padding: 10px 50px;
+  background-color: #007bff;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 9px;
+  font-size: 16px;
+  text-align: center;
+  transition: background-color 0.3s ease;
+}
+
+.redirect-button:hover {
+  background-color: #0056b3;
+}
+/* Button Container */
+.button-container {
+  display: flex;
+  justify-content: space-between; /* Space out the buttons */
+  align-items: center;
+  margin-top: 20px; /* Add some space above the buttons */
+}
+
+/* Redirect Button */
+.redirect-button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+  font-size: 16px;
+  text-align: center;
+  transition: background-color 0.3s ease;
+}
+
+.redirect-button:hover {
+  background-color: #0056b3;
+}
+
+/* Right Button (Optional: Add a different style for the right button) */
+.right-button {
+  background-color: #28a745; /* Green color for the right button */
+}
+
+.right-button:hover {
+  background-color: #218838; /* Darker green on hover */
+}
+/* Gradient Button */
+.gradient-button {
+  display: block; /* Make the button a block element */
+  width: 100%; /* Full width */
+  padding: 15px 20px; /* Padding for better touch targets */
+  background: linear-gradient(90deg, #007bff, #00ff88); /* Gradient background */
+  color: #fff; /* White text */
+  text-align: center; /* Center text */
+  text-decoration: none; /* Remove underline */
+  font-size: 18px; /* Larger font size */
+  font-weight: bold; /* Bold text */
+  border: none; /* Remove border */
+  border-radius: 5px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background 0.3s ease; /* Smooth transition for hover effect */
+  margin-top: 20px; /* Add some space above the button */
+}
+
+/* Hover Effect */
+.gradient-button:hover {
+  background: linear-gradient(90deg, #0056b3, #00cc77); /* Darker gradient on hover */
+}
+  </style>
+</head>
+<body>
+  <!-- Top Navigation -->
+  <nav class="top-nav">
+    <div class="brand">
+      <img src="https://i.ibb.co/QjQBrfZ0/Genius-Nest.png" alt="GeniusNest Logo" class="logo">
+      GeniusNest
+    </div>
+  </nav>
+
+  <!-- Main Content Sections -->
+  <section id="home" class="section">
+    <h1>Welcome to GeniusNest</h1>
+    <p>Your go-to place for creativity and innovation.</p>
+  </section>
+
+  <section id="about" class="section">
+    <h1>About Us</h1>
+    <p>We are a team of passionate individuals dedicated to building amazing things.</p>
+    <a href="#home" class="redirect-button">Go to Another Page</a>
+  </section>
+
+  <section id="services" class="section">
+    <h1>Our Services</h1>
+    <p>We offer a wide range of services to help you achieve your goals.</p>
+    <!-- Button Container -->
+  <div class="button-container">
+    <a href="#home" class="redirect-button">Visit Our Blog</a>
+    <a href="#home" class="redirect-button right-button">Learn More</a>
+  </div>
+  </section>
+
+  <section id="contact" class="section">
+    <h1>Contact Us</h1>
+    <p>Get in touch with us for any inquiries or collaborations.</p>
+   
+  <!-- Single Gradient Button -->
+  <a href="sumit.html" class="gradient-button">Get Started</a>
+  </section>
+
+  <!-- Bottom Navigation -->
+  <nav class="bottom-nav">
+    <a href="#home" class="nav-item">
+      <i class="fas fa-home"></i>
+      <span>Home</span>
+    </a>
+    <a href="#about" class="nav-item">
+      <i class="fas fa-info-circle"></i>
+      <span>About</span>
+    </a>
+    <a href="#services" class="nav-item">
+      <i class="fas fa-cogs"></i>
+      <span>Services</span>
+    </a>
+    <a href="#contact" class="nav-item">
+      <i class="fas fa-envelope"></i>
+      <span>Contact</span>
+    </a>
+  </nav>
+</body>
+</html>
