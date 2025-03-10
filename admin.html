@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - GeniusNest</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    h1 {
+      color: #007bff;
+    }
+    .logout-button {
+      margin-top: 1rem;
+      padding: 0.75rem 1.5rem;
+      background-color: #ff4444;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .logout-button:hover {
+      background-color: #cc0000;
+    }
+  </style>
+</head>
+<body>
+  <h1>Welcome to the Admin Panel!</h1>
+  <button class="logout-button" id="logoutButton">Logout</button>
+
+  <script>
+    // Check if the user is authenticated
+    const authToken = sessionStorage.getItem('authToken');
+
+    if (authToken !== 'validToken') {
+      // Redirect to login.html if the token is missing or invalid
+      window.location.href = 'login.html';
+    }
+
+    // Logout functionality
+    document.getElementById('logoutButton').addEventListener('click', function () {
+      // Clear the session storage
+      sessionStorage.removeItem('authToken');
+      // Redirect to login.html
+      window.location.href = 'login.html';
+    });
+  </script>
+</body>
+</html>
