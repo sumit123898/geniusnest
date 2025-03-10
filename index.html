@@ -5,167 +5,152 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GeniusNest</title>
   <link rel="stylesheet" href="styles.css">
-  <!-- Add icon library (e.g., FontAwesome for icons) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <!-- Add favicon -->
   <link rel="icon" type="image/png" href="https://i.ibb.co/QjQBrfZ0/Genius-Nest.png">
   <style>
-  /* General Styles */
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
-  color: #333;
-}
+    /* General Styles */
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      color: #333;
+    }
 
-/* Top Navigation */
-.top-nav {
-  background-color: #333;
-  color: #fff;
-  padding: 10px 20px;
-  display: flex;
-  align-items: center;
-  position: fixed;
-  width: 100%;
-  top: 0;
-  z-index: 1000;
-}
+    /* Top Navigation */
+    .top-nav {
+      background-color: #333;
+      color: #fff;
+      padding: 1rem 5%;
+      display: flex;
+      align-items: center;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+    }
 
-.brand {
-  display: flex;
-  align-items: center;
-  font-size: 24px;
-  font-weight: bold;
-}
+    .brand {
+      display: flex;
+      align-items: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
 
-.logo {
-  width: 30px; /* Adjust the size of the logo */
-  height: 30px; /* Adjust the size of the logo */
-  margin-right: 10px; /* Space between logo and text */
-}
+    .logo {
+      width: 2em;
+      height: 2em;
+      margin-right: 0.5em;
+    }
 
-/* Main Content Sections */
-.section {
-  padding: 80px 20px;
-  text-align: center;
-  min-height: 100vh;
-}
+    /* Main Content Sections */
+    .section {
+      padding: 6rem 5% 2rem;
+      text-align: center;
+      min-height: 100vh;
+    }
 
-#home {
-  background-color: #e2f3f5;
-}
+    #home {
+      background-color: #e2f3f5;
+    }
 
-#about {
-  background-color: #f5e2e2;
-}
+    #about {
+      background-color: #f5e2e2;
+    }
 
-#services {
-  background-color: #e2f5e2;
-}
+    #services {
+      background-color: #e2f5e2;
+    }
 
-#contact {
-  background-color: #f5f5e2;
-}
+    #contact {
+      background-color: #f5f5e2;
+    }
 
-/* Bottom Navigation */
-.bottom-nav {
-  background-color: #333;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  padding: 10px 0;
-  z-index: 1000;
-}
+    /* Bottom Navigation */
+    .bottom-nav {
+      background-color: #333;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      padding: 0.5rem 0;
+      z-index: 1000;
+    }
 
-.nav-item {
-  color: #fff;
-  text-decoration: none;
-  text-align: center;
-  font-size: 14px;
-}
+    .nav-item {
+      color: #fff;
+      text-decoration: none;
+      text-align: center;
+      font-size: 0.9rem;
+    }
 
-.nav-item i {
-  display: block;
-  font-size: 20px;
-  margin-bottom: 5px;
-}
+    .nav-item i {
+      display: block;
+      font-size: 1.2rem;
+      margin-bottom: 0.3rem;
+    }
 
-.nav-item:hover {
-  color: #ffcc00;
-}
-.redirect-button {
-  display: inline-block;
-  padding: 10px 50px;
-  background-color: #007bff;
-  color: #fff;
-  text-decoration: none;
-  border-radius: 9px;
-  font-size: 16px;
-  text-align: center;
-  transition: background-color 0.3s ease;
-}
+    .nav-item:hover {
+      color: #ffcc00;
+    }
 
-.redirect-button:hover {
-  background-color: #0056b3;
-}
-/* Button Container */
-.button-container {
-  display: flex;
-  justify-content: space-between; /* Space out the buttons */
-  align-items: center;
-  margin-top: 20px; /* Add some space above the buttons */
-}
+    /* Buttons */
+    .redirect-button {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      background-color: #007bff;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      text-align: center;
+      transition: background-color 0.3s ease;
+    }
 
-/* Redirect Button */
-.redirect-button {
-  display: inline-block;
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: #fff;
-  text-decoration: none;
-  border-radius: 5px;
-  font-size: 16px;
-  text-align: center;
-  transition: background-color 0.3s ease;
-}
+    .redirect-button:hover {
+      background-color: #0056b3;
+    }
 
-.redirect-button:hover {
-  background-color: #0056b3;
-}
+    .button-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
 
-/* Right Button (Optional: Add a different style for the right button) */
-.right-button {
-  background-color: #28a745; /* Green color for the right button */
-}
+    .gradient-button {
+      display: block;
+      width: 100%;
+      padding: 0.75rem;
+      background: linear-gradient(90deg, #007bff, #00ff88);
+      color: #fff;
+      text-align: center;
+      text-decoration: none;
+      font-size: 1.1rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      margin-top: 1.5rem;
+    }
 
-.right-button:hover {
-  background-color: #218838; /* Darker green on hover */
-}
-/* Gradient Button */
-.gradient-button {
-  display: block; /* Make the button a block element */
-  width: 100%; /* Full width */
-  padding: 15px 20px; /* Padding for better touch targets */
-  background: linear-gradient(90deg, #007bff, #00ff88); /* Gradient background */
-  color: #fff; /* White text */
-  text-align: center; /* Center text */
-  text-decoration: none; /* Remove underline */
-  font-size: 18px; /* Larger font size */
-  font-weight: bold; /* Bold text */
-  border: none; /* Remove border */
-  border-radius: 5px; /* Rounded corners */
-  cursor: pointer; /* Pointer cursor on hover */
-  transition: background 0.3s ease; /* Smooth transition for hover effect */
-  margin-top: 20px; /* Add some space above the button */
-}
+    .gradient-button:hover {
+      background: linear-gradient(90deg, #0056b3, #00cc77);
+    }
 
-/* Hover Effect */
-.gradient-button:hover {
-  background: linear-gradient(90deg, #0056b3, #00cc77); /* Darker gradient on hover */
-}
+    /* Media Queries for Mobile */
+    @media (min-width: 600px) {
+      .button-container {
+        flex-direction: row;
+        justify-content: space-between;
+      }
+
+      .gradient-button {
+        width: auto;
+      }
+    }
   </style>
 </head>
 <body>
@@ -192,19 +177,16 @@ body {
   <section id="services" class="section">
     <h1>Our Services</h1>
     <p>We offer a wide range of services to help you achieve your goals.</p>
-    <!-- Button Container -->
-  <div class="button-container">
-    <a href="test1.html" class="redirect-button">Visit Our Blog</a>
-    <a href="#home" class="redirect-button right-button">Learn More</a>
-  </div>
+    <div class="button-container">
+      <a href="test1.html" class="redirect-button">Visit Our Blog</a>
+      <a href="#home" class="redirect-button right-button">Learn More</a>
+    </div>
   </section>
 
   <section id="contact" class="section">
     <h1>Contact Us</h1>
     <p>Get in touch with us for any inquiries or collaborations.</p>
-   
-  <!-- Single Gradient Button -->
-  <a href="sumit.html" class="gradient-button">Get Started</a>
+    <a href="sumit.html" class="gradient-button">Get Started</a>
   </section>
 
   <!-- Bottom Navigation -->
