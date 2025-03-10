@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Sharp Profile and Chatbot</title>
+<style>
+  body {
+    font-family: sans-serif;
+    text-align: center;
+    margin-top: 20px;
+    background-color: #f4f4f9;
+  }
+
+  .profile-container {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px 20px;
+    border-radius: 25px;
+    background-color: #fff;
+    box-shadow: 0 0 15px rgba(0, 123, 255, 0.7);
+    margin-bottom: 20px;
+  }
+
+  .profile-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .profile-name {
+    font-size: 18px;
+    font-weight: bold;
+    color: #007bff;
+  }
+
+  #chat-container {
+    width: 300px;
+    border: 1px solid #ccc;
+    height: 400px;
+    overflow-y: scroll;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    margin: 20px auto;
+    text-align: left;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .user-message, .bot-message {
+    margin-bottom: 10px;
+    padding: 8px;
+    border-radius: 5px;
+    max-width: 70%;
+  }
+
+  .user-message {
+    background-color: #e0f7fa;
+    align-self: flex-end;
+  }
+
+  .bot-message {
+    background-color: #f0f0f0;
+    align-self: flex-start;
+  }
+
+  .bot-message a {
+    color: #007bff;
+    text-decoration: none;
+  }
+
+  .bot-message a:hover {
+    text-decoration: underline;
+  }
+
+  #input-container {
+    display: flex;
+    justify-content: center;
+    width: 300px;
+    margin: 0 auto;
+  }
+
+  #user-input {
+    flex-grow: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+
+  #send-button {
+    padding: 8px 15px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .typing-indicator {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background-color: #ccc;
+    border-radius: 50%;
+    margin: 0 2px;
+    animation: typing 1s infinite;
+  }
+
+  @keyframes typing {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+  }
+
+  @media (max-width: 600px) {
+    #chat-container {
+      width: 90%;
+      height: 300px;
+    }
+
+    #input-container {
+      width: 90%;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- Profile Container with Glowing Box -->
+<div class="profile-container">
+  <img src="https://i.ibb.co/6Jw7HhJR/Screenshot-2025-03-08-105425.png" alt="Sharp Profile Picture" class="profile-image">
+  <div class="profile-name">Sharp</div>
+</div>
+
+<!-- Chat Container -->
+<div id="chat-container">
+  <div class="bot-message">Welcome to Sharp's support! How can I help you?  i am very happy to see you here . you can ask question like course , pricing and anything else 
+ have your mind .............</div>
+</div>
+
+<!-- Input Container -->
+<div id="input-container">
+  <input type="text" id="user-input" placeholder="Type your message...">
+  <button id="send-button">Send</button>
+</div>
+
+<!-- Clear Chat Button -->
+<button id="clear-button" style="margin-top: 10px;">Clear Chat</button>
+
+<script>
+  const chatContainer = document.getElementById('chat-container');
+  const userInput = document.getElementById('user-input');
+  const sendButton = document.getElementById('send-button');
+  const clearButton = document.getElementById('clear-button');
+
+  // Track user messages
+  let userMessages = [];
+
+  sendButton.addEventListener('click', sendMessage);
+  userInput.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+      sendMessage();
+    }
+  });
+
+  clearButton.addEventListener('click', () => {
+    chatContainer.innerHTML = '';
+    localStorage.removeItem('sharpChatHistory');
+    userMessages = []; // Clear tracked messages
+  });
+
+  function sendMessage() {
+    const message = userInput.value.trim();
+    if (message) {
+      addUserMessage(message);
+      userInput.value = '';
+      getBotResponse(message);
+    }
+  }
+
+  function addUserMessage(message) {
+    const messageElement = document.createElement('div');
+    messageElement.classList.add('user-message');
+    messageElement.textContent = message;
+    chatContainer.appendChild(messageElement);
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+    saveChat();
+  }
+
+  function addBotMessage(message) {
+    const messageElement = document.createElement('div');
+    messageElement.classList.add('bot-message');
+    messageElement.innerHTML = message; // Use innerHTML to render links
+    chatContainer.appendChild(messageElement);
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+    saveChat();
+  }
+
+  function getBotResponse(message) {
+    let response;
+
+    // Check if the message has been asked before
+    if (userMessages.includes(message.toLowerCase())) {
+      response = "Looks like you have already asked this question that I have already answered you.if you think the answer was not relevant for your question then please send us mail <a href='mailto:help.geniusnest@gmail.com'>help.geniusnest@gmail.com</a> ";
+    } else {
+      // Add the message to the tracked list
+      userMessages.push(message.toLowerCase());
+
+      // Show typing indicator
+      const typingIndicator = document.createElement('div');
+      typingIndicator.classList.add('bot-message');
+      typingIndicator.innerHTML = `
+        <div class="typing-indicator"></div>
+        <div class="typing-indicator"></div>
+        <div class="typing-indicator"></div>
+      `;
+      chatContainer.appendChild(typingIndicator);
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+
+      // Simulate bot response delay
+      setTimeout(() => {
+        // Remove typing indicator
+        chatContainer.removeChild(typingIndicator);
+
+        // Add bot response based on partial input
+        if (message.toLowerCase().includes('th')) {
+          response = "You're welcome! Let me know if you need further assistance.";
+        } else if (message.toLowerCase().includes('co')) {
+          response = "We offer courses in programming, design, and data science. <a href='https://www.sumit2.online' target='_blank'>Visit our website</a> to learn more.";
+        } else if (message.toLowerCase().includes('en')) {
+          response = "You can enroll by visiting our website: <a href='https://www.sumit2.online' target='_blank'>www.sumit2.online</a>.";
+        } else if (message.toLowerCase().includes('he')) {
+          response = "Please describe the problem you are facing.";
+        } else if (message.toLowerCase().includes('con')) {
+          response = "You can contact us at <a href='mailto:support@sharptech.com'>support@sharptech.com</a>.";
+        } else if (message.toLowerCase().includes('pr')) {
+          response = "Our courses start at $49.99. <a href='https://www.sumit2.online' target='_blank'>Visit our website</a> for detailed pricing.";
+        }  else if (message.toLowerCase().includes('hi')) {
+          response = " hello how can i help you.";
+        }  else if (message.toLowerCase().includes('hello')) {
+          response = " hello how can i help you.";
+        } else {
+          response = "I'm still under development, and I'm learning to understand everything. Could you rephrase your request? can you help us by sending us your query that i am fail to solve . plese fill this from to develop my knowledge <a href='https://forms.gle/uJgqfVM2LmSThyhp6' target='_blank'>click here</a> ";
+        }
+
+        addBotMessage(response);
+      }, 1000);
+    }
+
+    // If the message is repeated, respond immediately
+    if (response) {
+      addBotMessage(response);
+    }
+  }
+
+  function saveChat() {
+    const chatMessages = chatContainer.innerHTML;
+    localStorage.setItem('sharpChatHistory', chatMessages);
+  }
+
+  function loadChat() {
+    const savedChat = localStorage.getItem('sharpChatHistory');
+    if (savedChat) {
+      chatContainer.innerHTML = savedChat;
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+  }
+
+  window.onload = loadChat;
+</script>
+
+</body>
+</html>
