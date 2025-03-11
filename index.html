@@ -84,7 +84,7 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: flex-start; /* Align content to the top */
       align-items: center;
       position: relative;
       background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
@@ -116,7 +116,71 @@
       z-index: 1; /* Ensure content is above the overlay */
       color: #fff; /* White text for better contrast */
     }
+ /* Subscription Section */
+    .subscription-cards {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+    }
 
+    .subscription-card {
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 2rem;
+      width: 300px;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .subscription-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .subscription-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .subscription-card p {
+      font-size: 1rem;
+      color: #666;
+    }
+
+    .subscription-card .price {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #007bff;
+      margin: 1rem 0;
+    }
+
+    .subscription-card .features {
+      list-style: none;
+      padding: 0;
+      margin: 1rem 0;
+    }
+
+    .subscription-card .features li {
+      margin: 0.5rem 0;
+    }
+
+    .subscription-card .btn {
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      background-color: #007bff;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      transition: background-color 0.3s ease;
+    }
+
+    .subscription-card .btn:hover {
+      background-color: #0056b3;
+    }
     /* Bottom Navigation */
     .bottom-nav {
       background-color: rgba(51, 51, 51, 0.8); /* Semi-transparent background */
@@ -312,6 +376,48 @@
       <a href="#home" class="redirect-button right-button">Learn More</a>
     </div>
   </section>
+   <!-- Subscription Section -->
+  <section id="subscriptions" class="section">
+    <h1>Choose Your Plan</h1>
+    <div class="subscription-cards">
+      <!-- Silver Plan -->
+      <div class="subscription-card">
+        <h3>Silver</h3>
+        <p>Perfect for beginners</p>
+        <div class="price">$10/month</div>
+        <ul class="features">
+          <li>Access to basic features</li>
+          <li>Email support</li>
+          <li>Limited resources</li>
+        </ul>
+        <a href="#" class="btn">Get Started</a>
+      </div>
+      <!-- Gold Plan -->
+      <div class="subscription-card">
+        <h3>Gold</h3>
+        <p>Great for professionals</p>
+        <div class="price">$25/month</div>
+        <ul class="features">
+          <li>Access to advanced features</li>
+          <li>Priority email support</li>
+          <li>Exclusive resources</li>
+        </ul>
+        <a href="#" class="btn">Get Started</a>
+      </div>
+      <!-- Diamond Plan -->
+      <div class="subscription-card">
+        <h3>Diamond</h3>
+        <p>Best for businesses</p>
+        <div class="price">$50/month</div>
+        <ul class="features">
+          <li>Access to all features</li>
+          <li>24/7 priority support</li>
+          <li>Unlimited resources</li>
+        </ul>
+        <a href="#" class="btn">Get Started</a>
+      </div>
+    </div>
+  </section>
 
   <section id="contact" class="section">
     <h1>Contact Us</h1>
@@ -332,6 +438,10 @@
     <a href="#services" class="nav-item">
       <i class="fas fa-cogs"></i>
       <span>Services</span>
+    </a>
+     <a href="#subscriptions" class="nav-item">
+      <i class="fas fa-gem"></i>
+      <span>Subscriptions</span>
     </a>
     <a href="#contact" class="nav-item">
       <i class="fas fa-envelope"></i>
