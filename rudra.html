@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image Stretch/Compress to Fit Size (cm)</title>
+  <style>
+    /* General Styles */
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      max-width: 800px;
+      width: 100%;
+      text-align: center;
+    }
+
+    h1 {
+      color: #333;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    /* File Upload */
+    #upload {
+      display: none;
+    }
+
+    .upload-label {
+      display: inline-block;
+      background: #007bff;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    .upload-label:hover {
+      background: #0056b3;
+      transform: translateY(-2px);
+    }
+
+    .upload-label:active {
+      transform: translateY(0);
+    }
+
+    /* Controls */
+    .controls {
+      margin-top: 20px;
+    }
+
+    .controls input {
+      padding: 10px;
+      font-size: 16px;
+      border: 2px solid #007bff;
+      border-radius: 5px;
+      width: 100px;
+      margin-right: 10px;
+      transition: border-color 0.3s ease;
+    }
+
+    .controls input:focus {
+      border-color: #0056b3;
+      outline: none;
+    }
+
+    .controls button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    .controls button:hover {
+      background: #0056b3;
+      transform: translateY(-2px);
+    }
+
+    .controls button:active {
+      transform: translateY(0);
+    }
+
+    .controls button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    /* Canvas */
+    canvas {
+      border: 2px solid #007bff;
+      border-radius: 10px;
+      margin-top: 20px;
+      max-width: 100%;
+      height: auto;
+      transition: border-color 0.3s ease;
+    }
+
+    canvas:hover {
+      border-color: #0056b3;
+    }
+
+    /* Mobile Compatibility */
+    @media (max-width: 600px) {
+      .controls input {
+        width: 80px;
+        margin-right: 5px;
+      }
+
+      .controls button {
+        padding: 10px 15px;
+        font-size: 14px;
+      }
+
+      h1 {
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Image Stretch/Compress to Fit Size (cm)</h1>
+    <label for="upload" class="upload-label">Upload Image</label>
+    <input type="file" id="upload" accept="image/*">
+    <div class="controls">
+      <label for="width">Width (cm):</label>
+      <input type="number" id="width" placeholder="Width">
+      <label for="height">Height (cm):</label>
+      <input type="number" id="height" placeholder="Height">
+      <button id="apply-size-btn">Apply Size</button>
+      <button id="download-btn" disabled>Download Image</button>
+    </div>
+    <img id="image" src="" alt="Uploaded Image">
+    <canvas id="canvas"></canvas>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const upload = document.getElementById('upload');
+      const image = document.getElementById('image');
+      const widthInput = document.getElementById('width');
+      const heightInput = document.getElementById('height');
+      const applySizeBtn = document.getElementById('apply-size-btn');
+      const downloadBtn = document.getElementById('download-btn');
+      const canvas = document.getElementById('canvas');
+      const ctx = canvas.getContext('2d');
+
+      let uploadedImage = null;
+
+      // Conversion factor: 1 cm = 37.8 pixels (based on 96 DPI)
+      const CM_TO_PX = 37.8;
+
+      // Load image when file is uploaded
+      upload.addEventListener('change', function (e) {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function (event) {
+            image.src = event.target.result;
+            uploadedImage = new Image();
+            uploadedImage.src = event.target.result;
+            uploadedImage.onload = function () {
+              canvas.width = uploadedImage.width;
+              canvas.height = uploadedImage.height;
+              ctx.drawImage(uploadedImage, 0, 0);
+              downloadBtn.disabled = false;
+            };
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+
+      // Apply custom size
+      applySizeBtn.addEventListener('click', function () {
+        if (uploadedImage) {
+          const widthCm = parseFloat(widthInput.value);
+          const heightCm = parseFloat(heightInput.value);
+
+          if (isNaN(widthCm) || isNaN(heightCm)) {
+            alert('Please enter valid width and height.');
+            return;
+          }
+
+          // Convert cm to pixels
+          const widthPx = widthCm * CM_TO_PX;
+          const heightPx = heightCm * CM_TO_PX;
+
+          // Resize canvas to fit the new size
+          canvas.width = widthPx;
+          canvas.height = heightPx;
+
+          // Draw the image stretched/compressed to the new size
+          ctx.drawImage(uploadedImage, 0, 0, widthPx, heightPx);
+        }
+      });
+
+      // Download the modified image
+      downloadBtn.addEventListener('click', function () {
+        if (uploadedImage) {
+          const link = document.createElement('a');
+          link.download = 'modified-image.png';
+          link.href = canvas.toDataURL('image/png');
+          link.click();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
