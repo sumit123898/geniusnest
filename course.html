@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Courses - GeniusNest</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* General Styles */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #eeffe9;
+      color: #333;
+    }
+
+    /* Header */
+    .course-header {
+      text-align: center;
+      padding: 2rem;
+      background-color: #8dea62;
+      color: #000;
+    }
+
+    .course-header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .course-header p {
+      font-size: 1.2rem;
+    }
+
+    /* Course Grid */
+    .course-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      padding: 2rem;
+    }
+
+    .course-card {
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .course-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .course-thumbnail img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .course-details {
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    .course-details h2 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .course-details p {
+      font-size: 1rem;
+      color: #666;
+      margin-bottom: 1.5rem;
+    }
+
+    .explore-button {
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      background-color: #527544;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      transition: background-color 0.3s ease;
+    }
+
+    .explore-button:hover {
+      background-color: #0056b3;
+    }
+
+    /* Footer */
+    .course-footer {
+      text-align: center;
+      padding: 1rem;
+      background-color: #333;
+      color: #fff;
+      margin-top: 2rem;
+    }
+
+    /* Media Queries for Mobile Devices */
+    @media (max-width: 600px) {
+      .course-header h1 {
+        font-size: 2rem;
+      }
+
+      .course-header p {
+        font-size: 1rem;
+      }
+
+      .course-grid {
+        grid-template-columns: 1fr;
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="course-header">
+    <h1>Our Courses</h1>
+    <p>Explore our wide range of courses designed to boost your skills.</p>
+  </header>
+
+  <!-- Course Grid -->
+  <main class="course-grid">
+    <!-- Course 1 -->
+    <div class="course-card">
+      <div class="course-thumbnail">
+        <img src="https://i.ibb.co/whHmHrVS/Whats-App-Image-2025-02-15-at-21-37-48-d5303e1c.jpg" alt="Web Development Course">
+      </div>
+      <div class="course-details">
+        <h2>Web Development</h2>
+        <p>Learn to build modern websites and web applications using HTML, CSS, JavaScript, and more.</p>
+        <a href="pay.html" class="explore-button">Explore</a>
+      </div>
+    </div>
+
+    <!-- Course 2 -->
+    <div class="course-card">
+      <div class="course-thumbnail">
+        <img src="https://i.ibb.co/whHmHrVS/Whats-App-Image-2025-02-15-at-21-37-48-d5303e1c.jpg" alt="Data Science Course">
+      </div>
+      <div class="course-details">
+        <h2>Data Science</h2>
+        <p>Master data analysis, machine learning, and data visualization with Python and R.</p>
+        <a href="pay.html" class="explore-button">Explore</a>
+      </div>
+    </div>
+
+    <!-- Course 3 -->
+    <div class="course-card">
+      <div class="course-thumbnail">
+        <img src="https://i.ibb.co/whHmHrVS/Whats-App-Image-2025-02-15-at-21-37-48-d5303e1c.jpg" alt="Graphic Design Course">
+      </div>
+      <div class="course-details">
+        <h2>Graphic Design</h2>
+        <p>Create stunning visuals and designs using tools like Adobe Photoshop and Illustrator.</p>
+        <a href="pay.html" class="explore-button">Explore</a>
+      </div>
+    </div>
+
+    <!-- Course 4 -->
+    <div class="course-card">
+      <div class="course-thumbnail">
+        <img src="https://i.ibb.co/whHmHrVS/Whats-App-Image-2025-02-15-at-21-37-48-d5303e1c.jpg" alt="Mobile App Development Course">
+      </div>
+      <div class="course-details">
+        <h2>Mobile App Development</h2>
+        <p>Build cross-platform mobile apps using Flutter and React Native.</p>
+        <a href="pay.html" class="explore-button">Explore</a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="course-footer">
+    <p>&copy; 2025 GeniusNest. All rights reserved.</p>
+  </footer>
+</body>
+</html>
