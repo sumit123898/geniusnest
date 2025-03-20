@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live YouTube Video with Popup Chat</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f0f0f0;
+        }
+        .video-container {
+            width: 100%;
+            max-width: 800px;
+            margin: 20px 0;
+        }
+        iframe {
+            border: none;
+            width: 100%;
+            height: 500px;
+        }
+        .chat-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #ff0000; /* YouTube red */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .chat-button:hover {
+            background-color: #cc0000; /* Darker red on hover */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="video-container">
+        <iframe src="https://www.youtube.com/embed/qXON741TgYI" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+
+    <button class="chat-button" onclick="openChatPopup()">Open Live Chat</button>
+
+    <script>
+        function openChatPopup() {
+            // Open the live chat in a popup window
+            window.open(
+                'https://www.youtube.com/live_chat?is_popout=1&v=qXON741TgYI',
+                'Live Chat',
+                'width=500,height=800,resizable=yes,scrollbars=yes'
+            );
+        }
+    </script>
+
+</body>
+</html>
