@@ -15,6 +15,31 @@ body {
   background-attachment: fixed;
   min-height: 100vh;
 }
+/* Style for the circular icon */
+    .circular-icon {
+      width: 24px; /* Adjust the size as needed */
+      height: 24px; /* Adjust the size as needed */
+      border-radius: 50%; /* Makes the image circular */
+      overflow: hidden; /* Ensures the image stays within the circle */
+      display: inline-block; /* Ensures it behaves like an inline element */
+      vertical-align: middle; /* Aligns the icon with the text */
+      margin-right: 8px; /* Adds spacing between the icon and text */
+    }
+
+    .circular-icon img {
+      width: 100%; /* Ensures the image fills the container */
+      height: 100%; /* Ensures the image fills the container */
+      object-fit: cover; /* Ensures the image covers the circle without distortion */
+    }
+
+    /* Style for the link */
+    .telegram-link {
+      color: #0088cc;
+      text-decoration: none;
+      font-weight: bold;
+      display: inline-flex; /* Aligns icon and text properly */
+      align-items: center; /* Centers the icon and text vertically */
+    }
 
 /* Top Navigation */
 .top-nav {
