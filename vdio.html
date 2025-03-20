@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Library</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .video-library {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+        .video-item {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            width: 300px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        .video-item:hover {
+            transform: scale(1.05);
+        }
+        .video-item iframe {
+            width: 100%;
+            height: 200px;
+            border: none;
+        }
+        .video-info {
+            padding: 15px;
+            text-align: center;
+        }
+        .video-info h3 {
+            margin: 0;
+            font-size: 18px;
+            color: #333;
+        }
+        .video-info p {
+            margin: 10px 0 0;
+            font-size: 14px;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Video Library</h1>
+
+    <div class="video-library">
+        <!-- Video 1 -->
+        <div class="video-item">
+            <iframe src="https://www.youtube.com/embed/vUQ74BTEmxU" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <div class="video-info">
+                <h3>Video Title 1</h3>
+                <p>Description for Video 1. This is a sample description.</p>
+            </div>
+        </div>
+
+        <!-- Video 2 -->
+        <div class="video-item">
+            <iframe src="https://www.youtube.com/embed/sqJ12DBktLw" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <div class="video-info">
+                <h3>Video Title 2</h3>
+                <p>Description for Video 2. This is a sample description.</p>
+            </div>
+        </div>
+
+        <!-- Video 3 -->
+        <div class="video-item">
+            <iframe src="https://www.youtube.com/embed/JdE6hT77FIk" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <div class="video-info">
+                <h3>Video Title 3</h3>
+                <p>Description for Video 3. This is a sample description.</p>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
