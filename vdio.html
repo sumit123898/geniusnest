@@ -35,13 +35,16 @@
         .search-bar {
             display: flex;
             align-items: center;
+            flex-grow: 1;
+            margin-left: 20px;
         }
 
         .search-bar input {
             padding: 8px;
             border: 1px solid #ddd;
             border-radius: 20px 0 0 20px;
-            width: 300px;
+            width: 100%;
+            max-width: 400px;
         }
 
         .search-bar button {
@@ -141,6 +144,10 @@
             .video-card {
                 flex: 1 1 calc(50% - 20px);
             }
+
+            .search-bar input {
+                max-width: 100%;
+            }
         }
 
         @media (max-width: 480px) {
@@ -151,6 +158,22 @@
             .popup-content iframe {
                 height: 300px;
             }
+
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 10px;
+            }
+
+            .search-bar {
+                width: 100%;
+                margin-left: 0;
+                margin-top: 10px;
+            }
+
+            .search-bar input {
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -158,26 +181,26 @@
 
     <!-- Header -->
     <header>
-        <div class="logo">YouTube</div>
+        <div class="logo">G-Tube</div>
         <div class="search-bar">
-            <input type="text" placeholder="Search...">
-            <button>Search</button>
+            <input type="text" id="searchInput" placeholder="Search...">
+            <button onclick="searchVideos()">Search</button>
         </div>
     </header>
 
     <!-- Main Content -->
-    <div class="main-content">
+    <div class="main-content" id="mainContent">
         <!-- Video Card 1 -->
-        <div class="video-card" onclick="openPopup('vUQ74BTEmxU')">
+        <div class="video-card" data-title="Video Title 1" onclick="openPopup('vUQ74BTEmxU')">
             <img src="https://img.youtube.com/vi/vUQ74BTEmxU/maxresdefault.jpg" alt="Video Thumbnail">
             <div class="video-info">
                 <h3>Video Title 1</h3>
-                <p>Channel Name • 1M views • 1 week ago</p>
+                <p>math • 789 M views • 1 week ago</p>
             </div>
         </div>
 
         <!-- Video Card 2 -->
-        <div class="video-card" onclick="openPopup('sqJ12DBktLw')">
+        <div class="video-card" data-title="Video Title 2" onclick="openPopup('sqJ12DBktLw')">
             <img src="https://img.youtube.com/vi/sqJ12DBktLw/maxresdefault.jpg" alt="Video Thumbnail">
             <div class="video-info">
                 <h3>Video Title 2</h3>
@@ -186,10 +209,10 @@
         </div>
 
         <!-- Video Card 3 -->
-        <div class="video-card" onclick="openPopup('JdE6hT77FIk')">
+        <div class="video-card" data-title="Video Title 3" onclick="openPopup('JdE6hT77FIk')">
             <img src="https://img.youtube.com/vi/JdE6hT77FIk/maxresdefault.jpg" alt="Video Thumbnail">
             <div class="video-info">
-                <h3>Video Title 3</h3>
+                <h3>math trick</h3>
                 <p>Channel Name • 2M views • 3 weeks ago</p>
             </div>
         </div>
@@ -228,6 +251,21 @@
                 closePopup();
             }
         };
+
+        // Function to search videos
+        function searchVideos() {
+            const searchQuery = document.getElementById('searchInput').value.toLowerCase();
+            const videoCards = document.querySelectorAll('.video-card');
+
+            videoCards.forEach(card => {
+                const title = card.getAttribute('data-title').toLowerCase();
+                if (title.includes(searchQuery)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
     </script>
 
 </body>
