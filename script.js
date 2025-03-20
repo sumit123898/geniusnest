@@ -86,3 +86,18 @@ function showSlide(index) {
 setInterval(() => {
   showSlide(currentSlide + 1);
 }, 4000);
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  Swal.fire({
+    title: 'Join Our Telegram Community!',
+    text: 'Get exclusive updates and connect with like-minded people.',
+    icon: 'info',
+    showCancelButton: true,
+    confirmButtonText: 'Join Now',
+    cancelButtonText: 'Not Now',
+  }).then((result) => {
+    if (result.isConfirmed) {
+      window.location.href = 'https://t.me/+GSd_OMQSm3E0ZmJl';
+    }
+  });
+</script>
