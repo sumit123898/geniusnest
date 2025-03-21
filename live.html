@@ -37,20 +37,91 @@
         .chat-button:hover {
             background-color: #cc0000; /* Darker red on hover */
         }
+        /* Password Popup Styles */
+        .password-popup {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+        }
+        .password-box {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .password-box input {
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .password-box button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #ff0000;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .password-box button:hover {
+            background-color: #cc0000;
+        }
+        .error-message {
+            color: red;
+            margin-top: 10px;
+            display: none;
+        }
     </style>
 </head>
 <body>
 
-    <div class="video-container">
-        <!-- Updated iframe with the new YouTube live video URL -->
-        <iframe src="https://www.youtube.com/embed/Nq2wYlWFucg" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    <!-- Password Popup -->
+    <div class="password-popup" id="passwordPopup">
+        <div class="password-box">
+            <h2>Enter Password</h2>
+            <input type="password" id="passwordInput" placeholder="Password">
+            <button onclick="checkPassword()">Submit</button>
+            <p class="error-message" id="errorMessage">Incorrect password. Please try again.</p>
+        </div>
     </div>
 
-    <button class="chat-button" onclick="openChatPopup()">Open Live Chat</button>
+    <!-- Main Content (Hidden by Default) -->
+    <div id="mainContent" style="display: none;">
+        <div class="video-container">
+            <iframe src="https://www.youtube.com/embed/Nq2wYlWFucg" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+
+        <button class="chat-button" onclick="openChatPopup()">Open Live Chat</button>
+    </div>
 
     <script>
+        // Password Protection
+        const correctPassword = "1234"; // Set your password here
+        const passwordPopup = document.getElementById("passwordPopup");
+        const mainContent = document.getElementById("mainContent");
+        const errorMessage = document.getElementById("errorMessage");
+
+        function checkPassword() {
+            const passwordInput = document.getElementById("passwordInput").value;
+            if (passwordInput === correctPassword) {
+                passwordPopup.style.display = "none"; // Hide the popup
+                mainContent.style.display = "block"; // Show the main content
+            } else {
+                errorMessage.style.display = "block"; // Show error message
+            }
+        }
+
+        // Open Chat Popup
         function openChatPopup() {
-            // Open the live chat in a popup window
             window.open(
                 'https://t.me/+LghpUCSNISQyODU1',
                 'Live Chat',
