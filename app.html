@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slideshow Banner with Navigation</title>
+    <style>
+        /* General body styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-bottom: 80px; /* Added padding for bottom nav */
+            box-sizing: border-box; /* Include padding in width calculation */
+        }
+
+        /* Top navigation bar */
+        .top-nav {
+            width: 100%;
+            background-color: #1b0f5b;
+            padding: 10px 10%; /* 10% padding on left and right */
+            display: flex;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            margin-bottom: 20px; /* Added margin for spacing */
+            box-sizing: border-box; /* Include padding in width calculation */
+        }
+
+        /* Logo and brand name container */
+        .brand {
+            display: flex;
+            align-items: center;
+        }
+
+        /* Logo in top nav */
+        .brand .logo {
+            height: 40px;
+            margin-right: 10px; /* Space between logo and brand name */
+        }
+
+        /* Brand name styling */
+        .brand .brand-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+        }
+
+        /* Banner container */
+        .banner {
+            width: 100%;
+            max-width: 100%; /* Ensure banner fits within viewport */
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            aspect-ratio: 16 / 9; /* Adjust based on your image ratio */
+        }
+
+        /* Banner images */
+        .banner img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        /* Show the first image by default */
+        .banner img:first-child {
+            opacity: 1;
+        }
+
+        /* Container for the circular buttons */
+        .button-container {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            max-width: 100%; /* Ensure buttons fit within viewport */
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            flex-wrap: nowrap; /* Ensure buttons stay in one line */
+            box-sizing: border-box; /* Include padding in width calculation */
+        }
+
+        /* Circular button styling */
+        .circle-button {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #007BFF;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            flex-shrink: 0; /* Prevent buttons from shrinking */
+            overflow: hidden; /* Ensure image fits inside the circle */
+        }
+
+        /* Circular button image */
+        .circle-button img {
+            width: 100%; /* Fill the circle */
+            height: 100%;
+            object-fit: cover; /* Ensure image covers the circle */
+            border-radius: 50%; /* Make the image circular */
+        }
+
+        /* Hover effect for circular buttons */
+        .circle-button:hover {
+            background-color: #0056b3;
+            transform: scale(1.1);
+        }
+
+        /* Container for the card buttons */
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 100%; /* Ensure cards fit within viewport */
+            margin-bottom: 20px; /* Added margin for spacing */
+            padding: 0 10px; /* Add padding to prevent overflow */
+            box-sizing: border-box; /* Include padding in width calculation */
+        }
+
+        /* Card button styling */
+        .card-button {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+            color: #333;
+            display: flex; /* Flexbox for two-column layout */
+            align-items: center; /* Center items vertically */
+            height: 100px; /* Fixed height for cards */
+            box-sizing: border-box; /* Include padding in width calculation */
+        }
+
+        /* Card button image */
+        .card-button img {
+            width: 40%; /* 40% of card width */
+            height: 100%; /* Same height as card */
+            object-fit: cover; /* Ensure image covers the area */
+            border-radius: 10px 0 0 10px; /* Rounded corners on the left */
+        }
+
+        /* Card button name container */
+        .card-button .name-container {
+            width: 60%; /* 60% of card width */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Name styling in card buttons */
+        .card-button span {
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        /* Hover effect for card buttons */
+        .card-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Bottom navigation bar */
+        .bottom-nav {
+            width: 100%;
+            max-width: 100%; /* Ensure bottom nav fits within viewport */
+            background-color: #cbffd5;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            bottom: 0;
+            z-index: 1000;
+            box-sizing: border-box; /* Include padding in width calculation */
+        }
+
+        /* Bottom nav icons */
+        .bottom-nav a {
+            color: black;
+            text-decoration: none;
+            font-size: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Bottom nav icon image */
+        .bottom-nav img {
+            width: 24px; /* Adjust size as needed */
+            height: 24px;
+            object-fit: contain;
+            margin-bottom: 5px;
+        }
+
+        /* Bottom nav icon labels */
+        .bottom-nav span {
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 600px) {
+            .button-container {
+                padding: 10px; /* Reduce padding for smaller screens */
+            }
+
+            .circle-button {
+                width: 50px; /* Smaller buttons for mobile */
+                height: 50px;
+            }
+
+            .circle-button img {
+                width: 100%; /* Ensure image fits */
+                height: 100%;
+            }
+
+            .card-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .card-button {
+                height: 80px; /* Smaller height for mobile */
+            }
+
+            .card-button img {
+                width: 40%; /* 40% of card width */
+                height: 100%; /* Same height as card */
+            }
+
+            .card-button span {
+                font-size: 14px; /* Smaller font size for mobile */
+            }
+
+            .bottom-nav {
+                padding: 10px;
+            }
+
+            .bottom-nav img {
+                width: 30px; /* Adjust size for mobile */
+                height: 30px;
+            }
+
+            .bottom-nav span {
+                font-size: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top navigation bar -->
+    <div class="top-nav">
+        <div class="brand">
+            <img src="https://i.ibb.co/QjQBrfZ0/Genius-Nest.png" alt="Logo" class="logo">
+            <div class="brand-name">GeniusNest</div>
+        </div>
+    </div>
+
+    <!-- Banner section -->
+    <div class="banner">
+        <img src="https://i.ibb.co/cSKB2xv5/Screenshot-2025-03-22-230031.png" alt="Graphic Design Banner">
+        <img src="https://i.ibb.co/tVSC3G5/Screenshot-2025-03-22-230443.png" alt="Travel Banner">
+        <img src="https://i.ibb.co/Z1kqhjFz/Screenshot-2025-03-22-230705.png" alt="Travel Banner">
+    </div>
+
+    <!-- Container for the circular buttons -->
+    <div class="button-container">
+        <!-- Button 1 -->
+        <a href="login.html" class="circle-button">
+            <img src="https://i.ibb.co/JWCR1G58/Screenshot-2025-03-22-220405.png" alt="Icon">
+        </a>
+        <!-- Button 2 -->
+        <a href="login.html" class="circle-button">
+            <img src="https://i.ibb.co/fdt2smsn/Screenshot-2025-03-22-220515.png" alt="Icon">
+        </a>
+        <!-- Button 3 -->
+        <a href="login.html" class="circle-button">
+            <img src="https://i.ibb.co/DHsyfshv/Screenshot-2025-03-22-220938.png" alt="Icon">
+        </a>
+    </div>
+
+    <!-- Container for the card buttons -->
+    <div class="card-container">
+        <!-- Card 1 -->
+        <a href="course.html" class="card-button">
+            <img src="https://i.ibb.co/tp9mW1nR/Screenshot-2025-03-22-221201.png" alt="Icon">
+            <div class="name-container">
+                <span>Course</span>
+            </div>
+        </a>
+        <!-- Card 2 -->
+        <a href="live.html" class="card-button">
+            <img src="https://i.ibb.co/NgQZh6hx/Screenshot-2025-03-22-221417.png" alt="Icon">
+            <div class="name-container">
+                <span>live news</span>
+            </div>
+        </a>
+        <!-- Card 3 -->
+        <a href="link.html" class="card-button">
+            <img src="https://i.ibb.co/H3gkC5h/Screenshot-2025-03-22-221610.png" alt="Icon">
+            <div class="name-container">
+                <span>Links</span>
+            </div>
+        </a>
+        <!-- Card 4 -->
+        <a href="https://sites.google.com/view/wavemath/home" class="card-button">
+            <img src="https://i.ibb.co/jZBQYzvP/Screenshot-2025-03-22-221846.png" alt="Icon">
+            <div class="name-container">
+                <span>Prime Members</span>
+            </div>
+        </a>
+        <!-- Card 5 -->
+        <a href="#" class="card-button">
+            <img src="https://i.ibb.co/QjQBrfZ0/Genius-Nest.png" alt="Icon">
+            <div class="name-container">
+                <span>Education</span>
+            </div>
+        </a>
+        <!-- Card 6 -->
+        <a href="#" class="card-button">
+            <img src="https://i.ibb.co/QjQBrfZ0/Genius-Nest.png" alt="Icon">
+            <div class="name-container">
+                <span>Shopping</span>
+            </div>
+        </a>
+    </div>
+
+    <!-- Bottom navigation bar -->
+    <div class="bottom-nav">
+        <a href="index.html">
+            <img src="https://i.ibb.co/QvvZg1DM/1.png" alt="Icon">
+            <span>Website </span>
+        </a>
+        <a href="https://www.sumit2.online/#services">
+            <img src="https://i.ibb.co/R4yH0WHv/2.png" alt="Icon">
+            <span>Services</span>
+        </a>
+        <a href="course.html">
+            <img src="https://i.ibb.co/2719Jsv6/3.png" alt="Icon">
+            <span>course </span>
+        </a>
+        <a href="login.html">
+            <img src="https://i.ibb.co/5hB9hh2x/4.png" alt="Icon">
+            <span>login</span>
+        </a>
+    </div>
+
+    <script>
+        // JavaScript for the slideshow
+        const banner = document.querySelector('.banner');
+        const images = banner.querySelectorAll('img');
+        let currentIndex = 0;
+
+        function showNextImage() {
+            // Hide the current image
+            images[currentIndex].style.opacity = 0;
+            // Move to the next image
+            currentIndex = (currentIndex + 1) % images.length;
+            // Show the next image
+            images[currentIndex].style.opacity = 1;
+        }
+
+        // Change image every 3 seconds
+        setInterval(showNextImage, 3000);
+    </script>
+</body>
+</html>
