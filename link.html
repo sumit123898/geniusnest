@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>All Important Links</title>
   <style>
     /* General Styles */
@@ -15,9 +15,9 @@
     }
 
     .container {
-      max-width: 800px;
-      margin: 50px auto;
-      padding: 20px;
+      max-width: 100%; /* Ensure container fits within the screen */
+      margin: 20px auto;
+      padding: 10px;
       background: #fff;
       border-radius: 10px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -26,54 +26,57 @@
     h1 {
       text-align: center;
       color: #2c3e50;
+      font-size: 1.5rem; /* Smaller font size for mobile */
     }
 
     p {
       text-align: center;
       color: #7f8c8d;
+      font-size: 0.9rem; /* Smaller font size for mobile */
     }
-    /* Back Button */
-.back-button {
-  display: inline-block;
-  margin: 20px;
-  padding: 10px 15px;
-  background-color: #007bff;
-  color: #fff;
-  text-decoration: none;
-  border-radius: 5px;
-  font-size: 16px;
-  transition: background-color 0.3s ease;
-}
 
-.back-button:hover {
-  background-color: #0056b3;
-}
+    /* Back Button */
+    .back-button {
+      display: inline-block;
+      margin: 10px;
+      padding: 8px 12px;
+      background-color: #007bff;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+      font-size: 0.9rem; /* Smaller font size for mobile */
+      transition: background-color 0.3s ease;
+    }
+
+    .back-button:hover {
+      background-color: #0056b3;
+    }
 
     /* Search Box */
     .search-box {
-      margin: 20px 0;
+      margin: 10px 0;
       text-align: center;
     }
 
     #searchInput {
-      width: 100%;
+      width: 90%; /* Responsive width */
       max-width: 400px;
-      padding: 10px;
+      padding: 8px;
       border: 2px solid #3498db;
       border-radius: 5px;
-      font-size: 16px;
+      font-size: 0.9rem; /* Smaller font size for mobile */
     }
 
     /* Links Container */
     .links-container {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 15px;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Responsive grid */
+      gap: 10px;
     }
 
     .link-card {
       background: #ecf0f1;
-      padding: 15px;
+      padding: 10px;
       border-radius: 5px;
       transition: transform 0.2s, box-shadow 0.2s;
     }
@@ -87,6 +90,7 @@
       text-decoration: none;
       color: #2980b9;
       font-weight: bold;
+      font-size: 0.9rem; /* Smaller font size for mobile */
     }
 
     .link-card a:hover {
@@ -96,13 +100,44 @@
     .link-card p {
       margin: 5px 0 0;
       color: #7f8c8d;
-      font-size: 14px;
+      font-size: 0.8rem; /* Smaller font size for mobile */
     }
-  
+
+    /* Mobile Responsiveness */
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 1.2rem; /* Smaller font size for mobile */
+      }
+
+      p {
+        font-size: 0.8rem; /* Smaller font size for mobile */
+      }
+
+      .back-button {
+        font-size: 0.8rem; /* Smaller font size for mobile */
+        padding: 6px 10px;
+      }
+
+      #searchInput {
+        font-size: 0.8rem; /* Smaller font size for mobile */
+      }
+
+      .links-container {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Smaller cards for mobile */
+      }
+
+      .link-card a {
+        font-size: 0.8rem; /* Smaller font size for mobile */
+      }
+
+      .link-card p {
+        font-size: 0.7rem; /* Smaller font size for mobile */
+      }
+    }
   </style>
 </head>
 <body>
-   <!-- Back Button -->
+  <!-- Back Button -->
   <a href="index.html" class="back-button">
     <i class="fas fa-arrow-left"></i> Back to Home
   </a>
@@ -117,17 +152,17 @@
     <div class="links-container" id="linksContainer">
       <!-- Links will be dynamically added here using JavaScript -->
     </div>
-</div>
+  </div>
 
   <script>
     // Sample data for links
     const links = [
       { name: "WBJEE", url: "https://wbjeeb.nic.in/", description: "JEE" },
-       { name: "JEE ADVANCED", url: "https://jeeadv.ac.in/", description: "JEE" },
-        { name: "SVMCM", url: "https://svmcm.wb.gov.in/", description: "scholarship" },
-        { name: "WBBSE", url: "https://wbbse.wb.gov.in/", description: " WBBSE" },
-        { name: "NTA-JEE", url: "https://jeemain.nta.nic.in/", description: "JEE" },
-       { name: "NTA-NEET", url: "https://neet.nta.nic.in/", description: "NEET" },
+      { name: "JEE ADVANCED", url: "https://jeeadv.ac.in/", description: "JEE" },
+      { name: "SVMCM", url: "https://svmcm.wb.gov.in/", description: "scholarship" },
+      { name: "WBBSE", url: "https://wbbse.wb.gov.in/", description: " WBBSE" },
+      { name: "NTA-JEE", url: "https://jeemain.nta.nic.in/", description: "JEE" },
+      { name: "NTA-NEET", url: "https://neet.nta.nic.in/", description: "NEET" },
       { name: "Google", url: "https://www.google.com", description: "Search the web" },
       { name: "Gmail", url: "https://mail.google.com", description: "Access your email" },
       { name: "Google Drive", url: "https://drive.google.com", description: "Cloud storage" },
