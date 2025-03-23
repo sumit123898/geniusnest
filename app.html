@@ -183,6 +183,122 @@
             box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
         }
 
+        /* Course cards container */
+        .course-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 100%; /* Ensure cards fit within viewport */
+            margin-bottom: 20px; /* Added margin for spacing */
+            padding: 0 10px; /* Add padding to prevent overflow */
+            box-sizing: border-box; /* Include padding in width calculation */
+        }
+
+        /* Course card styling */
+        .course-card {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Course card image */
+        .course-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        /* Course card title */
+        .course-card h3 {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+
+        /* Course card description */
+        .course-card p {
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* Hover effect for course cards */
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Reviews section */
+        .reviews-section {
+            width: 100%;
+            max-width: 100%;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+
+        .reviews-section h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .review-card {
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .review-card h3 {
+            font-size: 18px;
+            margin: 0 0 10px;
+        }
+
+        .review-card p {
+            font-size: 14px;
+            color: #555;
+            margin: 0;
+        }
+
+        .review-card .stars {
+            color: #ffc107;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .add-review-button {
+            display: block;
+            width: 100%;
+            max-width: 200px;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            text-align: center;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .add-review-button:hover {
+            background-color: #0056b3;
+        }
+
         /* Bottom navigation bar */
         .bottom-nav {
             width: 100%;
@@ -256,6 +372,39 @@
                 font-size: 14px; /* Smaller font size for mobile */
             }
 
+            .course-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .course-card img {
+                height: 100px; /* Smaller height for mobile */
+            }
+
+            .course-card h3 {
+                font-size: 16px;
+            }
+
+            .course-card p {
+                font-size: 12px;
+            }
+
+            .reviews-section h2 {
+                font-size: 20px;
+            }
+
+            .review-card h3 {
+                font-size: 16px;
+            }
+
+            .review-card p {
+                font-size: 12px;
+            }
+
+            .add-review-button {
+                font-size: 14px;
+                padding: 8px 16px;
+            }
+
             .bottom-nav {
                 padding: 10px;
             }
@@ -282,9 +431,9 @@
 
     <!-- Banner section -->
     <div class="banner">
-        <img src="https://i.ibb.co/cSKB2xv5/Screenshot-2025-03-22-230031.png" alt="Graphic Design Banner">
-        <img src="https://i.ibb.co/tVSC3G5/Screenshot-2025-03-22-230443.png" alt="Travel Banner">
-        <img src="https://i.ibb.co/Z1kqhjFz/Screenshot-2025-03-22-230705.png" alt="Travel Banner">
+        <img src="https://i.ibb.co/cS8Wg2Pb/22.jpg" alt="Graphic Design Banner">
+        <img src="https://i.ibb.co/j9f2V6nr/1.jpg" alt="Travel Banner">
+        <img src="https://i.ibb.co/1tc7158V/t.png" alt="Travel Banner">
     </div>
 
     <!-- Container for the circular buttons -->
@@ -335,28 +484,81 @@
         </a>
         <!-- Card 5 -->
         <a href="#" class="card-button">
-            <img src="https://i.ibb.co/QjQBrfZ0/Genius-Nest.png" alt="Icon">
+            <img src="https://i.ibb.co/1fQvhXwj/1.jpg" alt="Icon">
             <div class="name-container">
                 <span>Education</span>
             </div>
         </a>
         <!-- Card 6 -->
         <a href="#" class="card-button">
-            <img src="https://i.ibb.co/QjQBrfZ0/Genius-Nest.png" alt="Icon">
+            <img src="https://i.ibb.co/84gGsCDQ/1.jpg"" alt="Icon">
             <div class="name-container">
                 <span>Shopping</span>
             </div>
         </a>
     </div>
 
+    <!-- Container for the course cards -->
+    <div class="course-container">
+        <!-- Course Card 1 -->
+        <a href="https://sites.google.com/view/wavemath/home" class="course-card">
+            <img src="https://i.ibb.co/0yn24fhw/f.png" alt="Course Image">
+            <h3>Web Development</h3>
+            <p>Learn to build modern websites and web applications.</p>
+        </a>
+        <!-- Course Card 2 -->
+        <a href="https://sites.google.com/view/wavemath/home" class="course-card">
+            <img src="https://i.ibb.co/j9f2V6nr/1.jpg" alt="Course Image">
+            <h3>Graphic Design</h3>
+            <p>Master the art of visual communication and design.</p>
+        </a>
+        <!-- Course Card 3 -->
+        <a href="https://sites.google.com/view/wavemath/home" class="course-card">
+            <img src="https://i.ibb.co/1tc7158V/t.png" alt="Course Image">
+            <h3>Data Science</h3>
+            <p>Explore the world of data analysis and machine learning.</p>
+        </a>
+        <!-- Course Card 4 -->
+        <a href="https://sites.google.com/view/wavemath/home" class="course-card">
+            <img src="https://i.ibb.co/cS8Wg2Pb/22.jpg" alt="Course Image">
+            <h3>Mobile App Development</h3>
+            <p>Create mobile apps for iOS and Android platforms.</p>
+        </a>
+    </div>
+
+    <!-- Reviews section -->
+    <div class="reviews-section">
+        <h2>Student Reviews</h2>
+        <!-- Review 1 -->
+        <div class="review-card">
+            <div class="stars">★★★★★</div>
+            <h3>John Doe</h3>
+            <p>This course was amazing! I learned so much about web development.</p>
+        </div>
+        <!-- Review 2 -->
+        <div class="review-card">
+            <div class="stars">★★★★★</div>
+            <h3>Jane Smith</h3>
+            <p>Great content and excellent instructors. Highly recommended!</p>
+        </div>
+        <!-- Review 3 -->
+        <div class="review-card">
+            <div class="stars">★★★★★</div>
+            <h3>Alice Johnson</h3>
+            <p>The course was well-structured and easy to follow. Loved it!</p>
+        </div>
+        <!-- Add Review Button -->
+        <a href="https://forms.gle/u6eay8b3xQVUNSMr9" class="add-review-button">Add Your Review</a>
+    </div>
+
     <!-- Bottom navigation bar -->
     <div class="bottom-nav">
         <a href="index.html">
-            <img src="https://i.ibb.co/QvvZg1DM/1.png" alt="Icon">
+            <img src="https://i.ibb.co/fGtFQ8wP/1.png" alt="Icon">
             <span>Website </span>
         </a>
         <a href="https://www.sumit2.online/#services">
-            <img src="https://i.ibb.co/R4yH0WHv/2.png" alt="Icon">
+            <img src="https://i.ibb.co/gbtjq8HY/2.png" alt="Icon">
             <span>Services</span>
         </a>
         <a href="course.html">
