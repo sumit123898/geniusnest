@@ -278,6 +278,30 @@
             font-size: 16px;
         }
         
+        .upcoming-tasks {
+            background-color: var(--surface-hover);
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 10px;
+        }
+        
+        .upcoming-tasks h4 {
+            color: var(--accent);
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+        
+        .upcoming-task-item {
+            padding: 6px 0;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .upcoming-task-item:last-child {
+            border-bottom: none;
+        }
+        
         .progress-container {
             height: 6px;
             background: var(--surface-hover);
@@ -524,6 +548,12 @@
                 <button class="btn-pause" id="pause-timer">Pause</button>
                 <button class="btn-warning" id="do-later">Do Later</button>
                 <button class="btn-success" id="complete-task">Complete</button>
+                
+                <!-- Upcoming Tasks Section -->
+                <div class="upcoming-tasks" id="upcoming-tasks">
+                    <h4>Upcoming Tasks</h4>
+                    <!-- Tasks will be inserted here by JavaScript -->
+                </div>
             </div>
             <div class="progress-container">
                 <div class="progress-bar" id="progress-bar"></div>
@@ -581,6 +611,7 @@
             const doLaterBtn = document.getElementById('do-later');
             const completeTaskBtn = document.getElementById('complete-task');
             const progressBar = document.getElementById('progress-bar');
+            const upcomingTasksContainer = document.getElementById('upcoming-tasks');
             
             const summaryItems = document.getElementById('summary-items');
             const totalTimeDisplay = document.getElementById('total-time');
@@ -634,11 +665,11 @@
                     "Ray Optics",
                     "Atomic Physics",
                     "Dual Nature of Matter",
-                    "Nuclear Physics",
-                    "Some Basic Concepts",
-                    "Structure of Atom"
+                    "Nuclear Physics"
                 ],
                 "Chemistry": [
+                    "Some Basic Concepts",
+                    "Structure of Atom"
                     "Redox Reactions",
                     "Periodicity in Properties",
                     "Chemical Bonding and Molecular Structure",
@@ -846,7 +877,8 @@
                     hours,
                     minutes,
                     totalMinutes,
-                    totalSeconds: totalMinutes * 60
+                    totalSeconds: totalMinutes * 60,
+                    remainingSeconds: totalMinutes * 60 // Initialize remaining time
                 });
                 
                 renderTaskList();
@@ -892,6 +924,51 @@
                 });
             }
             
+            function renderUpcomingTasks() {
+                // Clear existing content except the header
+                upcomingTasksContainer.innerHTML = '<h4>Upcoming Tasks</h4>';
+                
+                if (tasks.length <= 1) {
+                    const emptyMsg = document.createElement('div');
+                    emptyMsg.textContent = 'No upcoming tasks';
+                    emptyMsg.style.color = 'var(--text-secondary)';
+                    emptyMsg.style.textAlign = 'center';
+                    emptyMsg.style.padding = '8px';
+                    upcomingTasksContainer.appendChild(emptyMsg);
+                    return;
+                }
+                
+                // Show next 3 tasks (excluding current)
+                const tasksToShow = tasks.slice(currentTaskIndex + 1, currentTaskIndex + 4);
+                
+                tasksToShow.forEach((task, index) => {
+                    const taskElement = document.createElement('div');
+                    taskElement.className = 'upcoming-task-item';
+                    
+                    const taskName = document.createElement('span');
+                    taskName.textContent = task.name;
+                    
+                    const taskTime = document.createElement('span');
+                    taskTime.textContent = formatTime(task.totalSeconds);
+                    taskTime.style.color = 'var(--text-secondary)';
+                    
+                    taskElement.appendChild(taskName);
+                    taskElement.appendChild(taskTime);
+                    upcomingTasksContainer.appendChild(taskElement);
+                });
+                
+                // Show "+X more" if there are additional tasks
+                if (tasks.length > currentTaskIndex + 4) {
+                    const moreCount = tasks.length - (currentTaskIndex + 4);
+                    const moreElement = document.createElement('div');
+                    moreElement.textContent = `+${moreCount} more`;
+                    moreElement.style.color = 'var(--text-secondary)';
+                    moreElement.style.textAlign = 'center';
+                    moreElement.style.paddingTop = '8px';
+                    upcomingTasksContainer.appendChild(moreElement);
+                }
+            }
+            
             function startStudying() {
                 if (tasks.length === 0) {
                     alert('Please add at least one task');
@@ -905,55 +982,83 @@
                 saveData();
                 
                 startTask(0);
+                renderUpcomingTasks();
             }
             
             function startTask(index) {
+                // Clear any existing timer
+                clearInterval(timerInterval);
+                
                 currentTaskIndex = index;
                 const task = tasks[currentTaskIndex];
                 
+                // Set up the new task
                 currentTaskDisplay.textContent = `Current Task: ${task.name} (${formatTime(task.totalSeconds)})`;
-                remainingSeconds = task.totalSeconds;
-                totalSeconds = task.totalSeconds;
                 
-                // If loading from saved state, we might have different remainingSeconds
-                if (remainingSeconds <= 0) {
+                // Check if this task has existing progress
+                if (typeof task.remainingSeconds !== 'undefined') {
+                    remainingSeconds = task.remainingSeconds;
+                } else {
                     remainingSeconds = task.totalSeconds;
+                    task.remainingSeconds = remainingSeconds; // Initialize remaining time
                 }
                 
-                updateTimerDisplay();
-                startTimer();
-                saveData();
-            }
-            
-            function startTimer() {
-                clearInterval(timerInterval);
-                isPaused = false;
-                pauseTimerBtn.textContent = 'Pause';
+                totalSeconds = task.totalSeconds;
                 
-                timerInterval = setInterval(function() {
-                    if (!isPaused) {
-                        remainingSeconds--;
-                        updateTimerDisplay();
-                        
-                        // Update progress bar
-                        const progress = ((totalSeconds - remainingSeconds) / totalSeconds) * 100;
-                        progressBar.style.width = `${progress}%`;
-                        
-                        if (remainingSeconds <= 0) {
-                            clearInterval(timerInterval);
-                            // Auto-complete when time runs out
-                            completeTask();
-                        }
-                        
-                        saveData();
-                    }
-                }, 1000);
+                updateTimerDisplay();
+                
+                // Update progress bar
+                const progress = ((totalSeconds - remainingSeconds) / totalSeconds) * 100;
+                progressBar.style.width = `${progress}%`;
+                
+                // Update upcoming tasks
+                renderUpcomingTasks();
+                
+                // Start the timer if not paused
+                if (!isPaused) {
+                    startTimer();
+                } else {
+                    pauseTimerBtn.textContent = 'Resume';
+                }
+                
+                saveData();
             }
             
             function togglePause() {
                 isPaused = !isPaused;
                 pauseTimerBtn.textContent = isPaused ? 'Resume' : 'Pause';
+                
+                if (!isPaused) {
+                    startTimer();
+                } else {
+                    clearInterval(timerInterval);
+                    // Save current progress when pausing
+                    tasks[currentTaskIndex].remainingSeconds = remainingSeconds;
+                }
+                
                 saveData();
+            }
+            
+            function startTimer() {
+                clearInterval(timerInterval);
+                
+                timerInterval = setInterval(function() {
+                    remainingSeconds--;
+                    tasks[currentTaskIndex].remainingSeconds = remainingSeconds; // Save progress
+                    
+                    updateTimerDisplay();
+                    
+                    // Update progress bar
+                    const progress = ((totalSeconds - remainingSeconds) / totalSeconds) * 100;
+                    progressBar.style.width = `${progress}%`;
+                    
+                    if (remainingSeconds <= 0) {
+                        clearInterval(timerInterval);
+                        completeTask();
+                    }
+                    
+                    saveData();
+                }, 1000);
             }
             
             function updateTimerDisplay() {
@@ -992,14 +1097,21 @@
             function changeCurrentTask() {
                 const selectedIndex = parseInt(taskSelectDropdown.value);
                 if (selectedIndex !== currentTaskIndex) {
-                    clearInterval(timerInterval);
+                    // Save current task progress before switching
+                    tasks[currentTaskIndex].remainingSeconds = remainingSeconds;
+                    
+                    // Switch to new task
                     startTask(selectedIndex);
+                    renderUpcomingTasks();
                     toggleTaskSelection();
                 }
             }
             
             function doLater() {
                 clearInterval(timerInterval);
+                
+                // Save current progress
+                tasks[currentTaskIndex].remainingSeconds = remainingSeconds;
                 
                 // Move current task to end of array
                 const task = tasks.splice(currentTaskIndex, 1)[0];
@@ -1011,6 +1123,7 @@
                     showSummary();
                 }
                 
+                renderUpcomingTasks();
                 saveData();
             }
             
@@ -1037,6 +1150,7 @@
                     showSummary();
                 }
                 
+                renderUpcomingTasks();
                 saveData();
             }
             
@@ -1175,6 +1289,9 @@
                         // Update progress bar for current task
                         const progress = ((totalSeconds - remainingSeconds) / totalSeconds) * 100;
                         progressBar.style.width = `${progress}%`;
+                        
+                        // Update upcoming tasks
+                        renderUpcomingTasks();
                         
                         // Restart the timer if it wasn't paused
                         if (!isPaused && remainingSeconds > 0) {
