@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Study Task Timer</title>
     <style>
         :root {
@@ -56,25 +56,27 @@
         }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             background-color: var(--bg);
             color: var(--text);
-            padding: 15px;
+            padding: 10px;
             line-height: 1.5;
+            -webkit-tap-highlight-color: transparent;
         }
         
         .app-container {
             max-width: 800px;
             margin: 0 auto;
+            padding-bottom: 20px;
         }
         
         .top-nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 8px;
         }
         
         h1, h2 {
@@ -82,33 +84,46 @@
         }
         
         h1 {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             margin: 0;
         }
         
         h2 {
-            margin-bottom: 15px;
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+        }
+        
+        h3 {
+            font-size: 1.1rem;
+            margin: 10px 0 5px 0;
+            color: var(--accent);
         }
         
         .nav-actions {
             display: flex;
-            gap: 10px;
+            gap: 8px;
         }
         
         .setup-container, .timer-container, .summary-container {
             background: var(--surface);
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 15px;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 12px;
             border: 1px solid var(--border);
         }
         
         .task-form {
             display: flex;
-            flex-wrap: wrap;
+            flex-direction: column;
             gap: 10px;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
+        }
+        
+        .task-input-row {
+            display: flex;
+            gap: 10px;
+            width: 100%;
         }
         
         input, button, select {
@@ -117,6 +132,7 @@
             font-size: 16px;
             width: 100%;
             transition: all 0.3s;
+            border: none;
         }
         
         input, select {
@@ -135,18 +151,13 @@
             color: var(--text-secondary);
         }
         
-        @media (min-width: 480px) {
-            .task-form input {
-                width: auto;
-                flex: 1;
-            }
-        }
-        
         button {
             cursor: pointer;
             font-weight: bold;
             border: none;
             white-space: nowrap;
+            user-select: none;
+            -webkit-user-select: none;
         }
         
         .btn-primary {
@@ -191,49 +202,37 @@
         .btn-theme {
             background-color: var(--accent);
             color: white;
-        }
-        
-        button:hover {
-            filter: brightness(1.1);
-            transform: translateY(-1px);
+            min-width: 44px;
         }
         
         button:active {
-            transform: translateY(0);
+            transform: scale(0.98);
         }
         
         .task-list {
             list-style: none;
             padding: 0;
-            margin-top: 15px;
+            margin-top: 12px;
         }
         
         .task-item {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
             padding: 12px;
             background-color: var(--surface-hover);
             border-radius: 8px;
             margin-bottom: 10px;
             border-left: 4px solid var(--accent);
             gap: 8px;
-            transition: all 0.3s;
-        }
-        
-        .task-item:hover {
-            background-color: var(--surface-hover);
         }
         
         .task-info {
             flex: 1;
-            min-width: 150px;
         }
         
         .task-name {
             font-weight: bold;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
             word-break: break-word;
         }
         
@@ -245,12 +244,13 @@
         .task-actions {
             display: flex;
             gap: 8px;
+            justify-content: flex-end;
         }
         
         .timer-display {
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             text-align: center;
-            margin: 15px 0;
+            margin: 12px 0;
             font-family: monospace;
             color: var(--accent);
             text-shadow: 0 0 10px rgba(72, 149, 239, 0.3);
@@ -258,8 +258,8 @@
         
         .current-task {
             text-align: center;
-            font-size: 1.1rem;
-            margin-bottom: 15px;
+            font-size: 1rem;
+            margin-bottom: 12px;
             padding: 10px;
             background-color: var(--surface-hover);
             border-radius: 8px;
@@ -268,22 +268,21 @@
         
         .timer-controls {
             display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 12px;
         }
         
         .timer-controls button {
-            flex: 1;
-            min-width: 120px;
+            padding: 14px;
+            font-size: 16px;
         }
         
         .progress-container {
-            height: 8px;
+            height: 6px;
             background: var(--surface-hover);
             border-radius: 5px;
-            margin-top: 15px;
+            margin-top: 12px;
             overflow: hidden;
         }
         
@@ -301,8 +300,7 @@
         
         .summary-item {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
+            flex-direction: column;
             padding: 10px 0;
             border-bottom: 1px solid var(--border);
             gap: 5px;
@@ -310,13 +308,13 @@
         
         .total-time {
             font-weight: bold;
-            margin-top: 15px;
-            padding-top: 15px;
+            margin-top: 12px;
+            padding-top: 12px;
             border-top: 2px solid var(--primary);
         }
         
         .task-selector {
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
         
         .task-selector select {
@@ -354,15 +352,17 @@
             transform: translate(-50%, -50%);
             background-color: var(--success);
             color: white;
-            padding: 20px 40px;
+            padding: 20px 30px;
             border-radius: 10px;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             font-weight: bold;
             z-index: 1001;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
             opacity: 0;
             animation: celebration-popup 2s ease-in-out;
             display: none;
+            text-align: center;
+            max-width: 90%;
         }
         
         @keyframes celebration-popup {
@@ -373,19 +373,115 @@
             100% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
         }
         
-        @media (max-width: 400px) {
-            .top-nav {
-                flex-direction: column;
-                align-items: flex-start;
+        /* Library Modal Styles */
+        .library-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1002;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+        }
+        
+        .library-content {
+            background-color: var(--surface);
+            padding: 16px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .library-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .library-close {
+            font-size: 1.8rem;
+            cursor: pointer;
+            padding: 5px 15px;
+        }
+        
+        .library-items {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .library-item {
+            padding: 10px;
+            background-color: var(--surface-hover);
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+        }
+        
+        .library-item:active {
+            transform: scale(0.95);
+        }
+        
+        /* Media Queries for larger screens */
+        @media (min-width: 480px) {
+            body {
+                padding: 15px;
             }
             
-            .nav-actions {
-                width: 100%;
+            .task-form {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+            
+            .task-input-row {
+                flex: 1;
+            }
+            
+            #task-hours, #task-minutes {
+                max-width: 100px;
+            }
+            
+            .task-item {
+                flex-direction: row;
+                align-items: center;
+            }
+            
+            .timer-controls {
+                flex-direction: row;
+            }
+            
+            .timer-controls button {
+                flex: 1;
+            }
+            
+            .summary-item {
+                flex-direction: row;
                 justify-content: space-between;
             }
-            
+        }
+        
+        @media (min-width: 768px) {
             .timer-display {
-                font-size: 2rem;
+                font-size: 3rem;
+            }
+            
+            .current-task {
+                font-size: 1.2rem;
+            }
+        }
+        
+        /* Prevent zoom on input focus on mobile */
+        @media screen and (max-width: 480px) {
+            input, select, textarea {
+                font-size: 16px !important;
             }
         }
     </style>
@@ -396,7 +492,7 @@
             <h1>Study Task Timer</h1>
             <div class="nav-actions">
                 <button class="btn-theme btn-small" id="theme-toggle">🌙</button>
-                <button class="btn-reset btn-small" id="reset-all">Reset Data</button>
+                <button class="btn-reset btn-small" id="reset-all">Reset</button>
                 <button class="btn-warning btn-small" id="toggle-task-select" style="display: none;">Select Task</button>
             </div>
         </div>
@@ -404,13 +500,18 @@
         <div class="setup-container" id="setup-container">
             <h2>Add Your Study Tasks</h2>
             <div class="task-form">
-                <input type="text" id="task-name" placeholder="Subject (e.g. Physics)">
-                <input type="number" id="task-hours" placeholder="Hours" min="0" max="24">
-                <input type="number" id="task-minutes" placeholder="Minutes" min="0" max="59">
-                <button class="btn-primary" id="add-task">Add</button>
+                <div class="task-input-row">
+                    <input type="text" id="task-name" placeholder="Subject (e.g. Physics)">
+                    <button class="btn-primary" id="choose-from-library">Library</button>
+                </div>
+                <div class="task-input-row">
+                    <input type="number" id="task-hours" placeholder="Hours" min="0" max="24">
+                    <input type="number" id="task-minutes" placeholder="Minutes" min="0" max="59">
+                    <button class="btn-primary" id="add-task">Add</button>
+                </div>
             </div>
             <ul class="task-list" id="task-list"></ul>
-            <button class="btn-primary" id="start-studying">Let's Start Studying!</button>
+            <button class="btn-primary" id="start-studying">Start Studying!</button>
         </div>
         
         <div class="timer-container" id="timer-container" style="display: none;">
@@ -433,11 +534,24 @@
             <h2>Study Session Summary</h2>
             <div id="summary-items"></div>
             <div class="total-time" id="total-time"></div>
-            <button class="btn-primary" id="new-session">Start New Session</button>
+            <button class="btn-primary" id="new-session">New Session</button>
         </div>
         
         <div class="completion-celebration" id="completion-celebration">
             Task Completed! 🎉
+        </div>
+        
+        <!-- Library Modal -->
+        <div class="library-modal" id="library-modal">
+            <div class="library-content">
+                <div class="library-header">
+                    <h2>Choose Subject</h2>
+                    <span class="library-close" id="library-close">&times;</span>
+                </div>
+                <div class="library-items" id="library-items">
+                    <!-- Subjects will be added here by JavaScript -->
+                </div>
+            </div>
         </div>
     </div>
 
@@ -472,6 +586,12 @@
             const totalTimeDisplay = document.getElementById('total-time');
             const newSessionBtn = document.getElementById('new-session');
             
+            // Library elements
+            const chooseFromLibraryBtn = document.getElementById('choose-from-library');
+            const libraryModal = document.getElementById('library-modal');
+            const libraryClose = document.getElementById('library-close');
+            const libraryItems = document.getElementById('library-items');
+            
             // Variables
             let tasks = [];
             let currentTaskIndex = 0;
@@ -483,6 +603,93 @@
             let isPaused = false;
             let isTaskSelectionVisible = false;
             let isDarkTheme = false;
+            
+            // Organized Subject Library
+            const subjectLibrary = {
+                "Physics": [
+                    "Units and Dimensions",
+                    "Mathematics in Physics",
+                    "Motion In One Dimension",
+                    "Motion In Two Dimensions",
+                    "Laws of Motion",
+                    "Work Power Energy",
+                    "Center of Mass Momentum",
+                    "Rotational Motion",
+                    "Gravitation",
+                    "Fluids",
+                    "Solids",
+                    "Oscillation",
+                    "Waves and Sound",
+                    "Kinetic Theory of Gases",
+                    "Thermal Properties Matter",
+                    "Thermodynamics",
+                    "Electrostatics",
+                    "Capacitance",
+                    "Current Electricity",
+                    "Magnetic Effects of Current",
+                    "Magnetic Properties",
+                    "Alternating Current",
+                    "Electromagnetic Induction",
+                    "Wave Optics",
+                    "Ray Optics",
+                    "Atomic Physics",
+                    "Dual Nature of Matter",
+                    "Nuclear Physics",
+                    "Some Basic Concepts",
+                    "Structure of Atom"
+                ],
+                "Chemistry": [
+                    "Redox Reactions",
+                    "Periodicity in Properties",
+                    "Chemical Bonding and Molecular Structure",
+                    "Thermodynamics (C)",
+                    "Chemical Equilibrium",
+                    "Ionic Equilibrium",
+                    "Chemical Kinetics",
+                    "Electrochemistry",
+                    "Solutions",
+                    "General Organic Chemistry",
+                    "Hydrocarbons",
+                    "Haloalkanes and Haloarenes",
+                    "Alcohols Phenols and Ethers",
+                    "Aldehydes and Ketones",
+                    "Carboxylic Acid Derivatives",
+                    "Amines",
+                    "Biomolecules",
+                    "Coordination Compounds",
+                    "d and f Block Element",
+                    "p Block Elements"
+                ],
+                "Mathematics": [
+                    "Basic of Mathematics",
+                    "Quadratic Equation",
+                    "Complex Number",
+                    "Binomial Theorem",
+                    "Sequences and Series",
+                    "Trigonometry",
+                    "Permutation Combination",
+                    "Probability",
+                    "Inverse Trigonometry",
+                    "Straight Lines",
+                    "Circle",
+                    "Parabola",
+                    "Ellipse Hyperbola",
+                    "Sets and Relations",
+                    "Functions",
+                    "Matrices",
+                    "Determinants",
+                    "Limits",
+                    "Continuity and Diff",
+                    "Application of Derivatives",
+                    "Indefinite Integration",
+                    "Definite Integration",
+                    "Area Under Curves",
+                    "Differential Equations",
+                    "3D",
+                    "Vector Algebra",
+                    "Statistics"
+                ]
+            };
             
             // Initialize theme from localStorage or prefer-color-scheme
             initTheme();
@@ -502,8 +709,19 @@
             taskSelectDropdown.addEventListener('change', changeCurrentTask);
             themeToggleBtn.addEventListener('click', toggleTheme);
             
+            // Library event listeners
+            chooseFromLibraryBtn.addEventListener('click', openLibrary);
+            libraryClose.addEventListener('click', closeLibrary);
+            
             // Save data before page unload
             window.addEventListener('beforeunload', saveData);
+            
+            // Prevent form submission on Enter key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
+                    e.preventDefault();
+                }
+            });
             
             // Functions
             function initTheme() {
@@ -572,6 +790,38 @@
                 setTimeout(() => {
                     completionCelebration.style.display = 'none';
                 }, 2000);
+            }
+            
+            function openLibrary() {
+                // Clear previous items
+                libraryItems.innerHTML = '';
+                
+                // Create category sections
+                for (const category in subjectLibrary) {
+                    // Add category header
+                    const categoryHeader = document.createElement('h3');
+                    categoryHeader.textContent = category;
+                    libraryItems.appendChild(categoryHeader);
+                    
+                    // Add subjects for this category
+                    subjectLibrary[category].forEach(subject => {
+                        const item = document.createElement('div');
+                        item.className = 'library-item';
+                        item.textContent = subject;
+                        item.addEventListener('click', () => {
+                            taskNameInput.value = subject;
+                            closeLibrary();
+                            taskHoursInput.focus();
+                        });
+                        libraryItems.appendChild(item);
+                    });
+                }
+                
+                libraryModal.style.display = 'flex';
+            }
+            
+            function closeLibrary() {
+                libraryModal.style.display = 'none';
             }
             
             function addTask() {
@@ -664,6 +914,11 @@
                 currentTaskDisplay.textContent = `Current Task: ${task.name} (${formatTime(task.totalSeconds)})`;
                 remainingSeconds = task.totalSeconds;
                 totalSeconds = task.totalSeconds;
+                
+                // If loading from saved state, we might have different remainingSeconds
+                if (remainingSeconds <= 0) {
+                    remainingSeconds = task.totalSeconds;
+                }
                 
                 updateTimerDisplay();
                 startTimer();
@@ -909,15 +1164,24 @@
                         setupContainer.style.display = 'none';
                         timerContainer.style.display = 'block';
                         toggleTaskSelectBtn.style.display = 'block';
-                        startTask(currentTaskIndex);
                         
-                        if (isPaused) {
-                            pauseTimerBtn.textContent = 'Resume';
-                        }
+                        // Update the current task display
+                        const task = tasks[currentTaskIndex];
+                        currentTaskDisplay.textContent = `Current Task: ${task.name} (${formatTime(task.totalSeconds)})`;
+                        
+                        // Update the timer display
+                        updateTimerDisplay();
                         
                         // Update progress bar for current task
                         const progress = ((totalSeconds - remainingSeconds) / totalSeconds) * 100;
                         progressBar.style.width = `${progress}%`;
+                        
+                        // Restart the timer if it wasn't paused
+                        if (!isPaused && remainingSeconds > 0) {
+                            startTimer();
+                        } else if (isPaused) {
+                            pauseTimerBtn.textContent = 'Resume';
+                        }
                     } 
                     else if (data.currentScreen === 'summary' || (sessionActive && tasks.length === 0)) {
                         setupContainer.style.display = 'none';
