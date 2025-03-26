@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Task Timer</title>
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4895ef;
+            --success: #4cc9f0;
+            --warning: #f72585;
+            --danger: #ef233c;
+            --pause: #7209b7;
+            
+            /* Light theme colors */
+            --bg-light: #f5f7fa;
+            --surface-light: #ffffff;
+            --surface-light-hover: #f0f0f0;
+            --text-light: #212529;
+            --text-light-secondary: #6c757d;
+            --border-light: #ddd;
+            
+            /* Dark theme colors */
+            --bg-dark: #121212;
+            --surface-dark: #1e1e1e;
+            --surface-dark-hover: #2a2a2a;
+            --text-dark: #e0e0e0;
+            --text-dark-secondary: #a0a0a0;
+            --border-dark: #333;
+            
+            /* Current theme defaults */
+            --bg: var(--bg-light);
+            --surface: var(--surface-light);
+            --surface-hover: var(--surface-light-hover);
+            --text: var(--text-light);
+            --text-secondary: var(--text-light-secondary);
+            --border: var(--border-light);
+        }
+        
+        .dark-theme {
+            --bg: var(--bg-dark);
+            --surface: var(--surface-dark);
+            --surface-hover: var(--surface-dark-hover);
+            --text: var(--text-dark);
+            --text-secondary: var(--text-dark-secondary);
+            --border: var(--border-dark);
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            padding: 15px;
+            line-height: 1.5;
+        }
+        
+        .app-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        h1, h2 {
+            color: var(--accent);
+        }
+        
+        h1 {
+            font-size: 1.5rem;
+            margin: 0;
+        }
+        
+        h2 {
+            margin-bottom: 15px;
+        }
+        
+        .nav-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .setup-container, .timer-container, .summary-container {
+            background: var(--surface);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 15px;
+            border: 1px solid var(--border);
+        }
+        
+        .task-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        input, button, select {
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-size: 16px;
+            width: 100%;
+            transition: all 0.3s;
+        }
+        
+        input, select {
+            background-color: var(--surface-hover);
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(72, 149, 239, 0.3);
+        }
+        
+        input::placeholder {
+            color: var(--text-secondary);
+        }
+        
+        @media (min-width: 480px) {
+            .task-form input {
+                width: auto;
+                flex: 1;
+            }
+        }
+        
+        button {
+            cursor: pointer;
+            font-weight: bold;
+            border: none;
+            white-space: nowrap;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--secondary);
+        }
+        
+        .btn-success {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .btn-warning {
+            background-color: var(--warning);
+            color: white;
+        }
+        
+        .btn-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+        
+        .btn-pause {
+            background-color: var(--pause);
+            color: white;
+        }
+        
+        .btn-small {
+            padding: 8px 12px;
+            font-size: 14px;
+        }
+        
+        .btn-reset {
+            background-color: #6c757d;
+            color: white;
+        }
+        
+        .btn-theme {
+            background-color: var(--accent);
+            color: white;
+        }
+        
+        button:hover {
+            filter: brightness(1.1);
+            transform: translateY(-1px);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .task-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 15px;
+        }
+        
+        .task-item {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background-color: var(--surface-hover);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 4px solid var(--accent);
+            gap: 8px;
+            transition: all 0.3s;
+        }
+        
+        .task-item:hover {
+            background-color: var(--surface-hover);
+        }
+        
+        .task-info {
+            flex: 1;
+            min-width: 150px;
+        }
+        
+        .task-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+            word-break: break-word;
+        }
+        
+        .task-time {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+        
+        .task-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .timer-display {
+            font-size: 2.5rem;
+            text-align: center;
+            margin: 15px 0;
+            font-family: monospace;
+            color: var(--accent);
+            text-shadow: 0 0 10px rgba(72, 149, 239, 0.3);
+        }
+        
+        .current-task {
+            text-align: center;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: var(--surface-hover);
+            border-radius: 8px;
+            word-break: break-word;
+        }
+        
+        .timer-controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .timer-controls button {
+            flex: 1;
+            min-width: 120px;
+        }
+        
+        .progress-container {
+            height: 8px;
+            background: var(--surface-hover);
+            border-radius: 5px;
+            margin-top: 15px;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--primary));
+            border-radius: 5px;
+            width: 0%;
+            transition: width 0.5s;
+        }
+        
+        .summary-container {
+            display: none;
+        }
+        
+        .summary-item {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+            gap: 5px;
+        }
+        
+        .total-time {
+            font-weight: bold;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid var(--primary);
+        }
+        
+        .task-selector {
+            margin-bottom: 15px;
+        }
+        
+        .task-selector select {
+            width: 100%;
+            background-color: var(--surface-hover);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+        
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background-color: var(--success);
+            opacity: 0;
+            animation: confetti-fall 3s ease-in-out;
+            z-index: 1000;
+        }
+        
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        .completion-celebration {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: var(--success);
+            color: white;
+            padding: 20px 40px;
+            border-radius: 10px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            z-index: 1001;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            animation: celebration-popup 2s ease-in-out;
+            display: none;
+        }
+        
+        @keyframes celebration-popup {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+            20% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+            40% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            80% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+        }
+        
+        @media (max-width: 400px) {
+            .top-nav {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .nav-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .timer-display {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="top-nav">
+            <h1>Study Task Timer</h1>
+            <div class="nav-actions">
+                <button class="btn-theme btn-small" id="theme-toggle">🌙</button>
+                <button class="btn-reset btn-small" id="reset-all">Reset Data</button>
+                <button class="btn-warning btn-small" id="toggle-task-select" style="display: none;">Select Task</button>
+            </div>
+        </div>
+        
+        <div class="setup-container" id="setup-container">
+            <h2>Add Your Study Tasks</h2>
+            <div class="task-form">
+                <input type="text" id="task-name" placeholder="Subject (e.g. Physics)">
+                <input type="number" id="task-hours" placeholder="Hours" min="0" max="24">
+                <input type="number" id="task-minutes" placeholder="Minutes" min="0" max="59">
+                <button class="btn-primary" id="add-task">Add</button>
+            </div>
+            <ul class="task-list" id="task-list"></ul>
+            <button class="btn-primary" id="start-studying">Let's Start Studying!</button>
+        </div>
+        
+        <div class="timer-container" id="timer-container" style="display: none;">
+            <div class="task-selector" id="task-selector" style="display: none;">
+                <select id="task-select-dropdown"></select>
+            </div>
+            <div class="current-task" id="current-task"></div>
+            <div class="timer-display" id="timer-display">00:00:00</div>
+            <div class="timer-controls">
+                <button class="btn-pause" id="pause-timer">Pause</button>
+                <button class="btn-warning" id="do-later">Do Later</button>
+                <button class="btn-success" id="complete-task">Complete</button>
+            </div>
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+        </div>
+        
+        <div class="summary-container" id="summary-container">
+            <h2>Study Session Summary</h2>
+            <div id="summary-items"></div>
+            <div class="total-time" id="total-time"></div>
+            <button class="btn-primary" id="new-session">Start New Session</button>
+        </div>
+        
+        <div class="completion-celebration" id="completion-celebration">
+            Task Completed! 🎉
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const setupContainer = document.getElementById('setup-container');
+            const timerContainer = document.getElementById('timer-container');
+            const summaryContainer = document.getElementById('summary-container');
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            const completionCelebration = document.getElementById('completion-celebration');
+            
+            const taskNameInput = document.getElementById('task-name');
+            const taskHoursInput = document.getElementById('task-hours');
+            const taskMinutesInput = document.getElementById('task-minutes');
+            const addTaskBtn = document.getElementById('add-task');
+            const taskList = document.getElementById('task-list');
+            const startStudyingBtn = document.getElementById('start-studying');
+            const resetAllBtn = document.getElementById('reset-all');
+            const toggleTaskSelectBtn = document.getElementById('toggle-task-select');
+            
+            const taskSelector = document.getElementById('task-selector');
+            const taskSelectDropdown = document.getElementById('task-select-dropdown');
+            const currentTaskDisplay = document.getElementById('current-task');
+            const timerDisplay = document.getElementById('timer-display');
+            const pauseTimerBtn = document.getElementById('pause-timer');
+            const doLaterBtn = document.getElementById('do-later');
+            const completeTaskBtn = document.getElementById('complete-task');
+            const progressBar = document.getElementById('progress-bar');
+            
+            const summaryItems = document.getElementById('summary-items');
+            const totalTimeDisplay = document.getElementById('total-time');
+            const newSessionBtn = document.getElementById('new-session');
+            
+            // Variables
+            let tasks = [];
+            let currentTaskIndex = 0;
+            let timerInterval;
+            let remainingSeconds = 0;
+            let totalSeconds = 0;
+            let completedTasks = [];
+            let sessionActive = false;
+            let isPaused = false;
+            let isTaskSelectionVisible = false;
+            let isDarkTheme = false;
+            
+            // Initialize theme from localStorage or prefer-color-scheme
+            initTheme();
+            
+            // Load data from localStorage
+            loadData();
+            
+            // Event Listeners
+            addTaskBtn.addEventListener('click', addTask);
+            startStudyingBtn.addEventListener('click', startStudying);
+            pauseTimerBtn.addEventListener('click', togglePause);
+            doLaterBtn.addEventListener('click', doLater);
+            completeTaskBtn.addEventListener('click', completeTask);
+            newSessionBtn.addEventListener('click', startNewSession);
+            resetAllBtn.addEventListener('click', resetAllData);
+            toggleTaskSelectBtn.addEventListener('click', toggleTaskSelection);
+            taskSelectDropdown.addEventListener('change', changeCurrentTask);
+            themeToggleBtn.addEventListener('click', toggleTheme);
+            
+            // Save data before page unload
+            window.addEventListener('beforeunload', saveData);
+            
+            // Functions
+            function initTheme() {
+                const savedTheme = localStorage.getItem('studyTimerTheme');
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                
+                if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+                    enableDarkTheme();
+                } else {
+                    enableLightTheme();
+                }
+            }
+            
+            function toggleTheme() {
+                if (isDarkTheme) {
+                    enableLightTheme();
+                } else {
+                    enableDarkTheme();
+                }
+                saveData();
+            }
+            
+            function enableDarkTheme() {
+                document.body.classList.add('dark-theme');
+                themeToggleBtn.textContent = '☀️';
+                isDarkTheme = true;
+                localStorage.setItem('studyTimerTheme', 'dark');
+            }
+            
+            function enableLightTheme() {
+                document.body.classList.remove('dark-theme');
+                themeToggleBtn.textContent = '🌙';
+                isDarkTheme = false;
+                localStorage.setItem('studyTimerTheme', 'light');
+            }
+            
+            function createConfetti() {
+                for (let i = 0; i < 50; i++) {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.backgroundColor = getRandomColor();
+                    confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                    confetti.style.animationDelay = (Math.random() * 0.5) + 's';
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => {
+                        confetti.remove();
+                    }, 3000);
+                }
+            }
+            
+            function getRandomColor() {
+                const colors = [
+                    '#4cc9f0', '#4895ef', '#4361ee', 
+                    '#3f37c9', '#7209b7', '#f72585',
+                    '#b5179e', '#560bad', '#480ca8'
+                ];
+                return colors[Math.floor(Math.random() * colors.length)];
+            }
+            
+            function celebrateCompletion() {
+                completionCelebration.style.display = 'block';
+                createConfetti();
+                
+                setTimeout(() => {
+                    completionCelebration.style.display = 'none';
+                }, 2000);
+            }
+            
+            function addTask() {
+                const name = taskNameInput.value.trim();
+                const hours = parseInt(taskHoursInput.value) || 0;
+                const minutes = parseInt(taskMinutesInput.value) || 0;
+                
+                if (!name) {
+                    alert('Please enter a task name');
+                    return;
+                }
+                
+                if (hours === 0 && minutes === 0) {
+                    alert('Please enter time for the task');
+                    return;
+                }
+                
+                const totalMinutes = (hours * 60) + minutes;
+                
+                tasks.push({
+                    name,
+                    hours,
+                    minutes,
+                    totalMinutes,
+                    totalSeconds: totalMinutes * 60
+                });
+                
+                renderTaskList();
+                saveData();
+                
+                // Clear inputs
+                taskNameInput.value = '';
+                taskHoursInput.value = '';
+                taskMinutesInput.value = '';
+                taskNameInput.focus();
+            }
+            
+            function renderTaskList() {
+                taskList.innerHTML = '';
+                
+                tasks.forEach((task, index) => {
+                    const li = document.createElement('li');
+                    li.className = 'task-item';
+                    
+                    const timeText = `${task.hours > 0 ? task.hours + 'h ' : ''}${task.minutes > 0 ? task.minutes + 'm' : ''}`;
+                    
+                    li.innerHTML = `
+                        <div class="task-info">
+                            <div class="task-name">${task.name}</div>
+                            <div class="task-time">Allotted time: ${timeText}</div>
+                        </div>
+                        <div class="task-actions">
+                            <button class="btn-danger btn-small" data-index="${index}">Remove</button>
+                        </div>
+                    `;
+                    
+                    taskList.appendChild(li);
+                });
+                
+                // Add event listeners to remove buttons
+                document.querySelectorAll('.task-item button').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const index = parseInt(this.getAttribute('data-index'));
+                        tasks.splice(index, 1);
+                        renderTaskList();
+                        saveData();
+                    });
+                });
+            }
+            
+            function startStudying() {
+                if (tasks.length === 0) {
+                    alert('Please add at least one task');
+                    return;
+                }
+                
+                sessionActive = true;
+                setupContainer.style.display = 'none';
+                timerContainer.style.display = 'block';
+                toggleTaskSelectBtn.style.display = 'block';
+                saveData();
+                
+                startTask(0);
+            }
+            
+            function startTask(index) {
+                currentTaskIndex = index;
+                const task = tasks[currentTaskIndex];
+                
+                currentTaskDisplay.textContent = `Current Task: ${task.name} (${formatTime(task.totalSeconds)})`;
+                remainingSeconds = task.totalSeconds;
+                totalSeconds = task.totalSeconds;
+                
+                updateTimerDisplay();
+                startTimer();
+                saveData();
+            }
+            
+            function startTimer() {
+                clearInterval(timerInterval);
+                isPaused = false;
+                pauseTimerBtn.textContent = 'Pause';
+                
+                timerInterval = setInterval(function() {
+                    if (!isPaused) {
+                        remainingSeconds--;
+                        updateTimerDisplay();
+                        
+                        // Update progress bar
+                        const progress = ((totalSeconds - remainingSeconds) / totalSeconds) * 100;
+                        progressBar.style.width = `${progress}%`;
+                        
+                        if (remainingSeconds <= 0) {
+                            clearInterval(timerInterval);
+                            // Auto-complete when time runs out
+                            completeTask();
+                        }
+                        
+                        saveData();
+                    }
+                }, 1000);
+            }
+            
+            function togglePause() {
+                isPaused = !isPaused;
+                pauseTimerBtn.textContent = isPaused ? 'Resume' : 'Pause';
+                saveData();
+            }
+            
+            function updateTimerDisplay() {
+                timerDisplay.textContent = formatTime(remainingSeconds);
+            }
+            
+            function formatTime(seconds) {
+                const hrs = Math.floor(seconds / 3600);
+                const mins = Math.floor((seconds % 3600) / 60);
+                const secs = seconds % 60;
+                
+                return `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            }
+            
+            function toggleTaskSelection() {
+                isTaskSelectionVisible = !isTaskSelectionVisible;
+                taskSelector.style.display = isTaskSelectionVisible ? 'block' : 'none';
+                
+                if (isTaskSelectionVisible) {
+                    populateTaskDropdown();
+                }
+            }
+            
+            function populateTaskDropdown() {
+                taskSelectDropdown.innerHTML = '';
+                
+                tasks.forEach((task, index) => {
+                    const option = document.createElement('option');
+                    option.value = index;
+                    option.textContent = `${task.name} (${formatTime(task.totalSeconds)})`;
+                    option.selected = index === currentTaskIndex;
+                    taskSelectDropdown.appendChild(option);
+                });
+            }
+            
+            function changeCurrentTask() {
+                const selectedIndex = parseInt(taskSelectDropdown.value);
+                if (selectedIndex !== currentTaskIndex) {
+                    clearInterval(timerInterval);
+                    startTask(selectedIndex);
+                    toggleTaskSelection();
+                }
+            }
+            
+            function doLater() {
+                clearInterval(timerInterval);
+                
+                // Move current task to end of array
+                const task = tasks.splice(currentTaskIndex, 1)[0];
+                tasks.push(task);
+                
+                if (tasks.length > 0) {
+                    startTask(0);
+                } else {
+                    showSummary();
+                }
+                
+                saveData();
+            }
+            
+            function completeTask() {
+                clearInterval(timerInterval);
+                
+                const task = tasks[currentTaskIndex];
+                const timeSpent = task.totalSeconds - remainingSeconds;
+                
+                completedTasks.push({
+                    name: task.name,
+                    allottedTime: task.totalSeconds,
+                    timeSpent: timeSpent
+                });
+                
+                tasks.splice(currentTaskIndex, 1);
+                
+                // Celebrate completion
+                celebrateCompletion();
+                
+                if (tasks.length > 0) {
+                    startTask(0);
+                } else {
+                    showSummary();
+                }
+                
+                saveData();
+            }
+            
+            function showSummary() {
+                sessionActive = false;
+                timerContainer.style.display = 'none';
+                summaryContainer.style.display = 'block';
+                toggleTaskSelectBtn.style.display = 'none';
+                
+                let totalAllotted = 0;
+                let totalSpent = 0;
+                
+                summaryItems.innerHTML = '';
+                
+                completedTasks.forEach(task => {
+                    totalAllotted += task.allottedTime;
+                    totalSpent += task.timeSpent;
+                    
+                    const item = document.createElement('div');
+                    item.className = 'summary-item';
+                    
+                    const efficiency = Math.round((task.timeSpent / task.allottedTime) * 100);
+                    
+                    item.innerHTML = `
+                        <span>${task.name}</span>
+                        <span>
+                            Allotted: ${formatTime(task.allottedTime)} | 
+                            Spent: ${formatTime(task.timeSpent)} | 
+                            ${efficiency}%
+                        </span>
+                    `;
+                    
+                    summaryItems.appendChild(item);
+                });
+                
+                const totalEfficiency = Math.round((totalSpent / totalAllotted) * 100);
+                
+                totalTimeDisplay.innerHTML = `
+                    Total Allotted Time: ${formatTime(totalAllotted)}<br>
+                    Total Time Spent: ${formatTime(totalSpent)}<br>
+                    Overall Efficiency: ${totalEfficiency}%
+                `;
+                
+                saveData();
+            }
+            
+            function startNewSession() {
+                tasks = [];
+                completedTasks = [];
+                currentTaskIndex = 0;
+                progressBar.style.width = '0%';
+                sessionActive = false;
+                isPaused = false;
+                
+                summaryContainer.style.display = 'none';
+                setupContainer.style.display = 'block';
+                toggleTaskSelectBtn.style.display = 'none';
+                
+                taskNameInput.focus();
+                saveData();
+            }
+            
+            function resetAllData() {
+                if (confirm('Are you sure you want to reset all data? This cannot be undone.')) {
+                    localStorage.removeItem('studyTimerData');
+                    tasks = [];
+                    completedTasks = [];
+                    currentTaskIndex = 0;
+                    remainingSeconds = 0;
+                    totalSeconds = 0;
+                    sessionActive = false;
+                    isPaused = false;
+                    
+                    setupContainer.style.display = 'block';
+                    timerContainer.style.display = 'none';
+                    summaryContainer.style.display = 'none';
+                    toggleTaskSelectBtn.style.display = 'none';
+                    
+                    renderTaskList();
+                    taskNameInput.focus();
+                }
+            }
+            
+            function saveData() {
+                const data = {
+                    tasks,
+                    currentTaskIndex,
+                    remainingSeconds,
+                    totalSeconds,
+                    completedTasks,
+                    sessionActive,
+                    isPaused,
+                    isDarkTheme,
+                    currentScreen: sessionActive ? 
+                        (tasks.length > 0 ? 'timer' : 'summary') : 'setup'
+                };
+                
+                localStorage.setItem('studyTimerData', JSON.stringify(data));
+            }
+            
+            function loadData() {
+                const savedData = localStorage.getItem('studyTimerData');
+                if (savedData) {
+                    const data = JSON.parse(savedData);
+                    
+                    tasks = data.tasks || [];
+                    currentTaskIndex = data.currentTaskIndex || 0;
+                    remainingSeconds = data.remainingSeconds || 0;
+                    totalSeconds = data.totalSeconds || 0;
+                    completedTasks = data.completedTasks || [];
+                    sessionActive = data.sessionActive || false;
+                    isPaused = data.isPaused || false;
+                    
+                    // Set theme
+                    if (data.isDarkTheme) {
+                        enableDarkTheme();
+                    } else {
+                        enableLightTheme();
+                    }
+                    
+                    renderTaskList();
+                    
+                    // Restore the appropriate screen
+                    if (data.currentScreen === 'timer' && tasks.length > 0) {
+                        setupContainer.style.display = 'none';
+                        timerContainer.style.display = 'block';
+                        toggleTaskSelectBtn.style.display = 'block';
+                        startTask(currentTaskIndex);
+                        
+                        if (isPaused) {
+                            pauseTimerBtn.textContent = 'Resume';
+                        }
+                        
+                        // Update progress bar for current task
+                        const progress = ((totalSeconds - remainingSeconds) / totalSeconds) * 100;
+                        progressBar.style.width = `${progress}%`;
+                    } 
+                    else if (data.currentScreen === 'summary' || (sessionActive && tasks.length === 0)) {
+                        setupContainer.style.display = 'none';
+                        timerContainer.style.display = 'none';
+                        summaryContainer.style.display = 'block';
+                        toggleTaskSelectBtn.style.display = 'none';
+                        showSummary();
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
