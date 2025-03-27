@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Popup Video Player</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #fff;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ff0000;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            flex-grow: 1;
+            margin-left: 20px;
+        }
+
+        .search-bar input {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 20px 0 0 20px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .search-bar button {
+            padding: 8px 16px;
+            border: 1px solid #ddd;
+            border-radius: 0 20px 20px 0;
+            background-color: #f8f8f8;
+            cursor: pointer;
+        }
+
+        /* Main Content */
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        /* Video Card */
+        .video-card {
+            flex: 1 1 calc(33.333% - 40px);
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .video-card:hover {
+            transform: scale(1.05);
+        }
+
+        .video-card img {
+            width: 100%;
+            height: auto;
+        }
+
+        .video-info {
+            padding: 10px;
+        }
+
+        .video-info h3 {
+            margin: 0;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .video-info p {
+            margin: 5px 0 0;
+            font-size: 14px;
+            color: #777;
+        }
+
+        /* Popup Video Player */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .popup-content {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            position: relative;
+        }
+
+        .popup-content iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+            color: #333;
+            cursor: pointer;
+            z-index: 1001;
+            background: white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .video-card {
+                flex: 1 1 calc(50% - 20px);
+            }
+
+            .search-bar input {
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .video-card {
+                flex: 1 1 100%;
+            }
+
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 10px;
+            }
+
+            .search-bar {
+                width: 100%;
+                margin-left: 0;
+                margin-top: 10px;
+            }
+
+            .search-bar input {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="logo">G-Tube</div>
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search...">
+            <button onclick="searchVideos()">Search</button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <!-- Video Card 1 -->
+        <div class="video-card" data-title="Video Title 1" onclick="openPopup('vUQ74BTEmxU')">
+            <img src="https://img.youtube.com/vi/vUQ74BTEmxU/maxresdefault.jpg" alt="Video Thumbnail">
+            <div class="video-info">
+                <h3>Video Title 1</h3>
+                <p>math • 789 M views • 1 week ago</p>
+            </div>
+        </div>
+
+        <!-- Video Card 2 -->
+        <div class="video-card" data-title="Video Title 2" onclick="openPopup('sqJ12DBktLw')">
+            <img src="https://img.youtube.com/vi/sqJ12DBktLw/maxresdefault.jpg" alt="Video Thumbnail">
+            <div class="video-info">
+                <h3>Video Title 2</h3>
+                <p>Channel Name • 500K views • 2 weeks ago</p>
+            </div>
+        </div>
+         <!-- Video Card 3 -->
+        <div class="video-card" data-title="Video Title 2" onclick="openPopup('jzMA3lBkX1U')">
+            <img src="https://img.youtube.com/vi/jzMA3lBkX1U/maxresdefault.jpg" alt="Video Thumbnail">
+            <div class="video-info">
+                <h3>Video Title 2</h3>
+                <p>Channel Name • 500K views • 2 weeks ago</p>
+            </div>
+        </div>
+         <!-- Video Card 4 -->
+        <div class="video-card" data-title="Video Title 2" onclick="openPopup('Hr1HeguMMFs')">
+            <img src="https://img.youtube.com/vi/Hr1HeguMMFs/maxresdefault.jpg" alt="Video Thumbnail">
+            <div class="video-info">
+                <h3>Video Title 2</h3>
+                <p>Channel Name • 500K views • 2 weeks ago</p>
+            </div>
+        </div>
+         <!-- Video Card 5 -->
+        <div class="video-card" data-title="Video Title 2" onclick="openPopup('11DaD8clz4s')">
+            <img src="https://img.youtube.com/vi/11DaD8clz4s/maxresdefault.jpg" alt="Video Thumbnail">
+            <div class="video-info">
+                <h3>Video Title 2</h3>
+                <p>Channel Name • 500K views • 2 weeks ago</p>
+            </div>
+        </div>
+         <!-- Video Card 6 -->
+        <div class="video-card" data-title="Video Title 2" onclick="openPopup('I_a-E1vtdks')">
+            <img src="https://img.youtube.com/vi/I_a-E1vtdks/maxresdefault.jpg" alt="Video Thumbnail">
+            <div class="video-info">
+                <h3>Video Title 2</h3>
+                <p>Channel Name • 500K views • 2 weeks ago</p>
+            </div>
+        </div>
+         <!-- Video Card 7 -->
+        <div class="video-card" data-title="Video Title 2" onclick="openPopup('HJn-6iyFcH8')">
+            <img src="https://img.youtube.com/vi/HJn-6iyFcH8/maxresdefault.jpg" alt="Video Thumbnail">
+            <div class="video-info">
+                <h3>Video Title 2</h3>
+                <p>Channel Name • 500K views • 2 weeks ago</p>
+            </div>
+        </div>
+
+        <!-- Video Card 8 -->
+        <div class="video-card" data-title="Video Title 3" onclick="openPopup('JdE6hT77FIk')">
+            <img src="https://img.youtube.com/vi/JdE6hT77FIk/maxresdefault.jpg" alt="Video Thumbnail">
+            <div class="video-info">
+                <h3>math trick</h3>
+                <p>Channel Name • 2M views • 3 weeks ago</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popup Video Player -->
+    <div class="popup" id="popup">
+        <div class="popup-content">
+            <span class="close-btn" onclick="closePopup()">&times;</span>
+            <iframe id="popup-iframe" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Function to open the popup and load the video in fullscreen mode
+        function openPopup(videoId) {
+            const popup = document.getElementById('popup');
+            const popupIframe = document.getElementById('popup-iframe');
+            
+            // Disable sharing and related videos by adding parameters to the URL
+            // autoplay=1: Auto play the video
+            // rel=0: Disable related videos
+            // controls=0: Hide controls (we'll use our own)
+            // mute=1: Start muted (required for autoplay in many browsers)
+            // fs=1: Force fullscreen (though this may not work in all browsers)
+            // modestbranding=1: Reduce YouTube branding
+            popupIframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&controls=0&mute=1&fs=1&modestbranding=1`;
+            
+            popup.style.display = 'flex';
+            
+            // Try to enter fullscreen mode programmatically
+            if (popup.requestFullscreen) {
+                popup.requestFullscreen();
+            } else if (popup.webkitRequestFullscreen) {
+                popup.webkitRequestFullscreen();
+            } else if (popup.msRequestFullscreen) {
+                popup.msRequestFullscreen();
+            }
+        }
+
+        // Function to close the popup
+        function closePopup() {
+            const popup = document.getElementById('popup');
+            const popupIframe = document.getElementById('popup-iframe');
+            
+            // Exit fullscreen if we're in it
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+            } else if (document.msExitFullscreen) {
+                document.msExitFullscreen();
+            }
+            
+            popup.style.display = 'none';
+            popupIframe.src = ''; // Stop the video when the popup is closed
+        }
+
+        // Close the popup when clicking outside the content
+        window.onclick = function (event) {
+            const popup = document.getElementById('popup');
+            if (event.target === popup) {
+                closePopup();
+            }
+        };
+
+        // Function to search videos
+        function searchVideos() {
+            const searchQuery = document.getElementById('searchInput').value.toLowerCase();
+            const videoCards = document.querySelectorAll('.video-card');
+
+            videoCards.forEach(card => {
+                const title = card.getAttribute('data-title').toLowerCase();
+                if (title.includes(searchQuery)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Disable right-click context menu to prevent easy video URL copying
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+        
+        // Listen for fullscreen change events to handle when user exits fullscreen
+        document.addEventListener('fullscreenchange', exitHandler);
+        document.addEventListener('webkitfullscreenchange', exitHandler);
+        document.addEventListener('mozfullscreenchange', exitHandler);
+        document.addEventListener('MSFullscreenChange', exitHandler);
+        
+        function exitHandler() {
+            if (!document.fullscreenElement && !document.webkitIsFullScreen && !document.mozFullScreen && !document.msFullscreenElement) {
+                closePopup();
+            }
+        }
+    </script>
+
+</body>
+</html>
