@@ -27,11 +27,20 @@
             background-color: var(--light);
             color: var(--text);
             line-height: 1.5;
-            padding: 20px 20px 80px; /* Added bottom padding for nav */
+            padding: 0 20px 80px;
             max-width: 500px;
             margin: 0 auto;
             position: relative;
             min-height: 100vh;
+        }
+        
+        .banner {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto 20px;
+            display: block;
+            border-radius: 0 0 12px 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
         }
         
         .card {
@@ -68,8 +77,48 @@
             word-break: break-all;
         }
         
-        .payment-options {
+        .terms-container {
+            background: white;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 20px 0;
+            text-align: left;
+            border: 1px solid var(--border);
+            max-height: 150px;
+            overflow-y: auto;
+        }
+        
+        .terms-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .terms-content {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+        
+        .checkbox-container {
             display: flex;
+            align-items: center;
+            margin: 16px 0;
+            padding: 10px;
+            background: var(--light);
+            border-radius: 8px;
+        }
+        
+        .checkbox-container input {
+            margin-right: 10px;
+            width: 18px;
+            height: 18px;
+        }
+        
+        .checkbox-label {
+            font-size: 0.85rem;
+        }
+        
+        .payment-options {
+            display: none;
             flex-direction: column;
             gap: 24px;
             margin-top: 24px;
@@ -135,6 +184,13 @@
             text-decoration: none;
             display: block;
             max-width: 300px;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        
+        .pay-button.active {
+            opacity: 1;
+            pointer-events: auto;
         }
         
         .pay-button:active {
@@ -142,16 +198,9 @@
             transform: scale(0.98);
         }
         
-        .instructions {
-            font-size: 0.85rem;
-            color: var(--gray);
-            margin-top: 24px;
-            text-align: center;
-        }
-        
         @media (max-width: 480px) {
             body {
-                padding: 16px 16px 80px;
+                padding: 0 16px 80px;
             }
             
             .card {
@@ -174,6 +223,9 @@
     </style>
 </head>
 <body>
+    <!-- Banner Image -->
+    <img src="https://i.ibb.co/Ppr4N2X/Whats-App-Image-2025-02-15-at-21-37-48-d5303e1c.jpg" alt="Payment Banner" class="banner">
+
     <div class="card">
         <h1>Instant ₹1 Payment</h1>
         <div class="amount-badge">Fixed Amount: ₹1</div>
@@ -182,20 +234,33 @@
             UPI ID: <strong>wave100@axl</strong>
         </div>
         
-        <div class="payment-options">
+        <div class="terms-container">
+            <div class="terms-title">Terms and Conditions</div>
+            <div class="terms-content">
+                <p>1. This is a fixed ₹1 payment to wave100@axl.</p>
+                <p>2. All payments are non-refundable.</p>
+                <p>3. By proceeding, you agree to make this payment voluntarily.</p>
+                <p>4. The recipient is not responsible for any unauthorized transactions.</p>
+                <p>5. Ensure you have entered the correct UPI ID before proceeding.</p>
+                <p>6. This payment gateway doesn't store any of your financial information.</p>
+                <p>7. For any disputes, please contact your bank directly.</p>
+            </div>
+        </div>
+        
+        <div class="checkbox-container">
+            <input type="checkbox" id="termsCheckbox">
+            <label for="termsCheckbox" class="checkbox-label">I agree to the terms and conditions</label>
+        </div>
+        
+        <div class="payment-options" id="paymentOptions">
             <div class="option">
                 <div class="option-title">Scan QR Code</div>
                 <div id="qrcode"></div>
                 <p style="margin-top: 12px; font-size: 0.9rem;">Scan with any UPI app</p>
                 <div class="disclaimer">
-                    By proceeding, you agree to make a payment of ₹1 to wave100@axl. Payments are non-refundable.
+                    By proceeding, you agree to make a payment of ₹1 to wave100@axl.
                 </div>
             </div>
-        </div>
-        
-        <div class="instructions">
-            <p>This is a fixed ₹1 payment gateway</p>
-            <p>All payments will go to wave100@axl</p>
         </div>
     </div>
 
@@ -206,18 +271,16 @@
     <script>
         // Generate UPI payment details for fixed ₹1
         function generatePaymentDetails() {
-            const amount = '1'; // Fixed amount
+            const amount = '1';
             const upiId = 'wave100@axl';
-            const recipientName = 'Recipient Name'; // Change to your name
+            const recipientName = 'Recipient Name';
             const note = '₹1 Payment';
-            // UPI payment link
+            
             const upiLink = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(recipientName)}&am=${amount}&cu=INR&tn=${encodeURIComponent(note)}`;
             
-            // Set payment button link
             const payButton = document.getElementById('payButton');
             payButton.href = upiLink;
             
-            // Generate QR code
             document.getElementById('qrcode').innerHTML = '';
             new QRCode(document.getElementById('qrcode'), {
                 text: upiLink,
@@ -229,8 +292,23 @@
             });
         }
         
-        // Generate payment options on page load
-        window.onload = generatePaymentDetails;
+        document.getElementById('termsCheckbox').addEventListener('change', function() {
+            const paymentOptions = document.getElementById('paymentOptions');
+            const payButton = document.getElementById('payButton');
+            
+            if (this.checked) {
+                paymentOptions.style.display = 'flex';
+                payButton.classList.add('active');
+                generatePaymentDetails();
+            } else {
+                paymentOptions.style.display = 'none';
+                payButton.classList.remove('active');
+            }
+        });
+        
+        window.onload = function() {
+            document.getElementById('paymentOptions').style.display = 'none';
+        };
     </script>
 </body>
 </html>
