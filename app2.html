@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genius Nest - Learning App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #3a86ff;
+            --secondary: #8338ec;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --success: #06d6a0;
+            --warning: #ffbe0b;
+            --danger: #ef476f;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+
+        /* Glowing Animated Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 15px 20px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(58, 134, 255, 0.3);
+            z-index: 1000;
+            animation: glow 3s infinite alternate;
+        }
+
+        @keyframes glow {
+            0% {
+                box-shadow: 0 0 10px rgba(58, 134, 255, 0.5);
+            }
+            100% {
+                box-shadow: 0 0 20px rgba(131, 56, 236, 0.7);
+            }
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .header .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 12px;
+            animation: float 10s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 70px;
+            margin-bottom: 70px;
+            padding: 20px;
+            min-height: calc(100vh - 140px);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #666;
+            text-decoration: none;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item i {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        /* Vertical Gap */
+        .section-gap {
+            margin-bottom: 30px;
+        }
+
+        /* Quote Section */
+        .quote-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+
+        .quote-card p {
+            font-style: italic;
+            margin-bottom: 10px;
+        }
+
+        .quote-card .author {
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        /* Section Styles */
+        .section-title {
+            font-size: 1.2rem;
+            margin: 30px 0 15px;
+            color: var(--dark);
+            position: relative;
+            padding-left: 10px;
+        }
+
+        .section-title::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        /* Course Cards */
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+            margin-bottom: 30px;
+        }
+
+        .course-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .course-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .course-card-content {
+            padding: 15px;
+        }
+
+        .course-card h3 {
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+
+        .course-card .instructor {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .course-card .price {
+            font-weight: bold;
+            color: var(--primary);
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+
+        .course-card .price.sale {
+            color: var(--danger);
+        }
+
+        .course-card .original-price {
+            text-decoration: line-through;
+            color: #999;
+            font-size: 0.9rem;
+            margin-left: 5px;
+        }
+
+        .course-card .rating {
+            color: var(--warning);
+            margin-bottom: 15px;
+        }
+
+        .course-card .btn {
+            display: inline-block;
+            padding: 8px 15px;
+            background: var(--primary);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            width: 100%;
+            text-align: center;
+        }
+
+        .course-card .btn:hover {
+            background: var(--secondary);
+            transform: scale(1.05);
+        }
+
+        .course-card .tag {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--danger);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+
+        /* Subject Categories */
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+            margin-bottom: 30px;
+        }
+
+        .category-card {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+            background: var(--primary);
+            color: white;
+        }
+
+        .category-card:hover i {
+            color: white;
+        }
+
+        .category-card i {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .category-card h3 {
+            font-size: 1rem;
+            color: var(--dark);
+            transition: all 0.3s ease;
+        }
+
+        .category-card:hover h3 {
+            color: white;
+        }
+
+        /* Learn Screen Specific Styles */
+        .learn-screen {
+            position: relative;
+        }
+
+        .add-course-btn {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 15px rgba(58, 134, 255, 0.4);
+            z-index: 999;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .add-course-btn:hover {
+            transform: scale(1.1);
+            background: var(--secondary);
+        }
+
+        .search-bar {
+            margin-bottom: 20px;
+            position: relative;
+            display: none;
+        }
+
+        .search-bar.active {
+            display: block;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 12px 20px;
+            border-radius: 30px;
+            border: 1px solid #ddd;
+            font-size: 1rem;
+            padding-left: 45px;
+            outline: none;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .search-bar i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            color: #666;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+
+        .empty-state p {
+            margin-bottom: 20px;
+        }
+
+        .empty-state .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: var(--primary);
+            color: white;
+            border-radius: 30px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .empty-state .btn:hover {
+            background: var(--secondary);
+        }
+
+        .my-courses {
+            display: none;
+        }
+
+        .my-courses.active {
+            display: block;
+        }
+
+        .delete-btn {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: var(--danger);
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .course-card:hover .delete-btn {
+            opacity: 1;
+        }
+
+        /* Profile Screen Styles */
+        .profile-empty-state {
+            text-align: center;
+            padding: 50px 20px;
+        }
+
+        .profile-empty-state i {
+            font-size: 3rem;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+
+        .profile-empty-state h3 {
+            margin-bottom: 15px;
+            color: #666;
+        }
+
+        .profile-empty-state p {
+            margin-bottom: 20px;
+            color: #666;
+        }
+
+        .profile-empty-state .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: var(--primary);
+            color: white;
+            border-radius: 30px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .profile-empty-state .btn:hover {
+            background: var(--secondary);
+        }
+
+        .profile-form {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .profile-form.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #666;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-size: 1rem;
+        }
+
+        .profile-info {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .profile-info.active {
+            display: block;
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            background: var(--primary);
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+        }
+
+        .profile-details {
+            margin-bottom: 15px;
+        }
+
+        .profile-details p {
+            margin-bottom: 10px;
+        }
+
+        .greeting {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        /* Hidden screens */
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .course-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .category-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Glowing Animated Header -->
+    <header class="header">
+        <h1>Genius Nest</h1>
+        <div class="particles" id="particles"></div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Home Screen -->
+        <div class="screen active" id="home-screen">
+            <!-- Quote at the top -->
+            <div class="quote-card section-gap">
+                <p><i>"The important thing is not to stop questioning. Curiosity has its own reason for existing."</i></p>
+                <p class="author">- Albert Einstein</p>
+            </div>
+
+            <h3 class="section-title">Popular Courses</h3>
+            
+            <div class="course-grid">
+                <div class="course-card">
+                    <span class="tag">Bestseller</span>
+                    <img src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Physics Masterclass">
+                    <div class="course-card-content">
+                        <h3>Physics Masterclass</h3>
+                        <p class="instructor">By Dr. Sarah Johnson</p>
+                        <div class="rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                            <span> (4.7)</span>
+                        </div>
+                        <p class="price">$49.99 <span class="original-price">$99.99</span></p>
+                        <a href="https://www.sumit2.online" target="_blank" class="btn">Buy Now</a>
+                    </div>
+                </div>
+
+                <div class="course-card">
+                    <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Advanced Mathematics">
+                    <div class="course-card-content">
+                        <h3>Advanced Mathematics</h3>
+                        <p class="instructor">By Prof. Michael Chen</p>
+                        <div class="rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <span> (5.0)</span>
+                        </div>
+                        <p class="price">$59.99</p>
+                        <a href="https://www.sumit2.online" target="_blank" class="btn">Buy Now</a>
+                    </div>
+                </div>
+
+                <div class="course-card">
+                    <span class="tag">New</span>
+                    <img src="https://images.unsplash.com/photo-1581094271901-8022df4466f9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Artificial Intelligence">
+                    <div class="course-card-content">
+                        <h3>Artificial Intelligence</h3>
+                        <p class="instructor">By Dr. Alan Turing</p>
+                        <div class="rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="far fa-star"></i>
+                            <span> (4.2)</span>
+                        </div>
+                        <p class="price">$79.99</p>
+                        <a href="https://www.sumit2.online" target="_blank" class="btn">Buy Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="section-title">Browse Categories</h3>
+            
+            <div class="category-grid">
+                <div class="category-card" onclick="window.open('https://www.sumit2.online', '_blank')">
+                    <i class="fas fa-atom"></i>
+                    <h3>Physics</h3>
+                </div>
+                <div class="category-card" onclick="window.open('https://www.sumit2.online', '_blank')">
+                    <i class="fas fa-square-root-alt"></i>
+                    <h3>Mathematics</h3>
+                </div>
+                <div class="category-card" onclick="window.open('https://www.sumit2.online', '_blank')">
+                    <i class="fas fa-code"></i>
+                    <h3>Programming</h3>
+                </div>
+                <div class="category-card" onclick="window.open('https://www.sumit2.online', '_blank')">
+                    <i class="fas fa-brain"></i>
+                    <h3>Psychology</h3>
+                </div>
+                <div class="category-card" onclick="window.open('https://www.sumit2.online', '_blank')">
+                    <i class="fas fa-dna"></i>
+                    <h3>Biology</h3>
+                </div>
+                <div class="category-card" onclick="window.open('https://www.sumit2.online', '_blank')">
+                    <i class="fas fa-flask"></i>
+                    <h3>Chemistry</h3>
+                </div>
+                <div class="category-card" onclick="window.open('https://www.sumit2.online', '_blank')">
+                    <i class="fas fa-globe-americas"></i>
+                    <h3>History</h3>
+                </div>
+                <div class="category-card" onclick="window.open('https://www.sumit2.online', '_blank')">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Economics</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- Learn Screen -->
+        <div class="screen learn-screen" id="learn-screen">
+            <div class="empty-state" id="learn-empty-state">
+                <i class="fas fa-book-open"></i>
+                <h3>No Courses Added Yet</h3>
+                <p>Add courses to your learning list to get started</p>
+                <a href="#" class="btn" id="show-all-courses-btn">Browse Courses</a>
+            </div>
+
+            <div class="search-bar" id="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search courses...">
+            </div>
+
+            <div class="my-courses" id="my-courses">
+                <h3 class="section-title">My Courses</h3>
+                <div class="course-grid" id="my-courses-grid">
+                    <!-- My courses will be added here dynamically -->
+                </div>
+            </div>
+
+            <div class="all-courses" id="all-courses" style="display: none;">
+                <h3 class="section-title">All Available Courses</h3>
+                <div class="course-grid" id="all-courses-grid">
+                    <!-- All courses will be added here dynamically -->
+                </div>
+            </div>
+
+            <div class="add-course-btn" id="add-course-btn">
+                <i class="fas fa-plus"></i>
+            </div>
+        </div>
+
+        <!-- Practice Screen -->
+        <div class="screen" id="practice-screen">
+            <h3 class="section-title">Practice Problems</h3>
+            
+            <div class="course-card section-gap">
+                <div class="course-card-content">
+                    <h3>Daily Challenge</h3>
+                    <p>Solve today's featured problem to earn bonus points!</p>
+                    <a href="https://www.sumit2.online" target="_blank" class="btn">Try Challenge</a>
+                </div>
+            </div>
+
+            <div class="course-card section-gap">
+                <div class="course-card-content">
+                    <h3>Formula Explorer</h3>
+                    <p>Interactive tool to explore formulas with examples</p>
+                    <a href="https://www.sumit2.online" target="_blank" class="btn">Open Explorer</a>
+                </div>
+            </div>
+
+            <div class="course-card">
+                <div class="course-card-content">
+                    <h3>Virtual Lab</h3>
+                    <p>Conduct experiments in a safe digital environment</p>
+                    <a href="https://www.sumit2.online" target="_blank" class="btn">Enter Lab</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Progress Screen -->
+        <div class="screen" id="progress-screen">
+            <h3 class="section-title">Your Learning Progress</h3>
+            
+            <div class="course-card section-gap">
+                <div class="course-card-content">
+                    <h3>Knowledge Points</h3>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <i class="fas fa-star" style="color: var(--warning); font-size: 1.5rem;"></i>
+                        <span style="font-size: 1.2rem; font-weight: bold;">1,245</span>
+                    </div>
+                    <p>Earn more points by completing lessons and challenges</p>
+                </div>
+            </div>
+
+            <div class="course-card section-gap">
+                <div class="course-card-content">
+                    <h3>Current Streak</h3>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <i class="fas fa-fire" style="color: var(--danger); font-size: 1.5rem;"></i>
+                        <span style="font-size: 1.2rem; font-weight: bold;">7 days</span>
+                    </div>
+                    <p>Don't break your streak! Learn something new every day.</p>
+                </div>
+            </div>
+
+            <div class="course-card">
+                <div class="course-card-content">
+                    <h3>Badges Earned</h3>
+                    <div style="display: flex; gap: 10px; margin: 10px 0;">
+                        <i class="fas fa-medal" style="color: gold; font-size: 1.5rem;"></i>
+                        <i class="fas fa-atom" style="color: silver; font-size: 1.5rem;"></i>
+                        <i class="fas fa-rocket" style="color: #cd7f32; font-size: 1.5rem;"></i>
+                    </div>
+                    <p>3 badges unlocked. 7 more to discover!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Screen -->
+        <div class="screen" id="profile-screen">
+            <div class="profile-empty-state" id="profile-empty-state">
+                <i class="fas fa-user-circle"></i>
+                <h3>No Profile Found</h3>
+                <p>Create your profile to personalize your learning experience</p>
+                <a href="#" class="btn" id="create-profile-btn">Create Profile</a>
+            </div>
+
+            <div class="profile-form" id="profile-form">
+                <h3 class="section-title">Create Your Profile</h3>
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" placeholder="Enter your name">
+                </div>
+                <div class="form-group">
+                    <label for="class">Class/Grade</label>
+                    <input type="text" id="class" placeholder="Enter your class/grade">
+                </div>
+                <div class="form-group">
+                    <label for="school">School Name</label>
+                    <input type="text" id="school" placeholder="Enter your school name">
+                </div>
+                <a href="#" class="btn" id="save-profile-btn">Save Profile</a>
+            </div>
+
+            <div class="profile-info" id="profile-info">
+                <div class="profile-header">
+                    <div class="profile-avatar" id="profile-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="greeting" id="greeting"></div>
+                    <h3 id="profile-name"></h3>
+                </div>
+                <div class="profile-details">
+                    <p><strong>Class:</strong> <span id="profile-class"></span></p>
+                    <p><strong>School:</strong> <span id="profile-school"></span></p>
+                </div>
+                <a href="#" class="btn" id="edit-profile-btn">Edit Profile</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="#" class="nav-item active" data-screen="home-screen">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="#" class="nav-item" data-screen="learn-screen">
+            <i class="fas fa-book"></i>
+            <span>Learn</span>
+        </a>
+        <a href="#" class="nav-item" data-screen="practice-screen">
+            <i class="fas fa-pencil-alt"></i>
+            <span>Practice</span>
+        </a>
+        <a href="#" class="nav-item" data-screen="progress-screen">
+            <i class="fas fa-chart-line"></i>
+            <span>Progress</span>
+        </a>
+        <a href="#" class="nav-item" data-screen="profile-screen">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <script>
+        // Sample course data
+        const allCourses = [
+            {
+                id: 1,
+                title: "Physics Masterclass",
+                instructor: "Dr. Sarah Johnson",
+                rating: 4.7,
+                price: 49.99,
+                originalPrice: 99.99,
+                image: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
+                tags: ["Bestseller"]
+            },
+            {
+                id: 2,
+                title: "Advanced Mathematics",
+                instructor: "Prof. Michael Chen",
+                rating: 5.0,
+                price: 59.99,
+                image: "https://images.unsplash.com/photo-1544717305-2782549b5136?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80"
+            },
+            {
+                id: 3,
+                title: "Artificial Intelligence",
+                instructor: "Dr. Alan Turing",
+                rating: 4.2,
+                price: 79.99,
+                image: "https://images.unsplash.com/photo-1581094271901-8022df4466f9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
+                tags: ["New"]
+            },
+            {
+                id: 4,
+                title: "Robotics Engineering",
+                instructor: "Dr. Maria Rodriguez",
+                rating: 4.5,
+                price: 69.99,
+                image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80"
+            },
+            {
+                id: 5,
+                title: "Financial Markets",
+                instructor: "Warren Buffet",
+                rating: 5.0,
+                price: 89.99,
+                image: "https://images.unsplash.com/photo-1531482615713-2afd69097998?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80"
+            },
+            {
+                id: 6,
+                title: "Creative Writing",
+                instructor: "J.K. Rowling",
+                rating: 4.0,
+                price: 39.99,
+                image: "https://images.unsplash.com/photo-1575505586569-646b2ca898fc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80"
+            }
+        ];
+
+        // User's selected courses
+        let myCourses = JSON.parse(localStorage.getItem('myCourses')) || [];
+
+        // User profile data
+        let userProfile = JSON.parse(localStorage.getItem('userProfile')) || null;
+
+        // Create floating particles for header
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleIcons = ['fa-atom', 'fa-lightbulb', 'fa-book', 'fa-flask', 'fa-rocket'];
+            
+            for (let i = 0; i < 15; i++) {
+                const particle = document.createElement('i');
+                particle.className = `particle fas ${particleIcons[Math.floor(Math.random() * particleIcons.length)]}`;
+                
+                // Random position
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                
+                // Random animation duration
+                particle.style.animationDuration = `${5 + Math.random() * 10}s`;
+                particle.style.animationDelay = `${Math.random() * 5}s`;
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Navigation functionality
+        function setupNavigation() {
+            const navItems = document.querySelectorAll('.nav-item');
+            const screens = document.querySelectorAll('.screen');
+            
+            navItems.forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    
+                    // Remove active class from all items
+                    navItems.forEach(navItem => navItem.classList.remove('active'));
+                    
+                    // Add active class to clicked item
+                    item.classList.add('active');
+                    
+                    // Get target screen
+                    const targetScreen = item.getAttribute('data-screen');
+                    
+                    // Hide all screens
+                    screens.forEach(screen => screen.classList.remove('active'));
+                    
+                    // Show target screen
+                    document.getElementById(targetScreen).classList.add('active');
+
+                    // If learn screen is shown, update the view
+                    if (targetScreen === 'learn-screen') {
+                        updateLearnScreen();
+                    }
+                    
+                    // If profile screen is shown, update the view
+                    if (targetScreen === 'profile-screen') {
+                        updateProfileScreen();
+                    }
+                });
+            });
+        }
+
+        // Create star rating HTML
+        function createRatingStars(rating) {
+            let stars = '';
+            const fullStars = Math.floor(rating);
+            const hasHalfStar = rating % 1 >= 0.5;
+            
+            for (let i = 0; i < fullStars; i++) {
+                stars += '<i class="fas fa-star"></i>';
+            }
+            
+            if (hasHalfStar) {
+                stars += '<i class="fas fa-star-half-alt"></i>';
+            }
+            
+            const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+            for (let i = 0; i < emptyStars; i++) {
+                stars += '<i class="far fa-star"></i>';
+            }
+            
+            return stars + ` <span>(${rating.toFixed(1)})</span>`;
+        }
+
+        // Render a course card
+        function renderCourseCard(course, isMyCourse = false) {
+            const card = document.createElement('div');
+            card.className = 'course-card';
+            card.dataset.id = course.id;
+            
+            let tagsHTML = '';
+            if (course.tags) {
+                course.tags.forEach(tag => {
+                    tagsHTML += `<span class="tag">${tag}</span>`;
+                });
+            }
+            
+            let priceHTML = '';
+            if (course.originalPrice) {
+                priceHTML = `<p class="price sale">$${course.price.toFixed(2)} <span class="original-price">$${course.originalPrice.toFixed(2)}</span></p>`;
+            } else {
+                priceHTML = `<p class="price">$${course.price.toFixed(2)}</p>`;
+            }
+            
+            let deleteBtn = '';
+            if (isMyCourse) {
+                deleteBtn = `<div class="delete-btn" data-id="${course.id}"><i class="fas fa-times"></i></div>`;
+            }
+            
+            card.innerHTML = `
+                ${tagsHTML}
+                ${deleteBtn}
+                <img src="${course.image}" alt="${course.title}">
+                <div class="course-card-content">
+                    <h3>${course.title}</h3>
+                    <p class="instructor">By ${course.instructor}</p>
+                    <div class="rating">
+                        ${createRatingStars(course.rating)}
+                    </div>
+                    ${priceHTML}
+                    <a href="https://www.sumit2.online" target="_blank" class="btn">${isMyCourse ? 'Continue' : 'Add Course'}</a>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        // Render all courses
+        function renderAllCourses() {
+            const allCoursesGrid = document.getElementById('all-courses-grid');
+            allCoursesGrid.innerHTML = '';
+            
+            allCourses.forEach(course => {
+                // Check if course is already in my courses
+                const isAdded = myCourses.some(c => c.id === course.id);
+                
+                if (!isAdded) {
+                    const card = renderCourseCard(course);
+                    allCoursesGrid.appendChild(card);
+                    
+                    // Add click event to add course
+                    const addBtn = card.querySelector('.btn');
+                    addBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        addCourseToMyCourses(course);
+                    });
+                }
+            });
+        }
+
+        // Render my courses
+        function renderMyCourses() {
+            const myCoursesGrid = document.getElementById('my-courses-grid');
+            myCoursesGrid.innerHTML = '';
+            
+            if (myCourses.length === 0) {
+                document.getElementById('learn-empty-state').style.display = 'block';
+                document.getElementById('my-courses').style.display = 'none';
+            } else {
+                document.getElementById('learn-empty-state').style.display = 'none';
+                document.getElementById('my-courses').style.display = 'block';
+                
+                myCourses.forEach(course => {
+                    const card = renderCourseCard(course, true);
+                    myCoursesGrid.appendChild(card);
+                    
+                    // Add click event to delete course
+                    const deleteBtn = card.querySelector('.delete-btn');
+                    deleteBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        removeCourseFromMyCourses(course.id);
+                    });
+                });
+            }
+        }
+
+        // Add course to my courses
+        function addCourseToMyCourses(course) {
+            if (!myCourses.some(c => c.id === course.id)) {
+                myCourses.push(course);
+                localStorage.setItem('myCourses', JSON.stringify(myCourses));
+                updateLearnScreen();
+                
+                // Hide all courses view if it's visible
+                document.getElementById('all-courses').style.display = 'none';
+                document.getElementById('search-bar').classList.remove('active');
+            }
+        }
+
+        // Remove course from my courses
+        function removeCourseFromMyCourses(courseId) {
+            myCourses = myCourses.filter(course => course.id !== courseId);
+            localStorage.setItem('myCourses', JSON.stringify(myCourses));
+            updateLearnScreen();
+        }
+
+        // Update learn screen based on current state
+        function updateLearnScreen() {
+            renderMyCourses();
+            renderAllCourses();
+        }
+
+        // Get time-based greeting
+        function getGreeting() {
+            const hour = new Date().getHours();
+            if (hour < 12) return "Good Morning";
+            if (hour < 18) return "Good Afternoon";
+            if (hour < 22) return "Good Evening";
+            return "Good Night";
+        }
+
+        // Update profile screen based on current state
+        function updateProfileScreen() {
+            if (userProfile) {
+                document.getElementById('profile-empty-state').style.display = 'none';
+                document.getElementById('profile-form').style.display = 'none';
+                document.getElementById('profile-info').style.display = 'block';
+                
+                // Update profile info
+                document.getElementById('profile-name').textContent = userProfile.name;
+                document.getElementById('profile-class').textContent = userProfile.class;
+                document.getElementById('profile-school').textContent = userProfile.school;
+                
+                // Update greeting
+                const greeting = getGreeting();
+                document.getElementById('greeting').textContent = `${greeting},`;
+                
+                // Update avatar with first letter of name
+                const firstLetter = userProfile.name.charAt(0).toUpperCase();
+                document.getElementById('profile-avatar').textContent = firstLetter;
+            } else {
+                document.getElementById('profile-empty-state').style.display = 'block';
+                document.getElementById('profile-form').style.display = 'none';
+                document.getElementById('profile-info').style.display = 'none';
+            }
+        }
+
+        // Save user profile
+        function saveUserProfile() {
+            const name = document.getElementById('name').value.trim();
+            const className = document.getElementById('class').value.trim();
+            const school = document.getElementById('school').value.trim();
+            
+            if (name && className && school) {
+                userProfile = {
+                    name,
+                    class: className,
+                    school
+                };
+                
+                localStorage.setItem('userProfile', JSON.stringify(userProfile));
+                updateProfileScreen();
+            } else {
+                alert('Please fill in all fields');
+            }
+        }
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', () => {
+            createParticles();
+            setupNavigation();
+            
+            // Initialize screens
+            updateLearnScreen();
+            updateProfileScreen();
+
+            // Add course button click handler
+            document.getElementById('add-course-btn').addEventListener('click', () => {
+                const allCoursesSection = document.getElementById('all-courses');
+                const searchBar = document.getElementById('search-bar');
+                
+                if (allCoursesSection.style.display === 'none') {
+                    allCoursesSection.style.display = 'block';
+                    searchBar.classList.add('active');
+                } else {
+                    allCoursesSection.style.display = 'none';
+                    searchBar.classList.remove('active');
+                }
+            });
+
+            // Show all courses button click handler
+            document.getElementById('show-all-courses-btn').addEventListener('click', (e) => {
+                e.preventDefault();
+                document.getElementById('all-courses').style.display = 'block';
+                document.getElementById('search-bar').classList.add('active');
+            });
+
+            // Search functionality
+            const searchInput = document.querySelector('.search-bar input');
+            searchInput.addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                const cards = document.querySelectorAll('#all-courses-grid .course-card');
+                
+                cards.forEach(card => {
+                    const title = card.querySelector('h3').textContent.toLowerCase();
+                    if (title.includes(searchTerm)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+
+            // Profile creation
+            document.getElementById('create-profile-btn').addEventListener('click', (e) => {
+                e.preventDefault();
+                document.getElementById('profile-empty-state').style.display = 'none';
+                document.getElementById('profile-form').style.display = 'block';
+                // Clear form fields when creating new profile
+                document.getElementById('name').value = '';
+                document.getElementById('class').value = '';
+                document.getElementById('school').value = '';
+            });
+
+            document.getElementById('save-profile-btn').addEventListener('click', (e) => {
+                e.preventDefault();
+                saveUserProfile();
+            });
+
+            document.getElementById('edit-profile-btn').addEventListener('click', (e) => {
+                e.preventDefault();
+                document.getElementById('profile-info').style.display = 'none';
+                document.getElementById('profile-form').style.display = 'block';
+                
+                // Fill form with existing data
+                if (userProfile) {
+                    document.getElementById('name').value = userProfile.name;
+                    document.getElementById('class').value = userProfile.class;
+                    document.getElementById('school').value = userProfile.school;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
