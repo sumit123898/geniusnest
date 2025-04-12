@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genius Nest - Math Solutions</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4CAF50;
+            --secondary: #2196F3;
+            --danger: #f44336;
+            --youtube: #FF0000;
+            --search: #9C27B0;
+            --time: #FF9800;
+            --brand: #6a1b9a;
+            --nav-btn: #673AB7;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #121212;
+            color: #fff;
+            padding: 0;
+            min-height: 100vh;
+        }
+        
+        /* Top Navigation */
+        .top-nav {
+            background-color: var(--brand);
+            color: white;
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .brand i {
+            font-size: 1.3rem;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+            animation: fadeInDown 0.6s;
+            padding: 20px 20px 0;
+        }
+        
+        .header h1 {
+            color: #fff;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+        
+        .search-container {
+            max-width: 500px;
+            margin: 0 auto 25px;
+            position: relative;
+            animation: fadeIn 0.8s;
+            padding: 0 20px;
+        }
+        
+        .search-bar {
+            width: 100%;
+            padding: 12px 20px;
+            border-radius: 30px;
+            border: none;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1rem;
+            padding-left: 45px;
+            transition: all 0.3s;
+            border: 1px solid transparent;
+        }
+        
+        .search-bar:focus {
+            outline: none;
+            background-color: rgba(255, 255, 255, 0.2);
+            border: 1px solid var(--search);
+            box-shadow: 0 0 15px rgba(156, 39, 176, 0.5);
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 35px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .question-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px 20px;
+        }
+        
+        .question-btn {
+            width: 100%;
+            padding: 15px 20px;
+            background-color: rgba(0, 0, 0, 0.3);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+            border-left: 4px solid var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            animation: fadeIn 0.5s ease-out;
+            animation-fill-mode: both;
+            text-align: left;
+        }
+        
+        .question-btn:hover, .question-btn.highlight {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 255, 255, 0.2);
+            background-color: rgba(76, 175, 80, 0.2);
+            border-left: 4px solid white;
+        }
+        
+        .question-btn::after {
+            content: '→';
+            font-size: 1.3rem;
+            opacity: 0.7;
+        }
+        
+        .question-title {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-top: 5px;
+            font-weight: normal;
+        }
+        
+        .screen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.97);
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 0;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .screen.active {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            opacity: 1;
+        }
+        
+        .media-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin: 80px 0 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .question-img, .solution-img {
+            max-width: 100%;
+            max-height: 60vh;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+        }
+        
+        /* Watermark for all images */
+        .question-img::after, .solution-img::after {
+            content: 'Genius Nest';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 3rem;
+            font-weight: bold;
+            text-align: center;
+            pointer-events: none;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 20px 0;
+            width: 100%;
+        }
+        
+        /* Additional title watermark for solution images */
+        .solution-img::before {
+            content: attr(data-title);
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-align: center;
+            pointer-events: none;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px 0;
+            width: 100%;
+            z-index: 1;
+        }
+        
+        .question-img.zoomed, .solution-img.zoomed {
+            transform: scale(1.8);
+            cursor: zoom-out;
+            z-index: 1001;
+        }
+        
+        .youtube-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin: 80px 0 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+        }
+        
+        .youtube-container iframe {
+            width: 100%;
+            height: 300px;
+            border: none;
+        }
+        
+        .time-input-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 20px 0;
+            width: 100%;
+            max-width: 800px;
+            padding: 0 20px;
+        }
+        
+        .time-input {
+            flex: 1;
+            padding: 10px 15px;
+            border-radius: 30px;
+            border: none;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1rem;
+            max-width: 200px;
+        }
+        
+        .time-input:focus {
+            outline: none;
+            background-color: rgba(255, 255, 255, 0.2);
+            border: 1px solid var(--time);
+            box-shadow: 0 0 10px rgba(255, 152, 0, 0.5);
+        }
+        
+        .time-btn {
+            padding: 10px 20px;
+            background-color: var(--time);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .time-btn:hover {
+            background-color: #f57c00;
+            transform: translateY(-2px);
+        }
+        
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            width: 100%;
+            max-width: 800px;
+            padding: 0 20px 20px;
+        }
+        
+        .nav-btn-container {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-bottom: 15px;
+            padding: 0 20px;
+        }
+        
+        .nav-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background-color: var(--nav-btn);
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .nav-btn:hover {
+            background-color: #5E35B1;
+            transform: translateY(-2px);
+        }
+        
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        
+        .action-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 160px;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .action-btn::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border-radius: 30px;
+            border: 1px solid white;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .action-btn:hover::after {
+            opacity: 0.7;
+        }
+        
+        .action-btn i {
+            font-size: 1.2rem;
+        }
+        
+        .solution-btn {
+            background-color: var(--secondary);
+            color: white;
+        }
+        
+        .video-btn {
+            background-color: var(--youtube);
+            color: white;
+        }
+        
+        .back-btn {
+            background-color: var(--danger);
+            color: white;
+        }
+        
+        .no-results {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 20px;
+            animation: fadeIn 0.5s;
+            padding: 0 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .brand {
+                font-size: 1.3rem;
+            }
+            
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .question-btn {
+                padding: 12px 15px;
+                font-size: 1.1rem;
+            }
+            
+            .question-title {
+                font-size: 0.8rem;
+            }
+            
+            .question-img::after, .solution-img::after {
+                font-size: 2rem;
+            }
+            
+            .solution-img::before {
+                font-size: 1.2rem;
+            }
+            
+            .youtube-container iframe {
+                height: 200px;
+            }
+            
+            .action-btn, .nav-btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+                min-width: 140px;
+            }
+            
+            .question-img.zoomed, .solution-img.zoomed {
+                transform: scale(1.5);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .top-nav {
+                padding: 12px 15px;
+            }
+            
+            .brand {
+                font-size: 1.1rem;
+            }
+            
+            .header h1 {
+                font-size: 1.3rem;
+            }
+            
+            .question-btn {
+                padding: 10px 12px;
+                font-size: 1rem;
+            }
+            
+            .question-img::after, .solution-img::after {
+                font-size: 1.5rem;
+                padding: 10px 0;
+            }
+            
+            .solution-img::before {
+                font-size: 1rem;
+                top: 10px;
+            }
+            
+            .btn-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .action-btn, .nav-btn {
+                width: 100%;
+                max-width: 250px;
+            }
+            
+            .time-input-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .time-input {
+                max-width: 100%;
+            }
+            
+            .nav-btn-container {
+                flex-direction: column;
+                gap: 10px;
+                align-items: center;
+            }
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-delay-1 { animation-delay: 0.1s; }
+        .animate-delay-2 { animation-delay: 0.2s; }
+        .animate-delay-3 { animation-delay: 0.3s; }
+        .animate-delay-4 { animation-delay: 0.4s; }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+        <div class="brand">
+            <i class="fas fa-brain"></i>
+            <span>Genius Nest</span>
+        </div>
+    </nav>
+    
+    <div class="header">
+        <h1>Math Solutions Portal</h1>
+        <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" class="search-bar" placeholder="Search by question number or title..." id="searchInput">
+        </div>
+    </div>
+    
+    <div class="question-list" id="questionList">
+        <!-- Question buttons will be added here dynamically -->
+    </div>
+    
+    <div id="noResults" class="no-results" style="display: none;">
+        No questions found matching your search.
+    </div>
+    
+    <!-- Question Screen Template -->
+    <div class="screen" id="questionScreenTemplate">
+        <div class="nav-btn-container">
+            <button class="nav-btn" id="prevBtn">
+                <i class="fas fa-arrow-left"></i> Previous
+            </button>
+            <button class="nav-btn" id="nextBtn">
+                Next <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+        <div class="media-container">
+            <img class="question-img" src="" alt="Question">
+        </div>
+        <div class="btn-container">
+            <button class="action-btn solution-btn">
+                <i class="fas fa-lightbulb"></i> Solution
+            </button>
+            <button class="action-btn video-btn">
+                <i class="fab fa-youtube"></i> Video
+            </button>
+            <button class="action-btn back-btn">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
+        </div>
+    </div>
+    
+    <!-- Solution Screen Template -->
+    <div class="screen" id="solutionScreenTemplate">
+        <div class="nav-btn-container">
+            <button class="nav-btn" id="prevBtnSolution">
+                <i class="fas fa-arrow-left"></i> Previous
+            </button>
+            <button class="nav-btn" id="nextBtnSolution">
+                Next <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+        <div class="media-container">
+            <img class="solution-img" src="" alt="Solution" data-title="">
+        </div>
+        <div class="btn-container">
+            <button class="action-btn back-btn">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
+        </div>
+    </div>
+    
+    <!-- Video Screen Template -->
+    <div class="screen" id="videoScreenTemplate">
+        <div class="nav-btn-container">
+            <button class="nav-btn" id="prevBtnVideo">
+                <i class="fas fa-arrow-left"></i> Previous
+            </button>
+            <button class="nav-btn" id="nextBtnVideo">
+                Next <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+        <div class="time-input-container">
+            <input type="number" class="time-input" id="timeInput" placeholder="Start time (seconds)">
+            <button class="time-btn" id="setTimeBtn">
+                <i class="fas fa-play"></i> Set Start Time
+            </button>
+        </div>
+        <div class="youtube-container">
+            <iframe src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen id="youtubeIframe"></iframe>
+        </div>
+        <div class="btn-container">
+            <button class="action-btn back-btn">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
+        </div>
+    </div>
+    
+    <script>
+        // Question data with images, YouTube videos, titles, and optional start times
+        const questions = [
+            { 
+                number: 1,
+                title: "Quadratic Equations",
+                questionImg: "https://i.ibb.co/bjKKLhrK/Screenshot-2025-04-12-230130.png", 
+                solutionImg: "https://i.ibb.co/svqB2kJ3/Screenshot-2025-04-12-230139.png",
+                videoId: "t8fUmrKnvEM",
+                startTime: 120
+            },
+            { 
+                number: 2,
+                title: "Circle Theorems",
+                questionImg: "https://i.ibb.co/bjKKLhrK/Screenshot-2025-04-12-230130.png", 
+                solutionImg: "https://i.ibb.co/svqB2kJ3/Screenshot-2025-04-12-230139.png",
+                videoId: "t8fUmrKnvEM",
+                startTime: 120
+            },
+            { 
+                number: 3,
+                title: "Differential Calculus",
+                questionImg: "https://i.ibb.co/bjKKLhrK/Screenshot-2025-04-12-230130.png", 
+                solutionImg: "https://i.ibb.co/svqB2kJ3/Screenshot-2025-04-12-230139.png",
+                videoId: "t8fUmrKnvEM",
+                startTime: 120
+            },
+            { 
+                number: 4,
+                title: "Trigonometric Identities",
+                questionImg: "https://i.ibb.co/bjKKLhrK/Screenshot-2025-04-12-230130.png", 
+                solutionImg: "https://i.ibb.co/svqB2kJ3/Screenshot-2025-04-12-230139.png",
+                videoId: "t8fUmrKnvEM",
+                startTime: 120
+            },
+            { 
+                number: 5,
+                title: "Probability Problems",
+                questionImg: "https://i.ibb.co/bjKKLhrK/Screenshot-2025-04-12-230130.png", 
+                solutionImg: "https://i.ibb.co/svqB2kJ3/Screenshot-2025-04-12-230139.png",
+                videoId: "t8fUmrKnvEM",
+                startTime: 120
+            },
+            { 
+                number: 6,
+                title: "Matrix Algebra",
+                questionImg: "https://i.ibb.co/bjKKLhrK/Screenshot-2025-04-12-230130.png", 
+                solutionImg: "https://i.ibb.co/svqB2kJ3/Screenshot-2025-04-12-230139.png",
+                videoId: "t8fUmrKnvEM",
+                startTime: 120
+            },
+            { 
+                number: 7,
+                title: "Advanced Algebra",
+                questionImg: "https://i.ibb.co/bjKKLhrK/Screenshot-2025-04-12-230130.png", 
+                solutionImg: "https://i.ibb.co/svqB2kJ3/Screenshot-2025-04-12-230139.png",
+                videoId: "t8fUmrKnvEM",
+                startTime: 120
+            },
+            { 
+                number: 8,
+                title: "Geometry Proofs",
+                questionImg: "https://i.ibb.co/bjKKLhrK/Screenshot-2025-04-12-230130.png", 
+                solutionImg: "https://i.ibb.co/svqB2kJ3/Screenshot-2025-04-12-230139.png",
+                videoId: "t8fUmrKnvEM",
+                startTime: 120
+            },
+            { 
+                number: 9,
+                title: "Integral Calculus",
+                questionImg: "https://i.ibb.co/bjKKLhrK/Screenshot-2025-04-12-230130.png", 
+                solutionImg: "https://i.ibb.co/svqB2kJ3/Screenshot-2025-04-12-230139.png",
+                videoId: "t8fUmrKnvEM",
+                startTime: 120
+            },
+            { 
+                number: 10,
+                title: "Trigonometry Applications",
+                questionImg: "https://i.imgur.com/mX0xH1V.png", 
+                solutionImg: "https://i.imgur.com/3nRq7WQ.png",
+                videoId: "4g5W7HEEmZA"
+            }
+        ];
+        
+        // Global variables
+        let currentQuestionIndex = 0;
+        let filteredQuestions = [];
+        
+        // DOM elements
+        const questionList = document.getElementById('questionList');
+        const noResults = document.getElementById('noResults');
+        const searchInput = document.getElementById('searchInput');
+        
+        // Initialize the application
+        function init() {
+            renderQuestions();
+            attachSearchFunctionality();
+        }
+        
+        // Render questions based on filter
+        function renderQuestions(filter = '') {
+            questionList.innerHTML = '';
+            noResults.style.display = 'none';
+            
+            filteredQuestions = questions.filter(q => 
+                q.number.toString().includes(filter.toLowerCase()) ||
+                q.title.toLowerCase().includes(filter.toLowerCase())
+            );
+            
+            if (filteredQuestions.length === 0 && filter !== '') {
+                noResults.style.display = 'block';
+                return;
+            }
+            
+            filteredQuestions.forEach((question, index) => {
+                const btn = document.createElement('button');
+                btn.className = `question-btn animate__animated animate__fadeIn animate-delay-${index % 4}`;
+                btn.innerHTML = `Question ${question.number}<span class="question-title">${question.title}</span>`;
+                btn.dataset.number = question.number;
+                btn.dataset.index = index;
+                questionList.appendChild(btn);
+            });
+            
+            attachQuestionButtonEvents();
+        }
+        
+        // Attach event listeners to question buttons
+        function attachQuestionButtonEvents() {
+            document.querySelectorAll('.question-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    currentQuestionIndex = parseInt(this.dataset.index);
+                    openQuestionScreen(currentQuestionIndex);
+                });
+            });
+        }
+        
+        // Open question screen
+        function openQuestionScreen(index) {
+            const questionData = filteredQuestions[index];
+            
+            // Create question screen
+            const questionScreen = document.getElementById('questionScreenTemplate').cloneNode(true);
+            questionScreen.id = `questionScreen-${questionData.number}`;
+            
+            // Set question image and zoom functionality
+            const questionImg = questionScreen.querySelector('.question-img');
+            questionImg.src = questionData.questionImg;
+            questionImg.alt = `Question ${questionData.number} - ${questionData.title}`;
+            
+            questionImg.addEventListener('click', function() {
+                this.classList.toggle('zoomed');
+            });
+            
+            // Navigation buttons
+            const prevBtn = questionScreen.querySelector('#prevBtn');
+            const nextBtn = questionScreen.querySelector('#nextBtn');
+            
+            prevBtn.disabled = index <= 0;
+            nextBtn.disabled = index >= filteredQuestions.length - 1;
+            
+            prevBtn.addEventListener('click', function() {
+                if (index > 0) {
+                    questionScreen.remove();
+                    openQuestionScreen(index - 1);
+                }
+            });
+            
+            nextBtn.addEventListener('click', function() {
+                if (index < filteredQuestions.length - 1) {
+                    questionScreen.remove();
+                    openQuestionScreen(index + 1);
+                }
+            });
+            
+            // Back button functionality
+            const backBtn = questionScreen.querySelector('.back-btn');
+            backBtn.addEventListener('click', function() {
+                questionScreen.classList.remove('active');
+                setTimeout(() => {
+                    questionScreen.remove();
+                }, 300);
+            });
+            
+            // Solution button functionality
+            const solutionBtn = questionScreen.querySelector('.solution-btn');
+            solutionBtn.addEventListener('click', function() {
+                openSolutionScreen(index);
+            });
+            
+            // Video button functionality
+            const videoBtn = questionScreen.querySelector('.video-btn');
+            videoBtn.addEventListener('click', function() {
+                openVideoScreen(index);
+            });
+            
+            document.body.appendChild(questionScreen);
+            setTimeout(() => {
+                questionScreen.classList.add('active');
+            }, 10);
+        }
+        
+        // Open solution screen
+        function openSolutionScreen(index) {
+            const questionData = filteredQuestions[index];
+            
+            // Create solution screen
+            const solutionScreen = document.getElementById('solutionScreenTemplate').cloneNode(true);
+            solutionScreen.id = `solutionScreen-${questionData.number}`;
+            
+            // Set solution image and title
+            const solutionImg = solutionScreen.querySelector('.solution-img');
+            solutionImg.src = questionData.solutionImg;
+            solutionImg.alt = `Solution ${questionData.number} - ${questionData.title}`;
+            solutionImg.dataset.title = `Solution for: ${questionData.title}`;
+            
+            solutionImg.addEventListener('click', function() {
+                this.classList.toggle('zoomed');
+            });
+            
+            // Navigation buttons
+            const prevBtn = solutionScreen.querySelector('#prevBtnSolution');
+            const nextBtn = solutionScreen.querySelector('#nextBtnSolution');
+            
+            prevBtn.disabled = index <= 0;
+            nextBtn.disabled = index >= filteredQuestions.length - 1;
+            
+            prevBtn.addEventListener('click', function() {
+                if (index > 0) {
+                    solutionScreen.remove();
+                    openSolutionScreen(index - 1);
+                }
+            });
+            
+            nextBtn.addEventListener('click', function() {
+                if (index < filteredQuestions.length - 1) {
+                    solutionScreen.remove();
+                    openSolutionScreen(index + 1);
+                }
+            });
+            
+            // Back button for solution screen
+            solutionScreen.querySelector('.back-btn').addEventListener('click', function() {
+                solutionScreen.classList.remove('active');
+                setTimeout(() => {
+                    solutionScreen.remove();
+                }, 300);
+            });
+            
+            document.body.appendChild(solutionScreen);
+            setTimeout(() => {
+                solutionScreen.classList.add('active');
+            }, 10);
+        }
+        
+        // Open video screen
+        function openVideoScreen(index) {
+            const questionData = filteredQuestions[index];
+            
+            // Create video screen
+            const videoScreen = document.getElementById('videoScreenTemplate').cloneNode(true);
+            videoScreen.id = `videoScreen-${questionData.number}`;
+            
+            // Navigation buttons
+            const prevBtn = videoScreen.querySelector('#prevBtnVideo');
+            const nextBtn = videoScreen.querySelector('#nextBtnVideo');
+            
+            prevBtn.disabled = index <= 0;
+            nextBtn.disabled = index >= filteredQuestions.length - 1;
+            
+            prevBtn.addEventListener('click', function() {
+                if (index > 0) {
+                    videoScreen.remove();
+                    openVideoScreen(index - 1);
+                }
+            });
+            
+            nextBtn.addEventListener('click', function() {
+                if (index < filteredQuestions.length - 1) {
+                    videoScreen.remove();
+                    openVideoScreen(index + 1);
+                }
+            });
+            
+            // Get elements
+            const timeInput = videoScreen.querySelector('.time-input');
+            const setTimeBtn = videoScreen.querySelector('.time-btn');
+            const iframe = videoScreen.querySelector('iframe');
+            
+            // Set initial time if available
+            if (questionData.startTime) {
+                timeInput.value = questionData.startTime;
+            }
+            
+            // Set YouTube video with initial time
+            let startTime = questionData.startTime || 0;
+            iframe.src = `https://www.youtube.com/embed/${questionData.videoId}?rel=0&start=${startTime}`;
+            
+            // Set time button functionality
+            setTimeBtn.addEventListener('click', function() {
+                const seconds = parseInt(timeInput.value) || 0;
+                iframe.src = `https://www.youtube.com/embed/${questionData.videoId}?rel=0&start=${seconds}`;
+                
+                // Show visual feedback
+                const originalText = setTimeBtn.innerHTML;
+                setTimeBtn.innerHTML = '<i class="fas fa-check"></i> Time Set!';
+                setTimeout(() => {
+                    setTimeBtn.innerHTML = originalText;
+                }, 1500);
+            });
+            
+            // Back button for video screen
+            videoScreen.querySelector('.back-btn').addEventListener('click', function() {
+                videoScreen.classList.remove('active');
+                setTimeout(() => {
+                    videoScreen.remove();
+                }, 300);
+            });
+            
+            document.body.appendChild(videoScreen);
+            setTimeout(() => {
+                videoScreen.classList.add('active');
+            }, 10);
+        }
+        
+        // Attach search functionality
+        function attachSearchFunctionality() {
+            searchInput.addEventListener('input', function() {
+                renderQuestions(this.value);
+            });
+        }
+        
+        // Handle image zoom on mobile with double-tap
+        document.addEventListener('touchstart', function(event) {
+            if (event.touches.length > 1) return;
+            
+            const now = new Date().getTime();
+            const timesince = now - (this.lastTouchTime || now);
+            
+            if (timesince < 300 && timesince > 0) {
+                // Double tap detected
+                const target = event.target;
+                if (target.classList.contains('question-img') || target.classList.contains('solution-img')) {
+                    target.classList.toggle('zoomed');
+                    event.preventDefault();
+                }
+            }
+            
+            this.lastTouchTime = now;
+        }, false);
+        
+        // Initialize the app
+        init();
+    </script>
+</body>
+</html>
