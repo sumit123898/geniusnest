@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genius Nest</title>
+    <style>
+        :root {
+            --primary-color: #6e48aa;
+            --secondary-color: #9d50bb;
+            --accent-color: #4776E6;
+            --dark-bg: #121212;
+            --darker-bg: #0a0a0a;
+            --card-bg: #1e1e1e;
+            --text-color: #ffffff;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        
+        /* Top Navigation */
+        .top-nav {
+            background-color: var(--darker-bg);
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .brand {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 20px;
+        }
+        
+        .search-container {
+            grid-column: 1 / -1;
+            margin: 10px 0;
+        }
+        
+        #search-bar {
+            width: 100%;
+            padding: 12px 20px;
+            font-size: 16px;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            border: 1px solid #333;
+            border-radius: 30px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        
+        #search-bar:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(71, 118, 230, 0.3);
+        }
+        
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+        
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .questions-sidebar {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            padding: 15px;
+            height: fit-content;
+            max-height: 600px;
+            overflow-y: auto;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .questions-sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .questions-sidebar::-webkit-scrollbar-thumb {
+            background-color: var(--primary-color);
+            border-radius: 3px;
+        }
+        
+        .question-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .question-btn {
+            padding: 14px 18px;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            border: 2px solid transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 15px;
+            text-align: left;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .question-btn:hover {
+            transform: translateX(5px);
+            background-color: rgba(110, 72, 170, 0.1);
+        }
+        
+        .question-btn.active {
+            border-color: var(--primary-color);
+            background-color: rgba(110, 72, 170, 0.2);
+        }
+        
+        /* Glowing border animation */
+        .question-btn::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border: 2px solid transparent;
+            border-radius: 8px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+            background-size: 200% 200%;
+            z-index: -1;
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+        
+        .question-btn:hover::before {
+            opacity: 1;
+            animation: glowing-border 2s linear infinite;
+        }
+        
+        @keyframes glowing-border {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                padding: 15px;
+            }
+            
+            .questions-sidebar {
+                max-height: none;
+                order: 3;
+            }
+            
+            .video-container {
+                order: 2;
+            }
+            
+            .search-container {
+                order: 1;
+            }
+            
+            .brand {
+                font-size: 1.5rem;
+            }
+            
+            .question-btn {
+                padding: 12px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="brand">Genius Nest</div>
+    </nav>
+    
+    <div class="container">
+        <div class="search-container">
+            <input type="text" id="search-bar" placeholder="Search for solutions...">
+        </div>
+        
+        <div class="video-container">
+            <iframe id="video-player" src="https://www.youtube.com/embed/t8fUmrKnvEM?enablejsapi=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        
+        <div class="questions-sidebar">
+            <div class="question-buttons" id="question-buttons">
+                <!-- Buttons will be added here dynamically -->
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Sample data - in a real app this would come from a database
+        const questions = [
+            { number: 1, title: "Question 1: 1i", time: 15 },
+            { number: 2, title: "Question 2: 1ii", time: 1200 },
+            { number: 3, title: "Question 3: 3iii", time: 240 },
+            { number: 4, title: "Question 4: Solution Approach", time: 360 },
+            { number: 5, title: "Question 5: Implementation", time: 480 },
+            { number: 6, title: "Question 6: Verification", time: 600 },
+            { number: 7, title: "Question 7: Advanced Technique", time: 720 },
+            { number: 8, title: "Question 8: Final Solution", time: 840 }
+        ];
+        
+        // Get DOM elements
+        const videoPlayer = document.getElementById('video-player');
+        const searchBar = document.getElementById('search-bar');
+        const buttonsContainer = document.getElementById('question-buttons');
+        
+        // Create question buttons
+        function createQuestionButtons(questionsToShow = questions) {
+            buttonsContainer.innerHTML = '';
+            
+            questionsToShow.forEach(question => {
+                const button = document.createElement('button');
+                button.className = 'question-btn';
+                button.textContent = question.title;
+                button.dataset.time = question.time;
+                
+                button.addEventListener('click', () => {
+                    // Remove active class from all buttons
+                    document.querySelectorAll('.question-btn').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    
+                    // Add active class to clicked button
+                    button.classList.add('active');
+                    
+                    // Update video with the correct timestamp
+                    const videoUrl = `https://www.youtube.com/embed/t8fUmrKnvEM?start=${question.time}&autoplay=1&enablejsapi=1`;
+                    
+                    // Smooth transition effect
+                    videoPlayer.style.opacity = '0';
+                    setTimeout(() => {
+                        videoPlayer.src = videoUrl;
+                        videoPlayer.style.opacity = '1';
+                    }, 300);
+                });
+                
+                buttonsContainer.appendChild(button);
+            });
+        }
+        
+        // Filter questions based on search input
+        searchBar.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            
+            if (searchTerm === '') {
+                createQuestionButtons();
+                return;
+            }
+            
+            const filteredQuestions = questions.filter(question => 
+                question.title.toLowerCase().includes(searchTerm)
+            );
+            
+            createQuestionButtons(filteredQuestions);
+        });
+        
+        // Initialize buttons on page load
+        createQuestionButtons();
+        
+        // Make first button active by default
+        setTimeout(() => {
+            const firstButton = document.querySelector('.question-btn');
+            if (firstButton) {
+                firstButton.classList.add('active');
+            }
+        }, 100);
+    </script>
+</body>
+</html>
