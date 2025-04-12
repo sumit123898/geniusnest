@@ -159,6 +159,10 @@
             font-weight: normal;
         }
         
+        .search-terms {
+            display: none;
+        }
+        
         .screen {
             display: none;
             position: fixed;
@@ -529,7 +533,7 @@
         <h1>Math Solutions Portal</h1>
         <div class="search-container">
             <i class="fas fa-search search-icon"></i>
-            <input type="text" class="search-bar" placeholder="Search by question number or title..." id="searchInput">
+            <input type="text" class="search-bar" placeholder="Search by question number, title or topic..." id="searchInput">
         </div>
     </div>
     
@@ -614,11 +618,12 @@
     </div>
     
     <script>
-        // Question data with images, YouTube videos, titles, and optional start times
+        // Enhanced question data with hidden search terms
         const questions = [
             { 
                 number: 1,
                 title: "Quadratic Equations",
+                searchTerms: "algebra polynomial quadratic equation factorization roots",
                 questionImg: "https://i.ibb.co/bjKKLhrK/Screenshot-2025-04-12-230130.png", 
                 solutionImg: "https://i.ibb.co/svqB2kJ3/Screenshot-2025-04-12-230139.png",
                 videoId: "t8fUmrKnvEM",
@@ -627,70 +632,75 @@
             { 
                 number: 2,
                 title: "Circle Theorems",
-                questionImg: "https://i.ibb.co/bjKKLhrK/Screenshot-2025-04-12-230130.png", 
-                solutionImg: "https://i.ibb.co/svqB2kJ3/Screenshot-2025-04-12-230139.png",
-                videoId: "t8fUmrKnvEM",
-                startTime: 120
+                searchTerms: "geometry circle arc chord tangent secant radius diameter circumference",
+                questionImg: "https://i.imgur.com/8LmXwvN.png", 
+                solutionImg: "https://i.imgur.com/vVXpQYF.png",
+                videoId: "wX2gY6QuNvI",
+                startTime: 45
             },
             { 
                 number: 3,
                 title: "Differential Calculus",
-                questionImg: "https://i.ibb.co/bjKKLhrK/Screenshot-2025-04-12-230130.png", 
+                searchTerms: "calculus derivative differentiation chain rule product quotient rule limits",
+                 questionImg: "https://i.ibb.co/bjKKLhrK/Screenshot-2025-04-12-230130.png", 
                 solutionImg: "https://i.ibb.co/svqB2kJ3/Screenshot-2025-04-12-230139.png",
                 videoId: "t8fUmrKnvEM",
-                startTime: 120
+                startTime: 180
             },
             { 
                 number: 4,
                 title: "Trigonometric Identities",
-                questionImg: "https://i.ibb.co/bjKKLhrK/Screenshot-2025-04-12-230130.png", 
-                solutionImg: "https://i.ibb.co/svqB2kJ3/Screenshot-2025-04-12-230139.png",
-                videoId: "t8fUmrKnvEM",
-                startTime: 120
+                searchTerms: "678 678 900",
+                questionImg: "https://i.imgur.com/mX0xH1V.png", 
+                solutionImg: "https://i.imgur.com/3nRq7WQ.png",
+                videoId: "4g5W7HEEmZA"
             },
             { 
                 number: 5,
                 title: "Probability Problems",
-                questionImg: "https://i.ibb.co/bjKKLhrK/Screenshot-2025-04-12-230130.png", 
-                solutionImg: "https://i.ibb.co/svqB2kJ3/Screenshot-2025-04-12-230139.png",
-                videoId: "t8fUmrKnvEM",
-                startTime: 120
+                searchTerms: "probability combinatorics permutations combinations statistics chance odds",
+                questionImg: "https://i.imgur.com/4TjJzWx.png", 
+                solutionImg: "https://i.imgur.com/JrQYvXG.png",
+                videoId: "9Vb5oUaAwkU",
+                startTime: 90
             },
             { 
                 number: 6,
                 title: "Matrix Algebra",
-                questionImg: "https://i.ibb.co/bjKKLhrK/Screenshot-2025-04-12-230130.png", 
-                solutionImg: "https://i.ibb.co/svqB2kJ3/Screenshot-2025-04-12-230139.png",
-                videoId: "t8fUmrKnvEM",
-                startTime: 120
+                searchTerms: "linear algebra matrices determinant inverse transpose system equations",
+                questionImg: "https://i.imgur.com/7P1hF9T.png", 
+                solutionImg: "https://i.imgur.com/V4jQx0H.png",
+                videoId: "k8U5hMOQ0Ww",
+                startTime: 30
             },
             { 
                 number: 7,
                 title: "Advanced Algebra",
-                questionImg: "https://i.ibb.co/bjKKLhrK/Screenshot-2025-04-12-230130.png", 
-                solutionImg: "https://i.ibb.co/svqB2kJ3/Screenshot-2025-04-12-230139.png",
-                videoId: "t8fUmrKnvEM",
-                startTime: 120
+                searchTerms: "algebra complex numbers logarithms exponents functions polynomials",
+                questionImg: "https://i.imgur.com/JQh1W9P.png", 
+                solutionImg: "https://i.imgur.com/5GkDZ8L.png",
+                videoId: "d0RLm7xEtkE"
             },
             { 
                 number: 8,
                 title: "Geometry Proofs",
-                questionImg: "https://i.ibb.co/bjKKLhrK/Screenshot-2025-04-12-230130.png", 
-                solutionImg: "https://i.ibb.co/svqB2kJ3/Screenshot-2025-04-12-230139.png",
-                videoId: "t8fUmrKnvEM",
-                startTime: 120
+                searchTerms: "geometry proof congruent similar triangles angles parallel perpendicular",
+                questionImg: "https://i.imgur.com/8LmXwvN.png", 
+                solutionImg: "https://i.imgur.com/vVXpQYF.png",
+                videoId: "wX2gY6QuNvI"
             },
             { 
                 number: 9,
                 title: "Integral Calculus",
-                questionImg: "https://i.ibb.co/bjKKLhrK/Screenshot-2025-04-12-230130.png", 
-                solutionImg: "https://i.ibb.co/svqB2kJ3/Screenshot-2025-04-12-230139.png",
-                videoId: "t8fUmrKnvEM",
-                startTime: 120
+                searchTerms: "calculus integration antiderivative area under curve definite integral",
+                questionImg: "https://i.imgur.com/KaYwWqB.png", 
+                solutionImg: "https://i.imgur.com/9tZQh2J.png",
+                videoId: "XqQnW9sIb1E"
             },
             { 
                 number: 10,
                 title: "Trigonometry Applications",
+                searchTerms: "trigonometry applications real-world problems height distance waves",
                 questionImg: "https://i.imgur.com/mX0xH1V.png", 
                 solutionImg: "https://i.imgur.com/3nRq7WQ.png",
                 videoId: "4g5W7HEEmZA"
@@ -719,7 +729,8 @@
             
             filteredQuestions = questions.filter(q => 
                 q.number.toString().includes(filter.toLowerCase()) ||
-                q.title.toLowerCase().includes(filter.toLowerCase())
+                q.title.toLowerCase().includes(filter.toLowerCase()) ||
+                (q.searchTerms && q.searchTerms.toLowerCase().includes(filter.toLowerCase()))
             );
             
             if (filteredQuestions.length === 0 && filter !== '') {
@@ -730,7 +741,11 @@
             filteredQuestions.forEach((question, index) => {
                 const btn = document.createElement('button');
                 btn.className = `question-btn animate__animated animate__fadeIn animate-delay-${index % 4}`;
-                btn.innerHTML = `Question ${question.number}<span class="question-title">${question.title}</span>`;
+                btn.innerHTML = `
+                    Question ${question.number}
+                    <span class="question-title">${question.title}</span>
+                    <span class="search-terms">${question.searchTerms || ''}</span>
+                `;
                 btn.dataset.number = question.number;
                 btn.dataset.index = index;
                 questionList.appendChild(btn);
