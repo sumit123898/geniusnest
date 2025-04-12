@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Solutions Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4CAF50;
+            --secondary: #2196F3;
+            --danger: #f44336;
+            --youtube: #FF0000;
+            --search: #9C27B0;
+            --time: #FF9800;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #121212;
+            color: #fff;
+            padding: 15px;
+            min-height: 100vh;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+            animation: fadeInDown 0.6s;
+        }
+        
+        .header h1 {
+            color: #fff;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+        
+        .search-container {
+            max-width: 500px;
+            margin: 0 auto 25px;
+            position: relative;
+            animation: fadeIn 0.8s;
+        }
+        
+        .search-bar {
+            width: 100%;
+            padding: 12px 20px;
+            border-radius: 30px;
+            border: none;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1rem;
+            padding-left: 45px;
+            transition: all 0.3s;
+            border: 1px solid transparent;
+        }
+        
+        .search-bar:focus {
+            outline: none;
+            background-color: rgba(255, 255, 255, 0.2);
+            border: 1px solid var(--search);
+            box-shadow: 0 0 15px rgba(156, 39, 176, 0.5);
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .question-column {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            max-width: 120px;
+            margin: 0 auto;
+        }
+        
+        .question-btn {
+            width: 80px;
+            height: 80px;
+            background-color: rgba(0, 0, 0, 0.3);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.4rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+            border: 2px solid transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            animation: fadeIn 0.5s ease-out;
+            animation-fill-mode: both;
+        }
+        
+        .question-btn:hover, .question-btn.highlight {
+            transform: translateY(-5px);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+            border: 2px solid white;
+            background-color: rgba(76, 175, 80, 0.3);
+        }
+        
+        .question-btn::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            border-radius: 50%;
+            border: 2px solid white;
+            opacity: 0;
+            animation: pulse 2s infinite;
+        }
+        
+        .question-btn:hover::before, .question-btn.highlight::before {
+            opacity: 0.7;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 0.7;
+            }
+            70% {
+                transform: scale(1.3);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 0;
+            }
+        }
+        
+        .screen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.97);
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .screen.active {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 1;
+        }
+        
+        .media-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-bottom: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .question-img, .solution-img {
+            max-width: 100%;
+            max-height: 60vh;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .question-img.zoomed, .solution-img.zoomed {
+            transform: scale(1.8);
+            cursor: zoom-out;
+            z-index: 1001;
+        }
+        
+        .youtube-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+        }
+        
+        .youtube-container iframe {
+            width: 100%;
+            height: 300px;
+            border: none;
+        }
+        
+        .time-input-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            width: 100%;
+            max-width: 800px;
+        }
+        
+        .time-input {
+            flex: 1;
+            padding: 10px 15px;
+            border-radius: 30px;
+            border: none;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1rem;
+            max-width: 200px;
+        }
+        
+        .time-input:focus {
+            outline: none;
+            background-color: rgba(255, 255, 255, 0.2);
+            border: 1px solid var(--time);
+            box-shadow: 0 0 10px rgba(255, 152, 0, 0.5);
+        }
+        
+        .time-btn {
+            padding: 10px 20px;
+            background-color: var(--time);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .time-btn:hover {
+            background-color: #f57c00;
+            transform: translateY(-2px);
+        }
+        
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            width: 100%;
+            max-width: 800px;
+        }
+        
+        .action-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 160px;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .action-btn::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border-radius: 30px;
+            border: 1px solid white;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .action-btn:hover::after {
+            opacity: 0.7;
+        }
+        
+        .action-btn i {
+            font-size: 1.2rem;
+        }
+        
+        .solution-btn {
+            background-color: var(--secondary);
+            color: white;
+        }
+        
+        .video-btn {
+            background-color: var(--youtube);
+            color: white;
+        }
+        
+        .back-btn {
+            background-color: var(--danger);
+            color: white;
+        }
+        
+        .no-results {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 20px;
+            animation: fadeIn 0.5s;
+        }
+        
+        @media (max-width: 768px) {
+            .question-btn {
+                width: 70px;
+                height: 70px;
+                font-size: 1.2rem;
+            }
+            
+            .youtube-container iframe {
+                height: 200px;
+            }
+            
+            .action-btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+                min-width: 140px;
+            }
+            
+            .question-img.zoomed, .solution-img.zoomed {
+                transform: scale(1.5);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .question-btn {
+                width: 60px;
+                height: 60px;
+                font-size: 1.1rem;
+            }
+            
+            .btn-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .action-btn {
+                width: 100%;
+                max-width: 250px;
+            }
+            
+            .time-input-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .time-input {
+                max-width: 100%;
+            }
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-delay-1 { animation-delay: 0.1s; }
+        .animate-delay-2 { animation-delay: 0.2s; }
+        .animate-delay-3 { animation-delay: 0.3s; }
+        .animate-delay-4 { animation-delay: 0.4s; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Math Solutions Portal</h1>
+        <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" class="search-bar" placeholder="Search by question number..." id="searchInput">
+        </div>
+    </div>
+    
+    <div class="question-column" id="questionColumn">
+        <!-- Question buttons will be added here dynamically -->
+    </div>
+    
+    <div id="noResults" class="no-results" style="display: none;">
+        No questions found matching your search.
+    </div>
+    
+    <!-- Question Screen Template -->
+    <div class="screen" id="questionScreenTemplate">
+        <div class="media-container">
+            <img class="question-img" src="" alt="Question">
+        </div>
+        <div class="btn-container">
+            <button class="action-btn solution-btn">
+                <i class="fas fa-lightbulb"></i> Solution
+            </button>
+            <button class="action-btn video-btn">
+                <i class="fab fa-youtube"></i> Video
+            </button>
+            <button class="action-btn back-btn">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
+        </div>
+    </div>
+    
+    <!-- Solution Screen Template -->
+    <div class="screen" id="solutionScreenTemplate">
+        <div class="media-container">
+            <img class="solution-img" src="" alt="Solution">
+        </div>
+        <div class="btn-container">
+            <button class="action-btn back-btn">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
+        </div>
+    </div>
+    
+    <!-- Video Screen Template -->
+    <div class="screen" id="videoScreenTemplate">
+        <div class="time-input-container">
+            <input type="number" class="time-input" id="timeInput" placeholder="Start time (seconds)">
+            <button class="time-btn" id="setTimeBtn">
+                <i class="fas fa-play"></i> Set Start Time
+            </button>
+        </div>
+        <div class="youtube-container">
+            <iframe src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen id="youtubeIframe"></iframe>
+        </div>
+        <div class="btn-container">
+            <button class="action-btn back-btn">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
+        </div>
+    </div>
+    
+    <script>
+        // Question data with images, YouTube videos, and optional start times
+        const questions = [
+            { 
+                number: 1,
+                questionImg: "https://i.ibb.co/bjKKLhrK/Screenshot-2025-04-12-230130.png", 
+                solutionImg: "https://i.ibb.co/svqB2kJ3/Screenshot-2025-04-12-230139.png",
+                videoId: "t8fUmrKnvEM",
+                startTime: 120 // Example start time in seconds
+            },
+            { 
+                number: 2,
+                questionImg: "https://i.imgur.com/8LmXwvN.png", 
+                solutionImg: "https://i.imgur.com/vVXpQYF.png",
+                videoId: "wX2gY6QuNvI",
+                startTime: 45
+            },
+            { 
+                number: 3,
+                questionImg: "https://i.imgur.com/KaYwWqB.png", 
+                solutionImg: "https://i.imgur.com/9tZQh2J.png",
+                videoId: "XqQnW9sIb1E",
+                startTime: 180
+            },
+            { 
+                number: 4,
+                questionImg: "https://i.imgur.com/mX0xH1V.png", 
+                solutionImg: "https://i.imgur.com/3nRq7WQ.png",
+                videoId: "4g5W7HEEmZA"
+                // No predefined start time for this question
+            },
+            { 
+                number: 5,
+                questionImg: "https://i.imgur.com/4TjJzWx.png", 
+                solutionImg: "https://i.imgur.com/JrQYvXG.png",
+                videoId: "9Vb5oUaAwkU",
+                startTime: 90
+            },
+            { 
+                number: 6,
+                questionImg: "https://i.imgur.com/7P1hF9T.png", 
+                solutionImg: "https://i.imgur.com/V4jQx0H.png",
+                videoId: "k8U5hMOQ0Ww",
+                startTime: 30
+            },
+            { 
+                number: 7,
+                questionImg: "https://i.imgur.com/JQh1W9P.png", 
+                solutionImg: "https://i.imgur.com/5GkDZ8L.png",
+                videoId: "d0RLm7xEtkE"
+            },
+            { 
+                number: 8,
+                questionImg: "https://i.imgur.com/8LmXwvN.png", 
+                solutionImg: "https://i.imgur.com/vVXpQYF.png",
+                videoId: "wX2gY6QuNvI"
+            },
+            { 
+                number: 9,
+                questionImg: "https://i.imgur.com/KaYwWqB.png", 
+                solutionImg: "https://i.imgur.com/9tZQh2J.png",
+                videoId: "XqQnW9sIb1E"
+            },
+            { 
+                number: 10,
+                questionImg: "https://i.imgur.com/mX0xH1V.png", 
+                solutionImg: "https://i.imgur.com/3nRq7WQ.png",
+                videoId: "4g5W7HEEmZA"
+            }
+        ];
+        
+        // Create question buttons with staggered animations
+        const questionColumn = document.getElementById('questionColumn');
+        const noResults = document.getElementById('noResults');
+        const searchInput = document.getElementById('searchInput');
+        
+        function renderQuestions(filter = '') {
+            questionColumn.innerHTML = '';
+            noResults.style.display = 'none';
+            
+            const filteredQuestions = questions.filter(q => 
+                q.number.toString().includes(filter.toLowerCase())
+            );
+            
+            if (filteredQuestions.length === 0 && filter !== '') {
+                noResults.style.display = 'block';
+                return;
+            }
+            
+            filteredQuestions.forEach((question, index) => {
+                const btn = document.createElement('button');
+                btn.className = `question-btn animate__animated animate__fadeIn animate-delay-${index % 4}`;
+                btn.textContent = question.number;
+                btn.dataset.number = question.number;
+                questionColumn.appendChild(btn);
+            });
+            
+            // Reattach event listeners to new buttons
+            attachQuestionButtonEvents();
+        }
+        
+        function attachQuestionButtonEvents() {
+            document.querySelectorAll('.question-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const questionNumber = this.dataset.number;
+                    const questionData = questions.find(q => q.number == questionNumber);
+                    
+                    // Highlight the selected button
+                    document.querySelectorAll('.question-btn').forEach(b => b.classList.remove('highlight'));
+                    this.classList.add('highlight');
+                    
+                    // Create question screen
+                    const questionScreen = document.getElementById('questionScreenTemplate').cloneNode(true);
+                    questionScreen.id = `questionScreen-${questionNumber}`;
+                    
+                    // Set question image and zoom functionality
+                    const questionImg = questionScreen.querySelector('.question-img');
+                    questionImg.src = questionData.questionImg;
+                    questionImg.alt = `Question ${questionNumber}`;
+                    
+                    questionImg.addEventListener('click', function() {
+                        this.classList.toggle('zoomed');
+                    });
+                    
+                    // Back button functionality
+                    const backBtn = questionScreen.querySelector('.back-btn');
+                    backBtn.addEventListener('click', function() {
+                        questionScreen.classList.remove('active');
+                        setTimeout(() => {
+                            questionScreen.remove();
+                        }, 300);
+                    });
+                    
+                    // Solution button functionality
+                    const solutionBtn = questionScreen.querySelector('.solution-btn');
+                    solutionBtn.addEventListener('click', function() {
+                        const solutionScreen = document.getElementById('solutionScreenTemplate').cloneNode(true);
+                        solutionScreen.id = `solutionScreen-${questionNumber}`;
+                        
+                        // Set solution image
+                        const solutionImg = solutionScreen.querySelector('.solution-img');
+                        solutionImg.src = questionData.solutionImg;
+                        solutionImg.alt = `Solution ${questionNumber}`;
+                        
+                        solutionImg.addEventListener('click', function() {
+                            this.classList.toggle('zoomed');
+                        });
+                        
+                        // Back button for solution screen
+                        solutionScreen.querySelector('.back-btn').addEventListener('click', function() {
+                            solutionScreen.classList.remove('active');
+                            setTimeout(() => {
+                                solutionScreen.remove();
+                            }, 300);
+                        });
+                        
+                        document.body.appendChild(solutionScreen);
+                        setTimeout(() => {
+                            solutionScreen.classList.add('active');
+                        }, 10);
+                    });
+                    
+                    // Video button functionality
+                    const videoBtn = questionScreen.querySelector('.video-btn');
+                    videoBtn.addEventListener('click', function() {
+                        const videoScreen = document.getElementById('videoScreenTemplate').cloneNode(true);
+                        videoScreen.id = `videoScreen-${questionNumber}`;
+                        
+                        // Get elements
+                        const timeInput = videoScreen.querySelector('.time-input');
+                        const setTimeBtn = videoScreen.querySelector('.time-btn');
+                        const iframe = videoScreen.querySelector('iframe');
+                        
+                        // Set initial time if available
+                        if (questionData.startTime) {
+                            timeInput.value = questionData.startTime;
+                        }
+                        
+                        // Set YouTube video with initial time
+                        let startTime = questionData.startTime || 0;
+                        iframe.src = `https://www.youtube.com/embed/${questionData.videoId}?rel=0&start=${startTime}`;
+                        
+                        // Set time button functionality
+                        setTimeBtn.addEventListener('click', function() {
+                            const seconds = parseInt(timeInput.value) || 0;
+                            iframe.src = `https://www.youtube.com/embed/${questionData.videoId}?rel=0&start=${seconds}`;
+                            
+                            // Show visual feedback
+                            const originalText = setTimeBtn.innerHTML;
+                            setTimeBtn.innerHTML = '<i class="fas fa-check"></i> Time Set!';
+                            setTimeout(() => {
+                                setTimeBtn.innerHTML = originalText;
+                            }, 1500);
+                        });
+                        
+                        // Back button for video screen
+                        videoScreen.querySelector('.back-btn').addEventListener('click', function() {
+                            videoScreen.classList.remove('active');
+                            setTimeout(() => {
+                                videoScreen.remove();
+                            }, 300);
+                        });
+                        
+                        document.body.appendChild(videoScreen);
+                        setTimeout(() => {
+                            videoScreen.classList.add('active');
+                        }, 10);
+                    });
+                    
+                    document.body.appendChild(questionScreen);
+                    setTimeout(() => {
+                        questionScreen.classList.add('active');
+                    }, 10);
+                });
+            });
+        }
+        
+        // Initial render
+        renderQuestions();
+        
+        // Search functionality
+        searchInput.addEventListener('input', function() {
+            renderQuestions(this.value);
+        });
+        
+        // Handle image zoom on mobile with double-tap
+        document.addEventListener('touchstart', function(event) {
+            if (event.touches.length > 1) return;
+            
+            const now = new Date().getTime();
+            const timesince = now - (this.lastTouchTime || now);
+            
+            if (timesince < 300 && timesince > 0) {
+                // Double tap detected
+                const target = event.target;
+                if (target.classList.contains('question-img') || target.classList.contains('solution-img')) {
+                    target.classList.toggle('zoomed');
+                    event.preventDefault();
+                }
+            }
+            
+            this.lastTouchTime = now;
+        }, false);
+    </script>
+</body>
+</html>
