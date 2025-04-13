@@ -30,7 +30,6 @@
             background-color: var(--dark);
             color: var(--light);
             overflow-x: hidden;
-            transition: background-color 0.5s ease, color 0.5s ease;
         }
 
         /* Glowing Animated Header */
@@ -266,11 +265,6 @@
             color: #777;
             font-size: 0.9rem;
             margin-left: 5px;
-        }
-
-        .course-card .rating {
-            color: var(--warning);
-            margin-bottom: 15px;
         }
 
         .course-card .btn {
@@ -695,41 +689,44 @@
             animation: floatCard 6s ease-in-out infinite reverse;
         }
 
-        /* Theme toggle button */
-        .theme-toggle {
-            position: fixed;
-            top: 15px;
-            right: 15px;
-            background: var(--gray);
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 1001;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease;
+        /* Course tags */
+        .course-tag {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            margin-right: 5px;
+            margin-bottom: 5px;
         }
 
-        .theme-toggle:hover {
-            transform: rotate(30deg);
-            background: var(--primary);
+        .tag-beginner {
+            background-color: #06d6a0;
             color: white;
         }
 
-        .theme-toggle i {
-            font-size: 1.2rem;
+        .tag-intermediate {
+            background-color: #3a86ff;
+            color: white;
+        }
+
+        .tag-advanced {
+            background-color: #8338ec;
+            color: white;
+        }
+
+        .tag-popular {
+            background-color: #ffbe0b;
+            color: black;
+        }
+
+        .tag-new {
+            background-color: #ef476f;
+            color: white;
         }
     </style>
 </head>
 <body>
-    <!-- Theme Toggle Button -->
-    <div class="theme-toggle" id="theme-toggle">
-        <i class="fas fa-moon"></i>
-    </div>
-
     <!-- Glowing Animated Header -->
     <header class="header">
         <h1>Genius Nest</h1>
@@ -755,16 +752,12 @@
                     <div class="course-card-content">
                         <h3>Physics Masterclass</h3>
                         <p class="instructor">By Dr. Sarah Johnson</p>
-                        <div class="rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star-half-alt"></i>
-                            <span> (4.7)</span>
+                        <div class="tags">
+                            <span class="course-tag tag-advanced">Advanced</span>
+                            <span class="course-tag tag-popular">Popular</span>
                         </div>
-                        <p class="price">Free <span class="original-price">$99.99</span></p>
-                        <a href="https://www.sumit2.online/app2/" target="_blank" class="btn">Buy Now</a>
+                        <p class="price">Free</p>
+                        <a href="https://www.sumit2.online/app2/" target="_blank" class="btn">Enroll Now</a>
                     </div>
                 </div>
 
@@ -773,16 +766,11 @@
                     <div class="course-card-content">
                         <h3>Advanced Mathematics</h3>
                         <p class="instructor">By Prof. Michael Chen</p>
-                        <div class="rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <span> (5.0)</span>
+                        <div class="tags">
+                            <span class="course-tag tag-advanced">Advanced</span>
                         </div>
-                        <p class="price">$59.99</p>
-                        <a href="https://www.sumit2.online/app2/2" target="_blank" class="btn">Buy Now</a>
+                        <p class="price">₹499</p>
+                        <a href="https://www.sumit2.online/app2/2" target="_blank" class="btn">Enroll Now</a>
                     </div>
                 </div>
 
@@ -792,16 +780,12 @@
                     <div class="course-card-content">
                         <h3>Artificial Intelligence</h3>
                         <p class="instructor">By Dr. Alan Turing</p>
-                        <div class="rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="far fa-star"></i>
-                            <span> (4.2)</span>
+                        <div class="tags">
+                            <span class="course-tag tag-intermediate">Intermediate</span>
+                            <span class="course-tag tag-new">New</span>
                         </div>
-                        <p class="price">$79.99</p>
-                        <a href="https://www.sumit2.online/app2/3" target="_blank" class="btn">Buy Now</a>
+                        <p class="price">₹799</p>
+                        <a href="https://www.sumit2.online/app2/3" target="_blank" class="btn">Enroll Now</a>
                     </div>
                 </div>
             </div>
@@ -1019,19 +1003,17 @@
                 id: 1,
                 title: "Physics Masterclass",
                 instructor: "Dr. Sarah Johnson",
-                rating: 4.7,
-                price: 49.99,
-                originalPrice: 99.99,
+                tags: ["Advanced", "Popular"],
+                price: "Free",
                 image: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
-                tags: ["Bestseller"],
                 link: "https://sites.google.com/view/ginnius123/new"
             },
             {
                 id: 2,
                 title: "Advanced Mathematics",
                 instructor: "Prof. Michael Chen",
-                rating: 5.0,
-                price: 59.99,
+                tags: ["Advanced"],
+                price: "₹499",
                 image: "https://images.unsplash.com/photo-1544717305-2782549b5136?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
                 link: "https://www.sumit2.online/app2/2"
             },
@@ -1039,18 +1021,17 @@
                 id: 3,
                 title: "Artificial Intelligence",
                 instructor: "Dr. Alan Turing",
-                rating: 4.2,
-                price: 79.99,
+                tags: ["Intermediate", "New"],
+                price: "₹799",
                 image: "https://images.unsplash.com/photo-1581094271901-8022df4466f9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
-                tags: ["New"],
                 link: "https://www.sumit2.online/app2/3"
             },
             {
                 id: 4,
                 title: "Robotics Engineering",
                 instructor: "Dr. Maria Rodriguez",
-                rating: 4.5,
-                price: 69.99,
+                tags: ["Advanced"],
+                price: "₹699",
                 image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
                 link: "https://www.sumit2.online/app2/4"
             },
@@ -1058,8 +1039,8 @@
                 id: 5,
                 title: "Financial Markets",
                 instructor: "Warren Buffet",
-                rating: 5.0,
-                price: 89.99,
+                tags: ["Intermediate"],
+                price: "₹899",
                 image: "https://images.unsplash.com/photo-1531482615713-2afd69097998?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
                 link: "https://www.sumit2.online/app2/5"
             },
@@ -1067,8 +1048,8 @@
                 id: 6,
                 title: "Creative Writing",
                 instructor: "J.K. Rowling",
-                rating: 4.0,
-                price: 39.99,
+                tags: ["Beginner"],
+                price: "₹399",
                 image: "https://images.unsplash.com/photo-1575505586569-646b2ca898fc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
                 link: "https://www.sumit2.online/app2/6"
             }
@@ -1138,28 +1119,6 @@
             });
         }
 
-        // Create star rating HTML
-        function createRatingStars(rating) {
-            let stars = '';
-            const fullStars = Math.floor(rating);
-            const hasHalfStar = rating % 1 >= 0.5;
-            
-            for (let i = 0; i < fullStars; i++) {
-                stars += '<i class="fas fa-star"></i>';
-            }
-            
-            if (hasHalfStar) {
-                stars += '<i class="fas fa-star-half-alt"></i>';
-            }
-            
-            const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
-            for (let i = 0; i < emptyStars; i++) {
-                stars += '<i class="far fa-star"></i>';
-            }
-            
-            return stars + ` <span>(${rating.toFixed(1)})</span>`;
-        }
-
         // Render a course card
         function renderCourseCard(course, isMyCourse = false) {
             const card = document.createElement('div');
@@ -1169,15 +1128,15 @@
             let tagsHTML = '';
             if (course.tags) {
                 course.tags.forEach(tag => {
-                    tagsHTML += `<span class="tag">${tag}</span>`;
+                    let tagClass = '';
+                    if (tag === 'Beginner') tagClass = 'tag-beginner';
+                    if (tag === 'Intermediate') tagClass = 'tag-intermediate';
+                    if (tag === 'Advanced') tagClass = 'tag-advanced';
+                    if (tag === 'Popular') tagClass = 'tag-popular';
+                    if (tag === 'New') tagClass = 'tag-new';
+                    
+                    tagsHTML += `<span class="course-tag ${tagClass}">${tag}</span>`;
                 });
-            }
-            
-            let priceHTML = '';
-            if (course.originalPrice) {
-                priceHTML = `<p class="price sale">$${course.price.toFixed(2)} <span class="original-price">$${course.originalPrice.toFixed(2)}</span></p>`;
-            } else {
-                priceHTML = `<p class="price">$${course.price.toFixed(2)}</p>`;
             }
             
             let deleteBtn = '';
@@ -1186,16 +1145,15 @@
             }
             
             card.innerHTML = `
-                ${tagsHTML}
                 ${deleteBtn}
                 <img src="${course.image}" alt="${course.title}">
                 <div class="course-card-content">
                     <h3>${course.title}</h3>
                     <p class="instructor">By ${course.instructor}</p>
-                    <div class="rating">
-                        ${createRatingStars(course.rating)}
+                    <div class="tags">
+                        ${tagsHTML}
                     </div>
-                    ${priceHTML}
+                    ${course.price ? `<p class="price">${course.price}</p>` : ''}
                     <a href="${course.link}" target="_blank" class="btn">${isMyCourse ? 'Continue' : 'Add Course'}</a>
                 </div>
             `;
