@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genius Nest</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+            min-height: 100vh;
+            padding-top: 70px; /* To account for fixed navbar */
+        }
+        
+        /* Top Navigation - Now Fixed */
+        .top-nav {
+            background-color: #1e1e1e;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+        
+        .brand-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        
+        .brand-name span {
+            color: #4dabf7;
+        }
+        
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: #e0e0e0;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: background-color 0.3s;
+        }
+        
+        .theme-toggle:hover {
+            background-color: #333;
+        }
+        
+        /* Banner - Adjusted for fixed nav */
+        .banner {
+            width: 100%;
+            height: 300px;
+            background-image: linear-gradient(135deg, #1e3a8a, #111827);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+            margin-top: -70px; /* Counteract body padding */
+            padding-top: 70px; /* Make content appear below nav */
+        }
+        
+        .banner::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80') center/cover no-repeat;
+            opacity: 0.3;
+        }
+        
+        .banner-content {
+            position: relative;
+            z-index: 1;
+            padding: 2rem;
+            max-width: 800px;
+        }
+        
+        .banner h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .banner p {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            opacity: 0.9;
+        }
+        
+        /* Main Content */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem 3rem;
+        }
+        
+        /* Buttons Grid */
+        .buttons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        /* Main Button Style */
+        .main-button {
+            display: flex;
+            align-items: center;
+            padding: 1.2rem 1.5rem;
+            background-color: #1e1e1e;
+            color: #e0e0e0;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+            min-height: 80px;
+            width: 100%;
+        }
+        
+        .main-button:hover {
+            background-color: #2d2d2d;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        .main-button.active {
+            background-color: #4dabf7;
+            color: white;
+        }
+        
+        .main-button.active i {
+            color: white;
+        }
+        
+        .main-button i {
+            font-size: 1.5rem;
+            margin-right: 1rem;
+            color: #4dabf7;
+            transition: all 0.3s ease;
+            min-width: 30px;
+        }
+        
+        .main-button:hover i {
+            transform: scale(1.1);
+        }
+        
+        .button-text h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.3rem;
+            line-height: 1.4;
+        }
+        
+        /* Sub Buttons Container */
+        .sub-buttons {
+            grid-column: 1 / -1;
+            display: none;
+            background-color: #252525;
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            margin-top: -0.5rem;
+            margin-bottom: 1rem;
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .sub-buttons.active {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+        
+        /* Sub Button Style */
+        .sub-button {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem 1rem;
+            background-color: #333;
+            color: #e0e0e0;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+            text-decoration: none;
+        }
+        
+        .sub-button:hover {
+            background-color: #4dabf7;
+            color: white;
+            transform: translateX(5px);
+        }
+        
+        .sub-button i {
+            font-size: 1rem;
+            margin-right: 0.8rem;
+            color: #4dabf7;
+            transition: all 0.2s ease;
+        }
+        
+        .sub-button:hover i {
+            color: white;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            body {
+                padding-top: 60px;
+            }
+            
+            .top-nav {
+                padding: 0.8rem 1rem;
+            }
+            
+            .banner {
+                margin-top: -60px;
+                padding-top: 60px;
+                height: 250px;
+            }
+            
+            .banner h1 {
+                font-size: 2rem;
+            }
+            
+            .banner p {
+                font-size: 1rem;
+            }
+            
+            .container {
+                padding: 0 1rem 2rem;
+            }
+            
+            .buttons-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation - Now Fixed -->
+    <nav class="top-nav">
+        <div class="brand-name">GENIUS <span>NEST</span></div>
+        <button class="theme-toggle" id="themeToggle">
+            <i class="fas fa-moon"></i>
+        </button>
+    </nav>
+    
+    <!-- Banner -->
+    <div class="banner">
+        <div class="banner-content">
+            <h1>গণিত শেখার আদর্শ স্থান</h1>
+            <p>বিভিন্ন গণিত বিষয় সম্পর্কে শিখুন এবং সমস্যার সমাধান করুন</p>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="container">
+        <div class="buttons-grid">
+            <!-- Math Topic Buttons -->
+           <button class="main-button" onclick="toggleSubButtons(this, 'quadratic')">
+    <i class="fas fa-square-root-alt"></i>
+    <div class="button-text">
+        <h3>একচলবিশিষ্ট দ্বিঘাত সমীকরণ</h3>
+    </div>
+</button>
+
+<div class="sub-buttons" id="quadratic">
+    <a href="#" class="sub-button">
+        <i class="fas fa-book-open"></i>
+        <div class="button-text">মূল বিষয়বস্তু</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-question-circle"></i>
+        <div class="button-text">সমস্যা ও সমাধান</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-file-alt"></i>
+        <div class="button-text">নোটস</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-video"></i>
+        <div class="button-text">ভিডিও লেকচার</div>
+    </a>
+</div>
+
+<button class="main-button" onclick="toggleSubButtons(this, 'simple_interest')">
+    <i class="fas fa-percentage"></i>
+    <div class="button-text">
+        <h3>সরল সুদকষা</h3>
+    </div>
+</button>
+
+<div class="sub-buttons" id="simple_interest">
+    <a href="#" class="sub-button">
+        <i class="fas fa-book-open"></i>
+        <div class="button-text">মূল বিষয়বস্তু</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-question-circle"></i>
+        <div class="button-text">সমস্যা ও সমাধান</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-file-alt"></i>
+        <div class="button-text">নোটস</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-video"></i>
+        <div class="button-text">ভিডিও লেকচার</div>
+    </a>
+</div>
+
+<button class="main-button" onclick="toggleSubButtons(this, 'circle_theorems')">
+    <i class="fas fa-circle"></i>
+    <div class="button-text">
+        <h3>বৃত্ত সম্পর্কিত উপপাদ্য</h3>
+    </div>
+</button>
+
+<div class="sub-buttons" id="circle_theorems">
+    <a href="#" class="sub-button">
+        <i class="fas fa-book-open"></i>
+        <div class="button-text">মূল বিষয়বস্তু</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-question-circle"></i>
+        <div class="button-text">সমস্যা ও সমাধান</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-file-alt"></i>
+        <div class="button-text">নোটস</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-video"></i>
+        <div class="button-text">ভিডিও লেকচার</div>
+    </a>
+</div>
+
+<button class="main-button" onclick="toggleSubButtons(this, 'cuboid')">
+    <i class="fas fa-cube"></i>
+    <div class="button-text">
+        <h3>আয়তঘন</h3>
+    </div>
+</button>
+
+<div class="sub-buttons" id="cuboid">
+    <a href="#" class="sub-button">
+        <i class="fas fa-book-open"></i>
+        <div class="button-text">মূল বিষয়বস্তু</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-question-circle"></i>
+        <div class="button-text">সমস্যা ও সমাধান</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-file-alt"></i>
+        <div class="button-text">নোটস</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-video"></i>
+        <div class="button-text">ভিডিও লেকচার</div>
+    </a>
+</div>
+
+<button class="main-button" onclick="toggleSubButtons(this, 'ratio_proportion')">
+    <i class="fas fa-divide"></i>
+    <div class="button-text">
+        <h3>অনুপাত ও সমানুপাত</h3>
+    </div>
+</button>
+
+<div class="sub-buttons" id="ratio_proportion">
+    <a href="#" class="sub-button">
+        <i class="fas fa-book-open"></i>
+        <div class="button-text">মূল বিষয়বস্তু</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-question-circle"></i>
+        <div class="button-text">সমস্যা ও সমাধান</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-file-alt"></i>
+        <div class="button-text">নোটস</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-video"></i>
+        <div class="button-text">ভিডিও লেকচার</div>
+    </a>
+</div>
+
+<button class="main-button" onclick="toggleSubButtons(this, 'compound_interest')">
+    <i class="fas fa-chart-line"></i>
+    <div class="button-text">
+        <h3>চক্রবৃদ্ধি সুদ ও সমহার বৃদ্ধি বা হ্রাস</h3>
+    </div>
+</button>
+
+<div class="sub-buttons" id="compound_interest">
+    <a href="#" class="sub-button">
+        <i class="fas fa-book-open"></i>
+        <div class="button-text">মূল বিষয়বস্তু</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-question-circle"></i>
+        <div class="button-text">সমস্যা ও সমাধান</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-file-alt"></i>
+        <div class="button-text">নোটস</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-video"></i>
+        <div class="button-text">ভিডিও লেকচার</div>
+    </a>
+</div>
+
+<button class="main-button" onclick="toggleSubButtons(this, 'cyclic_quadrilateral_angle')">
+    <i class="fas fa-vector-square"></i>
+    <div class="button-text">
+        <h3>বৃত্তস্থ কোন সম্পর্কিত উপপাদ্য</h3>
+    </div>
+</button>
+
+<div class="sub-buttons" id="cyclic_quadrilateral_angle">
+    <a href="#" class="sub-button">
+        <i class="fas fa-book-open"></i>
+        <div class="button-text">মূল বিষয়বস্তু</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-question-circle"></i>
+        <div class="button-text">সমস্যা ও সমাধান</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-file-alt"></i>
+        <div class="button-text">নোটস</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-video"></i>
+        <div class="button-text">ভিডিও লেকচার</div>
+    </a>
+</div>
+
+<button class="main-button" onclick="toggleSubButtons(this, 'right_circular_cylinder')">
+    <i class="fas fa-cylinder"></i>
+    <div class="button-text">
+        <h3>লম্ব বৃত্তাকার চোঙ</h3>
+    </div>
+</button>
+
+<div class="sub-buttons" id="right_circular_cylinder">
+    <a href="#" class="sub-button">
+        <i class="fas fa-book-open"></i>
+        <div class="button-text">মূল বিষয়বস্তু</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-question-circle"></i>
+        <div class="button-text">সমস্যা ও সমাধান</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-file-alt"></i>
+        <div class="button-text">নোটস</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-video"></i>
+        <div class="button-text">ভিডিও লেকচার</div>
+    </a>
+</div>
+
+<button class="main-button" onclick="toggleSubButtons(this, 'quadratic_surd')">
+    <i class="fas fa-square-root-alt"></i>
+    <div class="button-text">
+        <h3>দ্বিঘাত করণী</h3>
+    </div>
+</button>
+
+<div class="sub-buttons" id="quadratic_surd">
+    <a href="#" class="sub-button">
+        <i class="fas fa-book-open"></i>
+        <div class="button-text">মূল বিষয়বস্তু</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-question-circle"></i>
+        <div class="button-text">সমস্যা ও সমাধান</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-file-alt"></i>
+        <div class="button-text">নোটস</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-video"></i>
+        <div class="button-text">ভিডিও লেকচার</div>
+    </a>
+</div>
+
+<button class="main-button" onclick="toggleSubButtons(this, 'cyclic_quadrilateral_theorem')">
+    <i class="fas fa-vector-square"></i>
+    <div class="button-text">
+        <h3>বৃত্তস্থ চতুর্ভুজ সংক্রান্ত উপপাদ্য</h3>
+    </div>
+</button>
+
+<div class="sub-buttons" id="cyclic_quadrilateral_theorem">
+    <a href="#" class="sub-button">
+        <i class="fas fa-book-open"></i>
+        <div class="button-text">মূল বিষয়বস্তু</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-question-circle"></i>
+        <div class="button-text">সমস্যা ও সমাধান</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-file-alt"></i>
+        <div class="button-text">নোটস</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-video"></i>
+        <div class="button-text">ভিডিও লেকচার</div>
+    </a>
+</div>
+
+<button class="main-button" onclick="toggleSubButtons(this, 'triangle_circum_inscribe')">
+    <i class="fas fa-draw-polygon"></i>
+    <div class="button-text">
+        <h3>ত্রিভুজের পরিবৃত্ত ও অন্তর্বৃত্ত অঙ্কন</h3>
+    </div>
+</button>
+
+<div class="sub-buttons" id="triangle_circum_inscribe">
+    <a href="#" class="sub-button">
+        <i class="fas fa-book-open"></i>
+        <div class="button-text">মূল বিষয়বস্তু</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-question-circle"></i>
+        <div class="button-text">সমস্যা ও সমাধান</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-file-alt"></i>
+        <div class="button-text">নোটস</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-video"></i>
+        <div class="button-text">ভিডিও লেকচার</div>
+    </a>
+</div>
+
+<button class="main-button" onclick="toggleSubButtons(this, 'sphere')">
+    <i class="fas fa-globe"></i>
+    <div class="button-text">
+        <h3>গোলক</h3>
+    </div>
+</button>
+
+<div class="sub-buttons" id="sphere">
+    <a href="#" class="sub-button">
+        <i class="fas fa-book-open"></i>
+        <div class="button-text">মূল বিষয়বস্তু</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-question-circle"></i>
+        <div class="button-text">সমস্যা ও সমাধান</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-file-alt"></i>
+        <div class="button-text">নোটস</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-video"></i>
+        <div class="button-text">ভিডিও লেকচার</div>
+    </a>
+</div>
+
+<button class="main-button" onclick="toggleSubButtons(this, 'variation')">
+    <i class="fas fa-link"></i>
+    <div class="button-text">
+        <h3>ভেদ</h3>
+    </div>
+</button>
+
+<div class="sub-buttons" id="variation">
+    <a href="#" class="sub-button">
+        <i class="fas fa-book-open"></i>
+        <div class="button-text">মূল বিষয়বস্তু</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-question-circle"></i>
+        <div class="button-text">সমস্যা ও সমাধান</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-file-alt"></i>
+        <div class="button-text">নোটস</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-video"></i>
+        <div class="button-text">ভিডিও লেকচার</div>
+    </a>
+</div>
+
+<button class="main-button" onclick="toggleSubButtons(this, 'partnership')">
+    <i class="fas fa-handshake"></i>
+    <div class="button-text">
+        <h3>অংশীদারি কারবার</h3>
+    </div>
+</button>
+
+<div class="sub-buttons" id="partnership">
+    <a href="#" class="sub-button">
+        <i class="fas fa-book-open"></i>
+        <div class="button-text">মূল বিষয়বস্তু</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-question-circle"></i>
+        <div class="button-text">সমস্যা ও সমাধান</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-file-alt"></i>
+        <div class="button-text">নোটস</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-video"></i>
+        <div class="button-text">ভিডিও লেকচার</div>
+    </a>
+</div>
+
+<button class="main-button" onclick="toggleSubButtons(this, 'circle_tangent_theorem')">
+    <i class="fas fa-hand-pointer"></i>
+    <div class="button-text">
+        <h3>বৃত্তের স্পর্শক সংক্রান্ত উপপাদ্য</h3>
+    </div>
+</button>
+
+<div class="sub-buttons" id="circle_tangent_theorem">
+    <a href="#" class="sub-button">
+        <i class="fas fa-book-open"></i>
+        <div class="button-text">মূল বিষয়বস্তু</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-question-circle"></i>
+        <div class="button-text">সমস্যা ও সমাধান</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-file-alt"></i>
+        <div class="button-text">নোটস</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-video"></i>
+        <div class="button-text">ভিডিও লেকচার</div>
+    </a>
+</div>
+
+<button class="main-button" onclick="toggleSubButtons(this, 'right_circular_cone')">
+    <i class="fas fa-cone"></i>
+    <div class="button-text">
+        <h3>লম্ব বৃত্তাকার শঙ্কু</h3>
+    </div>
+</button>
+
+<div class="sub-buttons" id="right_circular_cone">
+    <a href="#" class="sub-button">
+        <i class="fas fa-book-open"></i>
+        <div class="button-text">মূল বিষয়বস্তু</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-question-circle"></i>
+        <div class="button-text">সমস্যা ও সমাধান</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-file-alt"></i>
+        <div class="button-text">নোটস</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-video"></i>
+        <div class="button-text">ভিডিও লেকচার</div>
+    </a>
+</div>
+<button class="main-button" onclick="toggleSubButtons(this, 'circle_tangent_draw')">
+    <i class="fas fa-pencil-alt"></i>
+    <div class="button-text">
+        <h3>বৃত্তের স্পর্শক অঙ্কন</h3>
+    </div>
+</button>
+
+<div class="sub-buttons" id="circle_tangent_draw">
+    <a href="#" class="sub-button">
+        <i class="fas fa-book-open"></i>
+        <div class="button-text">মূল বিষয়বস্তু</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-question-circle"></i>
+        <div class="button-text">সমস্যা ও সমাধান</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-file-alt"></i>
+        <div class="button-text">নোটস</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-video"></i>
+        <div class="button-text">ভিডিও লেকচার</div>
+    </a>
+</div>
+
+<button class="main-button" onclick="toggleSubButtons(this, 'similarity')">
+    <i class="fas fa-shapes"></i>
+    <div class="button-text">
+        <h3>সদৃশতা</h3>
+    </div>
+</button>
+
+<div class="sub-buttons" id="similarity">
+    <a href="#" class="sub-button">
+        <i class="fas fa-book-open"></i>
+        <div class="button-text">মূল বিষয়বস্তু</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-question-circle"></i>
+        <div class="button-text">সমস্যা ও সমাধান</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-file-alt"></i>
+        <div class="button-text">নোটস</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-video"></i>
+        <div class="button-text">ভিডিও লেকচার</div>
+    </a>
+</div>
+
+<button class="main-button" onclick="toggleSubButtons(this, 'real_life_solid_problems')">
+    <i class="fas fa-puzzle-piece"></i>
+    <div class="button-text">
+        <h3>বিভিন্ন ঘনবস্তু সংক্রান্ত বাস্তব সমস্যা</h3>
+    </div>
+</button>
+
+<div class="sub-buttons" id="real_life_solid_problems">
+    <a href="#" class="sub-button">
+        <i class="fas fa-book-open"></i>
+        <div class="button-text">মূল বিষয়বস্তু</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-question-circle"></i>
+        <div class="button-text">সমস্যা ও সমাধান</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-file-alt"></i>
+        <div class="button-text">নোটস</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-video"></i>
+        <div class="button-text">ভিডিও লেকচার</div>
+    </a>
+</div>
+
+<button class="main-button" onclick="toggleSubButtons(this, 'angle_measurement')">
+    <i class="fas fa-ruler-combined"></i>
+    <div class="button-text">
+        <h3>কোন পরিমাপের ধারণা</h3>
+    </div>
+</button>
+
+<div class="sub-buttons" id="angle_measurement">
+    <a href="#" class="sub-button">
+        <i class="fas fa-book-open"></i>
+        <div class="button-text">মূল বিষয়বস্তু</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-question-circle"></i>
+        <div class="button-text">সমস্যা ও সমাধান</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-file-alt"></i>
+        <div class="button-text">নোটস</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-video"></i>
+        <div class="button-text">ভিডিও লেকচার</div>
+    </a>
+</div>
+
+<button class="main-button" onclick="toggleSubButtons(this, 'mean_proportional')">
+    <i class="fas fa-equals"></i>
+    <div class="button-text">
+        <h3>মধ্যাসমানুপাতী নির্ণয়</h3>
+    </div>
+</button>
+
+<div class="sub-buttons" id="mean_proportional">
+    <a href="#" class="sub-button">
+        <i class="fas fa-book-open"></i>
+        <div class="button-text">মূল বিষয়বস্তু</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-question-circle"></i>
+        <div class="button-text">সমস্যা ও সমাধান</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-file-alt"></i>
+        <div class="button-text">নোটস</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-video"></i>
+        <div class="button-text">ভিডিও লেকচার</div>
+    </a>
+</div>
+
+<button class="main-button" onclick="toggleSubButtons(this, 'pythagoras_theorem')">
+    <i class="fas fa-triangle"></i>
+    <div class="button-text">
+        <h3>পিথাগোরাসের উপপাদ্য</h3>
+    </div>
+</button>
+
+<div class="sub-buttons" id="pythagoras_theorem">
+    <a href="#" class="sub-button">
+        <i class="fas fa-book-open"></i>
+        <div class="button-text">মূল বিষয়বস্তু</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-question-circle"></i>
+        <div class="button-text">সমস্যা ও সমাধান</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-file-alt"></i>
+        <div class="button-text">নোটস</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-video"></i>
+        <div class="button-text">ভিডিও লেকচার</div>
+    </a>
+</div>
+
+<button class="main-button" onclick="toggleSubButtons(this, 'trigonometric_ratio')">
+    <i class="fas fa-sin-cos"></i>
+    <div class="button-text">
+        <h3>ত্রিকোণমিতিক অনুপাত এবং ত্রিকোণমিতিক অভেদাবলি</h3>
+    </div>
+</button>
+
+<div class="sub-buttons" id="trigonometric_ratio">
+    <a href="#" class="sub-button">
+        <i class="fas fa-book-open"></i>
+        <div class="button-text">মূল বিষয়বস্তু</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-question-circle"></i>
+        <div class="button-text">সমস্যা ও সমাধান</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-file-alt"></i>
+        <div class="button-text">নোটস</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-video"></i>
+        <div class="button-text">ভিডিও লেকচার</div>
+    </a>
+</div>
+
+<button class="main-button" onclick="toggleSubButtons(this, 'complementary_angle_trigonometry')">
+    <i class="fas fa-angle-double-left"></i>
+    <div class="button-text">
+        <h3>পূরক কোণের ত্রিকোণমিতিক অনুপাত</h3>
+    </div>
+</button>
+
+<div class="sub-buttons" id="complementary_angle_trigonometry">
+    <a href="#" class="sub-button">
+        <i class="fas fa-book-open"></i>
+        <div class="button-text">মূল বিষয়বস্তু</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-question-circle"></i>
+        <div class="button-text">সমস্যা ও সমাধান</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-file-alt"></i>
+        <div class="button-text">নোটস</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-video"></i>
+        <div class="button-text">ভিডিও লেকচার</div>
+    </a>
+</div>
+
+<button class="main-button" onclick="toggleSubButtons(this, 'height_distance')">
+    <i class="fas fa-arrows-alt-v"></i>
+    <div class="button-text">
+        <h3>উচ্চতা ও দূরত্ব</h3>
+    </div>
+</button>
+
+<div class="sub-buttons" id="height_distance">
+    <a href="#" class="sub-button">
+        <i class="fas fa-book-open"></i>
+        <div class="button-text">মূল বিষয়বস্তু</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-question-circle"></i>
+        <div class="button-text">সমস্যা ও সমাধান</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-file-alt"></i>
+        <div class="button-text">নোটস</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-video"></i>
+        <div class="button-text">ভিডিও লেকচার</div>
+    </a>
+</div>
+
+<button class="main-button" onclick="toggleSubButtons(this, 'statistics')">
+    <i class="fas fa-chart-bar"></i>
+    <div class="button-text">
+        <h3>রাশিবিজ্ঞান</h3>
+    </div>
+</button>
+
+<div class="sub-buttons" id="statistics">
+    <a href="#" class="sub-button">
+        <i class="fas fa-book-open"></i>
+        <div class="button-text">মূল বিষয়বস্তু</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-question-circle"></i>
+        <div class="button-text">সমস্যা ও সমাধান</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-file-alt"></i>
+        <div class="button-text">নোটস</div>
+    </a>
+    <a href="#" class="sub-button">
+        <i class="fas fa-video"></i>
+        <div class="button-text">ভিডিও লেকচার</div>
+    </a>
+</div>
+            
+            <!-- Continue with all other topics following the same pattern -->
+        </div>
+    </div>
+    
+    <script>
+        // Toggle sub-buttons
+        function toggleSubButtons(button, subId) {
+            // Close all other sub-buttons first
+            document.querySelectorAll('.sub-buttons').forEach(sub => {
+                if (sub.id !== subId) {
+                    sub.classList.remove('active');
+                    const mainBtn = document.querySelector(`.main-button[onclick*="${sub.id}"]`);
+                    if (mainBtn) mainBtn.classList.remove('active');
+                }
+            });
+            
+            // Toggle the clicked one
+            const subButtons = document.getElementById(subId);
+            subButtons.classList.toggle('active');
+            button.classList.toggle('active');
+        }
+        
+        // Close sub-buttons when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('.main-button') && !event.target.closest('.sub-buttons')) {
+                document.querySelectorAll('.sub-buttons').forEach(sub => {
+                    sub.classList.remove('active');
+                });
+                document.querySelectorAll('.main-button').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+            }
+        });
+        
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('themeToggle');
+        themeToggle.addEventListener('click', function() {
+            document.body.classList.toggle('light-theme');
+            
+            if (document.body.classList.contains('light-theme')) {
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                localStorage.setItem('theme', 'light');
+            } else {
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+        
+        // Check for saved theme preference
+        if (localStorage.getItem('theme') === 'light') {
+            document.body.classList.add('light-theme');
+            themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        }
+        
+        // Add light theme styles
+        const style = document.createElement('style');
+        style.textContent = `
+            body.light-theme {
+                background-color: #f5f5f5;
+                color: #333;
+            }
+            
+            body.light-theme .top-nav {
+                background-color: #4dabf7;
+                color: white;
+            }
+            
+            body.light-theme .main-button {
+                background-color: white;
+                color: #333;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+            
+            body.light-theme .main-button:hover {
+                background-color: #f0f0f0;
+            }
+            
+            body.light-theme .sub-buttons {
+                background-color: #f0f0f0;
+            }
+            
+            body.light-theme .sub-button {
+                background-color: #e0e0e0;
+                color: #333;
+            }
+            
+            body.light-theme .banner {
+                background-image: linear-gradient(135deg, #4dabf7, #1e88e5);
+            }
+            
+            body.light-theme .sub-button i {
+                color: #4dabf7;
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Animation for buttons when they come into view
+        document.addEventListener('DOMContentLoaded', function() {
+            const buttons = document.querySelectorAll('.main-button');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            buttons.forEach((button, index) => {
+                button.style.opacity = '0';
+                button.style.transform = 'translateY(20px)';
+                button.style.transition = `opacity 0.5s ease ${index * 0.1}s, transform 0.5s ease ${index * 0.1}s`;
+                observer.observe(button);
+            });
+        });
+    </script>
+</body>
+</html>
