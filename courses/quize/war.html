@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ইতিহাসের যুদ্ধ | History Battle</title>
+    <style>
+        body {
+            font-family: 'SolaimanLipi', Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-image: url('https://i.imgur.com/JtQ8y9j.jpg');
+            background-size: cover;
+        }
+        
+        .battle-container {
+            width: 800px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .header {
+            background-color: #e74c3c;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .opponent {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .player, .opponent-player {
+            text-align: center;
+            width: 45%;
+        }
+        
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: white;
+            margin: 0 auto 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 40px;
+            color: #333;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .opponent-avatar {
+            background-color: #2c3e50;
+            color: white;
+        }
+        
+        .question-container {
+            padding: 30px;
+            min-height: 150px;
+            position: relative;
+        }
+        
+        .question {
+            font-size: 22px;
+            margin-bottom: 20px;
+            text-align: center;
+            animation: fadeIn 0.5s;
+        }
+        
+        .options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .option {
+            background-color: #f1c40f;
+            color: #333;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            font-weight: bold;
+            transition: all 0.3s;
+            animation: slideIn 0.5s;
+        }
+        
+        .option:hover {
+            background-color: #f39c12;
+            transform: scale(1.03);
+        }
+        
+        .timer-container {
+            height: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        .timer-bar {
+            height: 100%;
+            background-color: #e74c3c;
+            width: 100%;
+            transition: width 1s linear;
+        }
+        
+        .score {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 30px;
+            background-color: #2ecc71;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .result {
+            text-align: center;
+            padding: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            display: none;
+        }
+        
+        .start-screen, .end-screen {
+            text-align: center;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            background-color: #2980b9;
+            transform: scale(1.05);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideIn {
+            from { 
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .battle-effect {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            display: none;
+        }
+        
+        .correct {
+            background-color: #2ecc71 !important;
+            color: white !important;
+        }
+        
+        .wrong {
+            background-color: #e74c3c !important;
+            color: white !important;
+        }
+        
+        .typing-indicator {
+            display: inline-block;
+            margin-left: 5px;
+        }
+        
+        .typing-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background-color: white;
+            border-radius: 50%;
+            margin: 0 2px;
+            opacity: 0.4;
+            animation: typingAnimation 1.4s infinite ease-in-out;
+        }
+        
+        .typing-dot:nth-child(1) {
+            animation-delay: 0s;
+        }
+        
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        @keyframes typingAnimation {
+            0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+            30% { transform: translateY(-5px); opacity: 1; }
+        }
+        
+        .music-control {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.5);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <button class="music-control" id="music-control">♪</button>
+    <audio id="background-music" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="correct-sound">
+        <source src="https://www.soundjay.com/buttons/sounds/button-09.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="wrong-sound">
+        <source src="https://www.soundjay.com/buttons/sounds/button-10.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="timeup-sound">
+        <source src="https://www.soundjay.com/buttons/sounds/button-03.mp3" type="audio/mpeg">
+    </audio>
+    
+    <div class="battle-container">
+        <div class="header">ইতিহাসের যুদ্ধ | History Battle</div>
+        
+        <div class="opponent">
+            <div class="player">
+                <div class="avatar">😎</div>
+                <div>আপনি</div>
+                <div class="score-display">স্কোর: <span id="player-score">0</span></div>
+            </div>
+            <div class="opponent-player">
+                <div class="avatar opponent-avatar" id="opponent-avatar">👨</div>
+                <div id="opponent-name">প্রতিদ্বন্দ্বী</div>
+                <div class="score-display">স্কোর: <span id="opponent-score">0</span></div>
+                <div id="typing-status" style="display:none;"><span class="typing-indicator"><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span></span> উত্তর দিচ্ছে...</div>
+            </div>
+        </div>
+        
+        <div class="timer-container">
+            <div class="timer-bar" id="timer"></div>
+        </div>
+        
+        <div class="question-container">
+            <div class="start-screen" id="start-screen">
+                <h2>ইতিহাসের যুদ্ধে স্বাগতম!</h2>
+                <p>৫টি ইতিহাস প্রশ্নের উত্তর দিন ২০ সেকেন্ডের মধ্যে</p>
+                <p>একজন বাস্তব প্রতিপক্ষের সাথে আপনার জ্ঞানের পরীক্ষা করুন</p>
+                <button id="start-btn">যুদ্ধ শুরু করুন</button>
+            </div>
+            
+            <div class="quiz-screen" id="quiz-screen" style="display: none;">
+                <div class="question" id="question"></div>
+                <div class="options" id="options"></div>
+            </div>
+            
+            <div class="result" id="result"></div>
+            
+            <div class="end-screen" id="end-screen" style="display: none;">
+                <h2 id="final-result"></h2>
+                <p>আপনার স্কোর: <span id="final-player-score">0</span></p>
+                <p>প্রতিপক্ষের স্কোর: <span id="final-opponent-score">0</span></p>
+                <button id="restart-btn">আবার খেলুন</button>
+            </div>
+        </div>
+        
+        <div class="score">
+            <div>প্রশ্ন: <span id="current-question">0</span>/5</div>
+            <div>সময়: <span id="time-left">20</span>s</div>
+        </div>
+        
+        <div class="battle-effect" id="battle-effect"></div>
+    </div>
+
+    <script>
+        // Human-like opponent names and avatars
+        const opponents = [
+            {name: "রিয়াদ", avatar: "👨", bio: "ইতিহাসের শিক্ষক", accuracy: 0.85, speed: 12000},
+            {name: "তানিয়া", avatar: "👩", bio: "ইতিহাসবিদ", accuracy: 0.9, speed: 15000},
+            {name: "আরাফাত", avatar: "🧔", bio: "প্রতিযোগিতামূলক পরীক্ষার প্রস্তুতিকারক", accuracy: 0.8, speed: 10000},
+            {name: "নুসরাত", avatar: "👩‍🏫", bio: "মিউজিয়াম কিউরেটর", accuracy: 0.95, speed: 18000},
+            {name: "সাকিব", avatar: "🧑", bio: "ইতিহাস ব্লগার", accuracy: 0.75, speed: 8000}
+        ];
+        
+        // Questions pool (20 questions)
+        const questionsPool = [
+            {
+                question: "মুঘল সাম্রাজ্যের প্রতিষ্ঠাতা কে?",
+                options: ["আকবর", "হুমায়ুন", "বাবর", "শের শাহ"],
+                answer: 2,
+                fact: "বাবর 1526 সালে পানিপথের যুদ্ধে ইব্রাহিম লোদীকে পরাজিত করে মুঘল সাম্রাজ্য প্রতিষ্ঠা করেন।"
+            },
+            {
+                question: "পলাশীর যুদ্ধ কত সালে সংঘটিত হয়েছিল?",
+                options: ["1757", "1764", "1748", "1772"],
+                answer: 0,
+                fact: "পলাশীর যুদ্ধ 1757 সালে সংঘটিত হয়েছিল যেখানে রবার্ট ক্লাইভের নেতৃত্বে ব্রিটিশ ইস্ট ইন্ডিয়া কোম্পানি সিরাজউদ্দৌলাকে পরাজিত করে।"
+            },
+            {
+                question: "বাংলার শেষ স্বাধীন নবাব কে ছিলেন?",
+                options: ["মীর জাফর", "মীর কাসিম", "সিরাজউদ্দৌলা", "আলীবর্দী খান"],
+                answer: 2,
+                fact: "সিরাজউদ্দৌলা ছিলেন বাংলার শেষ স্বাধীন নবাব যিনি 1757 সালে পলাশীর যুদ্ধে পরাজিত হন।"
+            },
+            {
+                question: "বাংলা ভাষা আন্দোলন কত সালে হয়েছিল?",
+                options: ["1948", "1952", "1965", "1971"],
+                answer: 1,
+                fact: "বাংলা ভাষা আন্দোলন 1952 সালে সংঘটিত হয়েছিল যা পরবর্তীতে আন্তর্জাতিক মাতৃভাষা দিবস হিসেবে স্বীকৃতি পায়।"
+            },
+            {
+                question: "স্বাধীন বাংলাদেশের প্রথম রাষ্ট্রপতি কে ছিলেন?",
+                options: ["শেখ মুজিবুর রহমান", "জিয়াউর রহমান", "তাজউদ্দীন আহমেদ", "এস. এম. সুলতান"],
+                answer: 0,
+                fact: "বঙ্গবন্ধু শেখ মুজিবুর রহমান ছিলেন স্বাধীন বাংলাদেশের প্রথম রাষ্ট্রপতি।"
+            },
+            {
+                question: "কোন মুঘল সম্রাট 'জিন্দা পীর' নামে পরিচিত?",
+                options: ["আকবর", "জাহাঙ্গীর", "আওরঙ্গজেব", "শাহজাহান"],
+                answer: 2,
+                fact: "আওরঙ্গজেব তার ধর্মীয় নিষ্ঠার জন্য 'জিন্দা পীর' নামে পরিচিত ছিলেন।"
+            },
+            {
+                question: "বাংলাদেশের জাতীয় সংসদ ভবনের স্থপতি কে?",
+                options: ["ফজলুর রহমান খান", "লুই আই কান", "মাজহারুল ইসলাম", "শামসুল ওয়ারেস"],
+                answer: 1,
+                fact: "বিখ্যাত স্থপতি লুই আই কান বাংলাদেশের জাতীয় সংসদ ভবনের নকশা প্রণয়ন করেন।"
+            },
+            {
+                question: "কোন সালে ঢাকা মুঘল সাম্রাজ্যের রাজধানী হয়?",
+                options: ["1608", "1610", "1612", "1615"],
+                answer: 1,
+                fact: "ইসলাম খান চিশতি 1610 সালে ঢাকাকে বাংলার রাজধানী ঘোষণা করেন এবং এর নামকরণ করেন জাহাঙ্গীরনগর।"
+            },
+            {
+                question: "বাংলাদেশের জাতীয় পতাকার নকশা কে তৈরি করেন?",
+                options: ["কামরুল হাসান", "শেখ মুজিবুর রহমান", "আসাদুজ্জামান খান", "কামরুল আলম"],
+                answer: 0,
+                fact: "শিল্পী কামরুল হাসান 1972 সালে বাংলাদেশের জাতীয় পতাকার বর্তমান নকশা তৈরি করেন।"
+            },
+            {
+                question: "কোন সালে বাংলাদেশে প্রথম ডিজিটাল জনশুমারি করা হয়?",
+                options: ["2011", "2015", "2019", "2022"],
+                answer: 3,
+                fact: "বাংলাদেশে প্রথম ডিজিটাল জনশুমারি করা হয় ২০২২ সালে।"
+            },
+            {
+                question: "বাংলাদেশের প্রথম প্রধানমন্ত্রী কে ছিলেন?",
+                options: ["তাজউদ্দীন আহমেদ", "মুজিবুর রহমান", "শাহ আজিজুর রহমান", "মোহাম্মদ মোর্শেদ"],
+                answer: 0,
+                fact: "তাজউদ্দীন আহমেদ বাংলাদেশের প্রথম প্রধানমন্ত্রী হিসেবে ১৯৭১ সালের অস্থায়ী সরকার গঠন করেন।"
+            },
+            {
+                question: "কোন সালে বাংলাদেশ স্বাধীনতা অর্জন করে?",
+                options: ["1969", "1970", "1971", "1972"],
+                answer: 2,
+                fact: "বাংলাদেশ ১৯৭১ সালের ১৬ই ডিসেম্বর পাকিস্তান থেকে স্বাধীনতা অর্জন করে।"
+            },
+            {
+                question: "বাংলাদেশের জাতীয় ফল কী?",
+                options: ["আম", "কাঁঠাল", "লিচু", "জাম"],
+                answer: 1,
+                fact: "কাঁঠাল বাংলাদেশের জাতীয় ফল যা ২০১০ সালে ঘোষণা করা হয়।"
+            },
+            {
+                question: "বাংলাদেশের দীর্ঘতম নদী কোনটি?",
+                options: ["যমুনা", "পদ্মা", "মেঘনা", "ব্রহ্মপুত্র"],
+                answer: 0,
+                fact: "যমুনা নদী বাংলাদেশের দীর্ঘতম নদী যার দৈর্ঘ্য প্রায় ৩৬০ কিলোমিটার।"
+            },
+            {
+                question: "বাংলাদেশের প্রথম বিশ্ববিদ্যালয় কোনটি?",
+                options: ["ঢাকা বিশ্ববিদ্যালয়", "রাজশাহী বিশ্ববিদ্যালয়", "চট্টগ্রাম বিশ্ববিদ্যালয়", "জাহাঙ্গীরনগর বিশ্ববিদ্যালয়"],
+                answer: 0,
+                fact: "ঢাকা বিশ্ববিদ্যালয় বাংলাদেশের প্রথম বিশ্ববিদ্যালয় যা ১৯২১ সালে প্রতিষ্ঠিত হয়।"
+            },
+            {
+                question: "বাংলাদেশের জাতীয় কবি কে?",
+                options: ["রবীন্দ্রনাথ ঠাকুর", "কাজী নজরুল ইসলাম", "জসীমউদ্দীন", "সুকান্ত ভট্টাচার্য"],
+                answer: 1,
+                fact: "কাজী নজরুল ইসলাম বাংলাদেশের জাতীয় কবি যিনি বিদ্রোহী কবি হিসেবেও পরিচিত।"
+            },
+            {
+                question: "বাংলাদেশের জাতীয় খেলা কী?",
+                options: ["ক্রিকেট", "ফুটবল", "হকি", "কাবাডি"],
+                answer: 3,
+                fact: "কাবাডি বাংলাদেশের জাতীয় খেলা যা ১৯৭২ সালে ঘোষণা করা হয়।"
+            },
+            {
+                question: "বাংলাদেশের প্রথম স্যাটেলাইটের নাম কী?",
+                options: ["বঙ্গবন্ধু-১", "প্রগতি-১", "রোহিঙ্গা-১", "বাংলাদেশ-১"],
+                answer: 0,
+                fact: "বঙ্গবন্ধু-১ বাংলাদেশের প্রথম স্যাটেলাইট যা ২০১৮ সালে উৎক্ষেপণ করা হয়।"
+            },
+            {
+                question: "বাংলাদেশের জাতীয় মাছ কোনটি?",
+                options: ["ইলিশ", "রুই", "কাতলা", "মৃগেল"],
+                answer: 0,
+                fact: "ইলিশ বাংলাদেশের জাতীয় মাছ যা ১৯৭১ সালে ঘোষণা করা হয়।"
+            },
+            {
+                question: "বাংলাদেশের প্রথম নোবেল পুরস্কার বিজয়ী কে?",
+                options: ["ড. মুহাম্মদ ইউনূস", "রবীন্দ্রনাথ ঠাকুর", "আমর্ত্য সেন", "সত্যেন বোস"],
+                answer: 1,
+                fact: "রবীন্দ্রনাথ ঠাকুর ১৯১৩ সালে সাহিত্যে নোবেল পুরস্কার লাভ করেন, যা বাংলাদেশের ভূখণ্ডে জন্মগ্রহণকারী প্রথম নোবেল বিজয়ী।"
+            }
+        ];
+        
+        // Game variables
+        let currentQuestion = 0;
+        let playerScore = 0;
+        let opponentScore = 0;
+        let timer;
+        let timeLeft = 20;
+        let selectedOpponent;
+        let selectedQuestions = [];
+        let opponentTimeout;
+        let musicPlaying = false;
+        
+        // DOM elements
+        const startScreen = document.getElementById('start-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const endScreen = document.getElementById('end-screen');
+        const questionElement = document.getElementById('question');
+        const optionsElement = document.getElementById('options');
+        const playerScoreElement = document.getElementById('player-score');
+        const opponentScoreElement = document.getElementById('opponent-score');
+        const currentQuestionElement = document.getElementById('current-question');
+        const timeLeftElement = document.getElementById('time-left');
+        const timerBar = document.getElementById('timer');
+        const resultElement = document.getElementById('result');
+        const finalResultElement = document.getElementById('final-result');
+        const finalPlayerScoreElement = document.getElementById('final-player-score');
+        const finalOpponentScoreElement = document.getElementById('final-opponent-score');
+        const startBtn = document.getElementById('start-btn');
+        const restartBtn = document.getElementById('restart-btn');
+        const opponentNameElement = document.getElementById('opponent-name');
+        const opponentAvatarElement = document.getElementById('opponent-avatar');
+        const typingStatusElement = document.getElementById('typing-status');
+        const battleEffect = document.getElementById('battle-effect');
+        const backgroundMusic = document.getElementById('background-music');
+        const correctSound = document.getElementById('correct-sound');
+        const wrongSound = document.getElementById('wrong-sound');
+        const timeupSound = document.getElementById('timeup-sound');
+        const musicControl = document.getElementById('music-control');
+        
+        // Start game
+        startBtn.addEventListener('click', startGame);
+        restartBtn.addEventListener('click', startGame);
+        
+        // Music control
+        musicControl.addEventListener('click', toggleMusic);
+        
+        function toggleMusic() {
+            if (musicPlaying) {
+                backgroundMusic.pause();
+                musicControl.textContent = '♪';
+                musicPlaying = false;
+            } else {
+                backgroundMusic.play();
+                musicControl.textContent = '🔊';
+                musicPlaying = true;
+            }
+        }
+        
+        function startGame() {
+            // Reset game state
+            currentQuestion = 0;
+            playerScore = 0;
+            opponentScore = 0;
+            timeLeft = 20;
+            
+            // Select random opponent
+            selectedOpponent = opponents[Math.floor(Math.random() * opponents.length)];
+            opponentNameElement.textContent = selectedOpponent.name + " (" + selectedOpponent.bio + ")";
+            opponentAvatarElement.textContent = selectedOpponent.avatar;
+            
+            // Select 5 random questions
+            selectedQuestions = [...questionsPool]
+                .sort(() => 0.5 - Math.random())
+                .slice(0, 5);
+            
+            // Update UI
+            playerScoreElement.textContent = playerScore;
+            opponentScoreElement.textContent = opponentScore;
+            currentQuestionElement.textContent = currentQuestion + 1;
+            
+            // Show quiz screen
+            startScreen.style.display = 'none';
+            endScreen.style.display = 'none';
+            quizScreen.style.display = 'block';
+            resultElement.style.display = 'none';
+            
+            // Start music
+            backgroundMusic.play();
+            musicControl.textContent = '🔊';
+            musicPlaying = true;
+            
+            // Load first question
+            loadQuestion();
+        }
+        
+        function loadQuestion() {
+            // Reset timer
+            clearInterval(timer);
+            clearTimeout(opponentTimeout);
+            timeLeft = 20;
+            timeLeftElement.textContent = timeLeft;
+            timerBar.style.width = '100%';
+            typingStatusElement.style.display = 'none';
+            
+            // Update question counter
+            currentQuestionElement.textContent = currentQuestion + 1;
+            
+            // Load question
+            const q = selectedQuestions[currentQuestion];
+            questionElement.textContent = q.question;
+            
+            // Load options
+            optionsElement.innerHTML = '';
+            q.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.classList.add('option');
+                optionElement.textContent = option;
+                optionElement.addEventListener('click', () => selectOption(index));
+                optionsElement.appendChild(optionElement);
+            });
+            
+            // Start timer
+            timer = setInterval(updateTimer, 1000);
+            
+            // Opponent will answer after a variable time based on their profile
+            const opponentAnswerTime = Math.floor(Math.random() * selectedOpponent.speed * 0.4) + selectedOpponent.speed * 0.8;
+            
+            // Show typing indicator a few seconds before answering
+            const typingIndicatorTime = opponentAnswerTime - 3000;
+            opponentTimeout = setTimeout(() => {
+                typingStatusElement.style.display = 'block';
+            }, typingIndicatorTime > 0 ? typingIndicatorTime : 0);
+            
+            opponentTimeout = setTimeout(opponentAnswer, opponentAnswerTime);
+        }
+        
+        function updateTimer() {
+            timeLeft--;
+            timeLeftElement.textContent = timeLeft;
+            timerBar.style.width = `${(timeLeft / 20) * 100}%`;
+            
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                timeUp();
+            }
+        }
+        
+        function selectOption(selectedIndex) {
+            clearInterval(timer);
+            clearTimeout(opponentTimeout);
+            
+            const q = selectedQuestions[currentQuestion];
+            const options = document.querySelectorAll('.option');
+            
+            // Disable all options
+            options.forEach(option => {
+                option.style.pointerEvents = 'none';
+            });
+            
+            // Hide typing indicator
+            typingStatusElement.style.display = 'none';
+            
+            // Check answer
+            if (selectedIndex === q.answer) {
+                // Correct answer
+                playerScore++;
+                playerScoreElement.textContent = playerScore;
+                options[selectedIndex].classList.add('correct');
+                showResult('ঠিক উত্তর!', '#2ecc71');
+                correctSound.play();
+                
+                // Show fact after delay
+                setTimeout(() => {
+                    resultElement.textContent = q.fact;
+                    resultElement.style.display = 'block';
+                }, 1500);
+            } else {
+                // Wrong answer
+                options[selectedIndex].classList.add('wrong');
+                options[q.answer].classList.add('correct');
+                showResult('ভুল উত্তর!', '#e74c3c');
+                wrongSound.play();
+            }
+            
+            // Move to next question after delay
+            setTimeout(nextQuestion, 3000);
+        }
+        
+        function opponentAnswer() {
+            const q = selectedQuestions[currentQuestion];
+            const options = document.querySelectorAll('.option');
+            
+            // If time hasn't run out and player hasn't answered
+            if (timeLeft > 0 && options[0].style.pointerEvents !== 'none') {
+                clearInterval(timer);
+                
+                // Opponent answers based on their accuracy
+                const isCorrect = Math.random() < selectedOpponent.accuracy;
+                let opponentSelected;
+                
+                if (isCorrect) {
+                    opponentSelected = q.answer;
+                    opponentScore++;
+                } else {
+                    // Select wrong answer randomly
+                    const wrongOptions = q.options.filter((_, index) => index !== q.answer);
+                    const wrongIndex = q.options.indexOf(wrongOptions[Math.floor(Math.random() * wrongOptions.length)]);
+                    opponentSelected = wrongIndex;
+                }
+                
+                // Show opponent's answer
+                options.forEach(option => {
+                    option.style.pointerEvents = 'none';
+                });
+                
+                typingStatusElement.style.display = 'none';
+                
+                options[opponentSelected].classList.add(isCorrect ? 'correct' : 'wrong');
+                if (!isCorrect) options[q.answer].classList.add('correct');
+                
+                opponentScoreElement.textContent = opponentScore;
+                
+                if (isCorrect) {
+                    showResult(selectedOpponent.name + ' সঠিক উত্তর দিয়েছেন!', '#2ecc71');
+                    correctSound.play();
+                } else {
+                    showResult(selectedOpponent.name + ' ভুল উত্তর দিয়েছেন!', '#e74c3c');
+                    wrongSound.play();
+                }
+                
+                // Move to next question after delay
+                setTimeout(nextQuestion, 3000);
+            }
+        }
+        
+        function timeUp() {
+            const q = selectedQuestions[currentQuestion];
+            const options = document.querySelectorAll('.option');
+            
+            options.forEach(option => {
+                option.style.pointerEvents = 'none';
+            });
+            
+            typingStatusElement.style.display = 'none';
+            
+            options[q.answer].classList.add('correct');
+            showResult('সময় শেষ!', '#e74c3c');
+            timeupSound.play();
+            
+            // Move to next question after delay
+            setTimeout(nextQuestion, 3000);
+        }
+        
+        function showResult(message, color) {
+            resultElement.textContent = message;
+            resultElement.style.color = color;
+            resultElement.style.display = 'block';
+            
+            // Battle effect
+            battleEffect.style.display = 'block';
+            battleEffect.style.background = `radial-gradient(circle, ${color}40 0%, transparent 70%)`;
+            setTimeout(() => {
+                battleEffect.style.display = 'none';
+            }, 1000);
+        }
+        
+        function nextQuestion() {
+            resultElement.style.display = 'none';
+            currentQuestion++;
+            
+            if (currentQuestion < selectedQuestions.length) {
+                loadQuestion();
+            } else {
+                endGame();
+            }
+        }
+        
+        function endGame() {
+            quizScreen.style.display = 'none';
+            endScreen.style.display = 'block';
+            
+            finalPlayerScoreElement.textContent = playerScore;
+            finalOpponentScoreElement.textContent = opponentScore;
+            
+            if (playerScore > opponentScore) {
+                finalResultElement.textContent = 'আপনি জয়ী হয়েছেন!';
+                finalResultElement.style.color = '#2ecc71';
+            } else if (playerScore < opponentScore) {
+                finalResultElement.textContent = selectedOpponent.name + ' জয়ী হয়েছেন!';
+                finalResultElement.style.color = '#e74c3c';
+            } else {
+                finalResultElement.textContent = 'খেলা ড্র হয়েছে!';
+                finalResultElement.style.color = '#3498db';
+            }
+        }
+    </script>
+</body>
+</html>
