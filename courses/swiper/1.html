@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Click Navigation Image Swiper</title>
+    <title>Image Swiper with Rounded Corners</title>
     <style>
         * {
             margin: 0;
@@ -43,6 +43,7 @@
             position: absolute;
             top: 0;
             left: 0;
+            padding-top: 10px;
         }
         
         .click-area {
@@ -65,9 +66,8 @@
             width: 100%;
             display: flex;
             justify-content: center;
-            align-items: center;
-            flex: 1;
-            padding: 20px;
+            align-items: flex-start; /* Changed to start at top */
+            padding: 0 20px;
             box-sizing: border-box;
         }
         
@@ -75,13 +75,16 @@
             max-width: 100%;
             max-height: 70vh;
             object-fit: contain;
+            border-radius: 12px; /* Rounded corners */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         }
         
         .text-container {
             width: 100%;
-            padding: 15px 20px 30px;
+            padding: 20px;
             background: rgba(0, 0, 0, 0.8);
             text-align: center;
+            margin-top: 10px; /* Space between image and text */
         }
         
         .slide-title {
@@ -146,22 +149,22 @@
         // Slide data with your actual images
         const slidesData = [
             {
-                imageUrl: 'https://i.ibb.co/B25gxYJ5/Screenshot-2025-04-09-222236.png',
+                imageUrl: 'https://i.ibb.co/Qjt9GLn8/Screenshot-2025-04-13-221723.png',
                 title: 'Beautiful Sunset',
                 text: 'Experience the breathtaking colors of nature as the sun dips below the horizon.'
             },
             {
-                imageUrl: 'https://i.ibb.co/Wvvz8kPs/Screenshot-2025-04-10-185547.png',
+                imageUrl: 'https://i.ibb.co/PvDmRPqL/Screenshot-2025-04-13-221938.png',
                 title: 'Mountain View',
                 text: 'Discover the majestic beauty of mountain ranges and their serene landscapes.'
             },
             {
-                imageUrl: 'https://i.ibb.co/pTdmN3S/Screenshot-2025-04-12-142227.png',
+                imageUrl: 'https://i.ibb.co/PGDBkXPD/Screenshot-2025-04-13-222016.png',
                 title: 'City Lights',
                 text: 'The vibrant energy of city life illuminated at night creates a magical atmosphere.'
             },
             {
-                imageUrl: 'https://i.ibb.co/FLr3K4ZX/Screenshot-2025-04-12-210748.png',
+                imageUrl: 'https://i.ibb.co/kVt8W43p/Screenshot-2025-04-13-222028.png',
                 title: 'Ocean Breeze',
                 text: 'Feel the tranquility of ocean waves and the endless horizon stretching before you.'
             },
