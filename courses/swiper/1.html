@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Image Swiper with Text</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            background-color: #000;
+            color: #fff;
+            overflow: hidden;
+            touch-action: pan-y;
+        }
+        
+        .swiper-container {
+            height: 100vh;
+            width: 100vw;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .swiper-wrapper {
+            height: 100%;
+            width: 100%;
+            position: relative;
+            transition: transform 0.5s ease-out;
+        }
+        
+        .swiper-slide {
+            height: auto;
+            min-height: 100vh;
+            width: 100vw;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .image-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            flex-grow: 1;
+            align-items: center;
+        }
+        
+        .slide-image {
+            max-width: 100%;
+            max-height: 70vh;
+            object-fit: contain;
+            display: block;
+        }
+        
+        .text-container {
+            width: 100%;
+            max-width: 600px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            margin: 0 auto;
+        }
+        
+        .slide-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .slide-text {
+            font-size: 16px;
+            line-height: 1.5;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .navigation-dots {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 100;
+        }
+        
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .dot.active {
+            background-color: #fff;
+        }
+        
+        .swipe-hint {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            text-align: center;
+            animation: float 2s infinite ease-in-out;
+            z-index: 10;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(-50%); }
+            50% { transform: translateY(-10px) translateX(-50%); }
+        }
+    </style>
+</head>
+<body>
+    <div class="swiper-container">
+        <div class="swiper-wrapper" id="swiperWrapper">
+            <!-- Slides will be added here by JavaScript -->
+        </div>
+        <div class="navigation-dots" id="navigationDots"></div>
+        <div class="swipe-hint">Swipe up or down to navigate</div>
+    </div>
+
+    <script>
+        // Slide data with your actual images
+        const slidesData = [
+            {
+                imageUrl: 'https://i.ibb.co/B25gxYJ5/Screenshot-2025-04-09-222236.png',
+                title: 'Beautiful Sunset',
+                text: 'Experience the breathtaking colors of nature as the sun dips below the horizon.'
+            },
+            {
+                imageUrl: 'https://i.ibb.co/Wvvz8kPs/Screenshot-2025-04-10-185547.png',
+                title: 'Mountain View',
+                text: 'Discover the majestic beauty of mountain ranges and their serene landscapes.'
+            },
+            {
+                imageUrl: 'https://i.ibb.co/pTdmN3S/Screenshot-2025-04-12-142227.png',
+                title: 'City Lights',
+                text: 'The vibrant energy of city life illuminated at night creates a magical atmosphere.'
+            },
+            {
+                imageUrl: 'https://i.ibb.co/FLr3K4ZX/Screenshot-2025-04-12-210748.png',
+                title: 'Ocean Breeze',
+                text: 'Feel the tranquility of ocean waves and the endless horizon stretching before you.'
+            },
+            {
+                imageUrl: 'https://i.ibb.co/3mhgX2vQ/Screenshot-2025-04-12-224023.png',
+                title: 'Forest Trail',
+                text: 'Immerse yourself in the peaceful solitude of nature walking through lush forests.'
+            }
+        ];
+        
+        // Initialize the swiper
+        const swiperWrapper = document.getElementById('swiperWrapper');
+        const navigationDots = document.getElementById('navigationDots');
+        let currentSlide = 0;
+        let startY = 0;
+        let isSwiping = false;
+        let slides = [];
+        let dots = [];
+        
+        // Create slides from the data
+        function createSlides() {
+            slidesData.forEach((slide, index) => {
+                // Create slide element
+                const slideElement = document.createElement('div');
+                slideElement.className = 'swiper-slide';
+                slideElement.dataset.index = index;
+                
+                // Create image container
+                const imageContainer = document.createElement('div');
+                imageContainer.className = 'image-container';
+                
+                // Create image
+                const img = document.createElement('img');
+                img.className = 'slide-image';
+                img.src = slide.imageUrl;
+                img.alt = slide.title;
+                
+                // Create text container
+                const textContainer = document.createElement('div');
+                textContainer.className = 'text-container';
+                
+                const title = document.createElement('h2');
+                title.className = 'slide-title';
+                title.textContent = slide.title;
+                
+                const text = document.createElement('p');
+                text.className = 'slide-text';
+                text.textContent = slide.text;
+                
+                textContainer.appendChild(title);
+                textContainer.appendChild(text);
+                
+                imageContainer.appendChild(img);
+                slideElement.appendChild(imageContainer);
+                slideElement.appendChild(textContainer);
+                
+                swiperWrapper.appendChild(slideElement);
+                
+                // Create navigation dot
+                const dot = document.createElement('div');
+                dot.className = 'dot';
+                dot.dataset.index = index;
+                dot.addEventListener('click', () => scrollToSlide(index));
+                navigationDots.appendChild(dot);
+            });
+            
+            // Get references to all slides and dots
+            slides = document.querySelectorAll('.swiper-slide');
+            dots = document.querySelectorAll('.dot');
+            
+            // Set initial active dot
+            dots[0].classList.add('active');
+            
+            // Position slides
+            positionSlides();
+        }
+        
+        // Position slides vertically
+        function positionSlides() {
+            let cumulativeHeight = 0;
+            
+            slides.forEach((slide, index) => {
+                slide.style.transform = `translateY(${cumulativeHeight}px)`;
+                cumulativeHeight += slide.offsetHeight;
+            });
+            
+            swiperWrapper.style.height = `${cumulativeHeight}px`;
+        }
+        
+        // Scroll to a specific slide
+        function scrollToSlide(index) {
+            if (index < 0 || index >= slides.length) return;
+            
+            currentSlide = index;
+            
+            // Calculate scroll position
+            let scrollPosition = 0;
+            for (let i = 0; i < index; i++) {
+                scrollPosition += slides[i].offsetHeight;
+            }
+            
+            // Smooth scroll to the slide
+            window.scrollTo({
+                top: scrollPosition,
+                behavior: 'smooth'
+            });
+            
+            updateActiveDot();
+        }
+        
+        // Update active navigation dot
+        function updateActiveDot() {
+            const scrollPosition = window.scrollY + (window.innerHeight / 2);
+            let newActiveSlide = 0;
+            
+            // Find which slide is currently in view
+            let cumulativeHeight = 0;
+            slides.forEach((slide, index) => {
+                cumulativeHeight += slide.offsetHeight;
+                if (scrollPosition <= cumulativeHeight) {
+                    newActiveSlide = index;
+                    return;
+                }
+            });
+            
+            // Update active dot if changed
+            if (currentSlide !== newActiveSlide) {
+                currentSlide = newActiveSlide;
+                dots.forEach((dot, index) => {
+                    if (index === currentSlide) {
+                        dot.classList.add('active');
+                    } else {
+                        dot.classList.remove('active');
+                    }
+                });
+            }
+        }
+        
+        // Handle touch events
+        function handleTouchStart(e) {
+            startY = e.touches ? e.touches[0].clientY : e.clientY;
+            isSwiping = true;
+        }
+        
+        function handleTouchEnd(e) {
+            if (!isSwiping) return;
+            isSwiping = false;
+            
+            const endY = e.changedTouches ? e.changedTouches[0].clientY : e.clientY;
+            const diffY = startY - endY;
+            
+            // Determine if we should change slides
+            if (Math.abs(diffY) > window.innerHeight * 0.15) {
+                if (diffY > 0 && currentSlide < slides.length - 1) {
+                    // Swipe up - next slide
+                    scrollToSlide(currentSlide + 1);
+                } else if (diffY < 0 && currentSlide > 0) {
+                    // Swipe down - previous slide
+                    scrollToSlide(currentSlide - 1);
+                }
+            }
+        }
+        
+        // Initialize the swiper
+        function initSwiper() {
+            createSlides();
+            scrollToSlide(0);
+            
+            // Add event listeners
+            document.addEventListener('touchstart', handleTouchStart);
+            document.addEventListener('touchend', handleTouchEnd);
+            
+            // Mouse events for desktop
+            document.addEventListener('mousedown', handleTouchStart);
+            document.addEventListener('mouseup', handleTouchEnd);
+            
+            // Keyboard navigation
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowDown' && currentSlide < slides.length - 1) {
+                    scrollToSlide(currentSlide + 1);
+                    e.preventDefault();
+                } else if (e.key === 'ArrowUp' && currentSlide > 0) {
+                    scrollToSlide(currentSlide - 1);
+                    e.preventDefault();
+                }
+            });
+            
+            // Update active dot on scroll
+            window.addEventListener('scroll', updateActiveDot);
+            
+            // Handle window resize
+            window.addEventListener('resize', positionSlides);
+        }
+        
+        // Start the swiper when the page loads
+        window.addEventListener('load', initSwiper);
+    </script>
+</body>
+</html>
