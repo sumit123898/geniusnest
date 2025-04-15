@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logout-btn {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .welcome-msg {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+        .dashboard-card {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .dashboard-card h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+        }
+        .video-container video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h2>Student Dashboard</h2>
+        <button id="logoutBtn" class="logout-btn">Logout</button>
+    </div>
+    
+    <div class="container">
+        <div class="welcome-msg">
+            Welcome, Student <span id="studentIdDisplay"></span>
+        </div>
+        
+        <div class="dashboard-card">
+            <h3>Your Video</h3>
+            <div class="video-container">
+                <video controls>
+                    <source src="https://drive.google.com/uc?export=download&id=17ac7oqT0JPmU2LQUvY3vrr_6yWEvm2v-" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+        </div>
+        
+        <div class="dashboard-card">
+            <h3>Quick Links</h3>
+            <ul>
+                <li><a href="#">View Grades</a></li>
+                <li><a href="#">Course Materials</a></li>
+                <li><a href="#">Assignment Submissions</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+    <script>
+        // Check authentication
+        if (!localStorage.getItem('loggedIn') || localStorage.getItem('loggedIn') !== 'true') {
+            window.location.href = 'login2.html';
+        }
+        
+        // Display student ID
+        document.getElementById('studentIdDisplay').textContent = localStorage.getItem('studentId');
+        
+        // Logout button
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            localStorage.removeItem('loggedIn');
+            localStorage.removeItem('studentId');
+            window.location.href = 'login2.html';
+        });
+    </script>
+</body>
+</html>
