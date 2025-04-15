@@ -38,13 +38,24 @@
             top: 0;
             left: 0;
             width: 100%;
-            padding: 15px 20px;
+            padding: 10px 20px;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
             text-align: center;
             box-shadow: 0 4px 20px rgba(58, 134, 255, 0.3);
             z-index: 1000;
             animation: glow 3s infinite alternate;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .header-logo {
+            height: 40px;
+            width: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+            object-fit: cover;
         }
 
         @keyframes glow {
@@ -153,6 +164,13 @@
             text-align: center;
             transition: all 0.3s ease;
             border-left: 4px solid var(--primary);
+            position: relative;
+            overflow: hidden;
+            min-height: 120px;
+        }
+
+        .quote-text {
+            transition: opacity 0.5s ease;
         }
 
         .quote-card:hover {
@@ -636,6 +654,155 @@
             font-size: 1.1rem;
         }
 
+        /* Notes Screen Styles */
+        .notes-screen {
+            position: relative;
+        }
+
+        .notes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .note-card {
+            background: var(--gray);
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--primary);
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .note-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .note-image {
+            width: 80px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .note-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .note-card h3 {
+            color: var(--lighter);
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .note-card .btn {
+            display: inline-block;
+            padding: 8px 15px;
+            background: var(--primary);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+            width: 100%;
+        }
+
+        .note-card .btn:hover {
+            background: var(--secondary);
+            transform: scale(1.05);
+        }
+
+        /* Book Cards */
+        .book-card {
+            background: var(--gray);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .book-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .book-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .book-card-content {
+            padding: 15px;
+        }
+
+        .book-card h3 {
+            color: var(--lighter);
+            margin-bottom: 10px;
+        }
+
+        .book-card .author {
+            color: #aaa;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .book-card .btn {
+            display: inline-block;
+            padding: 8px 15px;
+            background: var(--primary);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            width: 100%;
+            text-align: center;
+            border: none;
+            cursor: pointer;
+        }
+
+        .book-card .btn:hover {
+            background: var(--secondary);
+            transform: scale(1.05);
+        }
+
+        .add-note-btn {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 15px rgba(58, 134, 255, 0.4);
+            z-index: 999;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .add-note-btn:hover {
+            transform: scale(1.1) rotate(90deg);
+            background: var(--secondary);
+            box-shadow: 0 0 20px rgba(131, 56, 236, 0.6);
+        }
+
         /* Hidden screens */
         .screen {
             display: none;
@@ -648,7 +815,7 @@
 
         /* Responsive */
         @media (max-width: 768px) {
-            .course-grid {
+            .course-grid, .notes-grid {
                 grid-template-columns: 1fr;
             }
             
@@ -729,6 +896,7 @@
 <body>
     <!-- Glowing Animated Header -->
     <header class="header">
+        <img src="https://i.ibb.co/bSdPmFr/Genius-Nest.png" alt="Genius Nest Logo" class="header-logo">
         <h1>Genius Nest</h1>
         <div class="particles" id="particles"></div>
     </header>
@@ -739,8 +907,10 @@
         <div class="screen active" id="home-screen">
             <!-- Quote at the top -->
             <div class="quote-card section-gap">
-                <p><i>"The important thing is not to stop questioning. Curiosity has its own reason for existing."</i></p>
-                <p class="author">- Albert Einstein</p>
+                <div class="quote-text">
+                    <p><i>"The important thing is not to stop questioning. Curiosity has its own reason for existing."</i></p>
+                    <p class="author">- Albert Einstein</p>
+                </div>
             </div>
 
             <h3 class="section-title">Popular Courses</h3>
@@ -890,42 +1060,69 @@
             </div>
         </div>
 
-        <!-- Progress Screen -->
-        <div class="screen" id="progress-screen">
-            <h3 class="section-title">Your Learning Progress</h3>
+        <!-- Notes Screen -->
+        <div class="screen notes-screen" id="notes-screen">
+            <h3 class="section-title">My Notes</h3>
             
-            <div class="course-card section-gap">
-                <div class="course-card-content">
-                    <h3>Knowledge Points</h3>
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <i class="fas fa-star" style="color: var(--warning); font-size: 1.5rem;"></i>
-                        <span style="font-size: 1.2rem; font-weight: bold;">1,245</span>
+            <div class="notes-grid" id="notes-grid">
+                <div class="note-card">
+                    <img src="https://i.ibb.co/wZnGbZDf/1.webp" alt="Physics Notes" class="note-image">
+                    <div class="note-content">
+                        <h3>Physics Formulas</h3>
+                        <a href="https://www.sumit2.online" target="_blank" class="btn">View Notes</a>
                     </div>
-                    <p>Earn more points by completing lessons and challenges</p>
+                </div>
+                
+                <div class="note-card">
+                    <img src="https://images.unsplash.com/photo-1541963463532-d68292c34b19?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Math Notes" class="note-image">
+                    <div class="note-content">
+                        <h3>Math Theorems</h3>
+                        <a href="https://www.sumit2.online" target="_blank" class="btn">View Notes</a>
+                    </div>
+                </div>
+                
+                <div class="note-card">
+                    <img src="https://images.unsplash.com/photo-1531346878377-a5be20888e57?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Chemistry Notes" class="note-image">
+                    <div class="note-content">
+                        <h3>Chemistry Reactions</h3>
+                        <a href="https://www.sumit2.online" target="_blank" class="btn">View Notes</a>
+                    </div>
                 </div>
             </div>
 
-            <div class="course-card section-gap">
-                <div class="course-card-content">
-                    <h3>Current Streak</h3>
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <i class="fas fa-fire" style="color: var(--danger); font-size: 1.5rem;"></i>
-                        <span style="font-size: 1.2rem; font-weight: bold;">7 days</span>
+            <h3 class="section-title">Recommended Books</h3>
+            
+            <div class="course-grid" id="books-grid">
+                <div class="book-card">
+                    <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Physics Book">
+                    <div class="book-card-content">
+                        <h3>Fundamentals of Physics</h3>
+                        <p class="author">By Halliday & Resnick</p>
+                        <a href="https://www.sumit2.online/" target="_blank" class="btn">Read Online</a>
                     </div>
-                    <p>Don't break your streak! Learn something new every day.</p>
+                </div>
+
+                <div class="book-card">
+                    <img src="https://images.unsplash.com/photo-1541963463532-d68292c34b19?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Math Book">
+                    <div class="book-card-content">
+                        <h3>Advanced Mathematics</h3>
+                        <p class="author">By R.D. Sharma</p>
+                        <a href="https://www.sumit2.online/" target="_blank" class="btn">Read Online</a>
+                    </div>
+                </div>
+
+                <div class="book-card">
+                    <img src="https://images.unsplash.com/photo-1531346878377-a5be20888e57?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Chemistry Book">
+                    <div class="book-card-content">
+                        <h3>Principles of Chemistry</h3>
+                        <p class="author">By Peter Atkins</p>
+                        <a href="https://www.sumit2.online/" target="_blank" class="btn">Read Online</a>
+                    </div>
                 </div>
             </div>
 
-            <div class="course-card">
-                <div class="course-card-content">
-                    <h3>Badges Earned</h3>
-                    <div style="display: flex; gap: 10px; margin: 10px 0;">
-                        <i class="fas fa-medal" style="color: gold; font-size: 1.5rem;"></i>
-                        <i class="fas fa-atom" style="color: silver; font-size: 1.5rem;"></i>
-                        <i class="fas fa-rocket" style="color: #cd7f32; font-size: 1.5rem;"></i>
-                    </div>
-                    <p>3 badges unlocked. 7 more to discover!</p>
-                </div>
+            <div class="add-note-btn" id="add-note-btn">
+                <i class="fas fa-plus"></i>
             </div>
         </div>
 
@@ -986,9 +1183,9 @@
             <i class="fas fa-pencil-alt"></i>
             <span>Practice</span>
         </a>
-        <a href="#" class="nav-item" data-screen="progress-screen">
-            <i class="fas fa-chart-line"></i>
-            <span>Progress</span>
+        <a href="#" class="nav-item" data-screen="notes-screen">
+            <i class="fas fa-sticky-note"></i>
+            <span>Notes</span>
         </a>
         <a href="#" class="nav-item" data-screen="profile-screen">
             <i class="fas fa-user"></i>
@@ -1055,8 +1252,82 @@
             }
         ];
 
+        // Sample notes data
+        const sampleNotes = [
+            {
+                id: 1,
+                title: "Physics Formulas",
+                content: "Important formulas for kinematics and dynamics",
+                date: "2 days ago"
+            },
+            {
+                id: 2,
+                title: "Math Theorems",
+                content: "Key theorems for algebra and calculus",
+                date: "1 week ago"
+            },
+            {
+                id: 3,
+                title: "Chemistry Reactions",
+                content: "Important chemical reactions and equations",
+                date: "3 days ago"
+            }
+        ];
+
+        // Sample books data
+        const sampleBooks = [
+            {
+                id: 1,
+                title: "Fundamentals of Physics",
+                author: "Halliday & Resnick",
+                image: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
+                link: "https://www.sumit2.online/"
+            },
+            {
+                id: 2,
+                title: "Advanced Mathematics",
+                author: "R.D. Sharma",
+                image: "https://images.unsplash.com/photo-1541963463532-d68292c34b19?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
+                link: "https://www.sumit2.online/"
+            },
+            {
+                id: 3,
+                title: "Principles of Chemistry",
+                author: "Peter Atkins",
+                image: "https://images.unsplash.com/photo-1531346878377-a5be20888e57?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
+                link: "https://www.sumit2.online/"
+            }
+        ];
+
+        // Quotes for rotation
+        const quotes = [
+            {
+                text: "The important thing is not to stop questioning. Curiosity has its own reason for existing.",
+                author: "Albert Einstein"
+            },
+            {
+                text: "Education is the most powerful weapon which you can use to change the world.",
+                author: "Nelson Mandela"
+            },
+            {
+                text: "Live as if you were to die tomorrow. Learn as if you were to live forever.",
+                author: "Mahatma Gandhi"
+            },
+            {
+                text: "The more that you read, the more things you will know. The more that you learn, the more places you'll go.",
+                author: "Dr. Seuss"
+            },
+            {
+                text: "Learning is not attained by chance, it must be sought for with ardor and attended to with diligence.",
+                author: "Abigail Adams"
+            }
+        ];
+
         // User's selected courses
         let myCourses = JSON.parse(localStorage.getItem('myCourses')) || [];
+
+        // User's notes
+        let userNotes = JSON.parse(localStorage.getItem('userNotes')) || sampleNotes;
 
         // User profile data
         let userProfile = JSON.parse(localStorage.getItem('userProfile')) || null;
@@ -1080,6 +1351,28 @@
                 
                 particlesContainer.appendChild(particle);
             }
+        }
+
+        // Rotate quotes every 3 seconds
+        function rotateQuotes() {
+            const quoteContainer = document.querySelector('.quote-text');
+            let currentIndex = 0;
+            
+            setInterval(() => {
+                currentIndex = (currentIndex + 1) % quotes.length;
+                const quote = quotes[currentIndex];
+                
+                quoteContainer.style.opacity = 0;
+                
+                setTimeout(() => {
+                    quoteContainer.innerHTML = `
+                        <p><i>"${quote.text}"</i></p>
+                        <p class="author">- ${quote.author}</p>
+                    `;
+                    quoteContainer.style.opacity = 1;
+                }, 500);
+                
+            }, 3000);
         }
 
         // Navigation functionality
@@ -1109,6 +1402,11 @@
                     // If learn screen is shown, update the view
                     if (targetScreen === 'learn-screen') {
                         updateLearnScreen();
+                    }
+                    
+                    // If notes screen is shown, update the view
+                    if (targetScreen === 'notes-screen') {
+                        updateNotesScreen();
                     }
                     
                     // If profile screen is shown, update the view
@@ -1155,6 +1453,41 @@
                     </div>
                     ${course.price ? `<p class="price">${course.price}</p>` : ''}
                     <a href="${course.link}" target="_blank" class="btn">${isMyCourse ? 'Continue' : 'Add Course'}</a>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        // Render a note card
+        function renderNoteCard(note) {
+            const card = document.createElement('div');
+            card.className = 'note-card';
+            card.dataset.id = note.id;
+            
+            card.innerHTML = `
+                <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="${note.title}" class="note-image">
+                <div class="note-content">
+                    <h3>${note.title}</h3>
+                    <a href="https://www.sumit2.online" target="_blank" class="btn">View Notes</a>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        // Render a book card
+        function renderBookCard(book) {
+            const card = document.createElement('div');
+            card.className = 'book-card';
+            card.dataset.id = book.id;
+            
+            card.innerHTML = `
+                <img src="${book.image}" alt="${book.title}">
+                <div class="book-card-content">
+                    <h3>${book.title}</h3>
+                    <p class="author">By ${book.author}</p>
+                    <a href="${book.link}" target="_blank" class="btn">Read Online</a>
                 </div>
             `;
             
@@ -1210,6 +1543,28 @@
             }
         }
 
+        // Render notes
+        function renderNotes() {
+            const notesGrid = document.getElementById('notes-grid');
+            notesGrid.innerHTML = '';
+            
+            userNotes.forEach(note => {
+                const card = renderNoteCard(note);
+                notesGrid.appendChild(card);
+            });
+        }
+
+        // Render books
+        function renderBooks() {
+            const booksGrid = document.getElementById('books-grid');
+            booksGrid.innerHTML = '';
+            
+            sampleBooks.forEach(book => {
+                const card = renderBookCard(book);
+                booksGrid.appendChild(card);
+            });
+        }
+
         // Add course to my courses
         function addCourseToMyCourses(course) {
             if (!myCourses.some(c => c.id === course.id)) {
@@ -1234,6 +1589,12 @@
         function updateLearnScreen() {
             renderMyCourses();
             renderAllCourses();
+        }
+
+        // Update notes screen
+        function updateNotesScreen() {
+            renderNotes();
+            renderBooks();
         }
 
         // Get time-based greeting
@@ -1294,10 +1655,12 @@
         // Initialize the app
         document.addEventListener('DOMContentLoaded', () => {
             createParticles();
+            rotateQuotes();
             setupNavigation();
             
             // Initialize screens
             updateLearnScreen();
+            updateNotesScreen();
             updateProfileScreen();
 
             // Add course button click handler
@@ -1319,6 +1682,11 @@
                 e.preventDefault();
                 document.getElementById('all-courses').style.display = 'block';
                 document.getElementById('search-bar').classList.add('active');
+            });
+
+            // Add note button click handler
+            document.getElementById('add-note-btn').addEventListener('click', () => {
+                alert('Feature coming soon! You will be able to add your own notes here.');
             });
 
             // Search functionality
