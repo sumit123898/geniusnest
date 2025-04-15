@@ -79,22 +79,101 @@
         </form>
     </div>
 
-    <script src="auth.js"></script>
     <script>
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
+        // Student database with hashed passwords (using simple SHA-256 for demonstration)
+        const studentDatabase = {
+            'student1': {
+                id: 'student1',
+                password: '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', // SHA-256 of 'password123'
+                name: 'John Smith'
+            },
+            'student2': {
+                id: 'student2',
+                password: '2ac9cb7dc02b3c0083eb70898e549b63cb869c90a70b738735d47745c11be8d6', // SHA-256 of 'hello123'
+                name: 'Sarah Johnson'
+            },
+            'test': {
+                id: 'test',
+                password: '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08', // SHA-256 of 'test'
+                name: 'Test User'
+            }
+        };
+
+        // Simple SHA-256 hashing function
+        async function sha256(message) {
+            // Encode as UTF-8
+            const msgBuffer = new TextEncoder().encode(message);
+            
+            // Hash the message
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+            
+            // Convert to hex string
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        // Session management functions
+        function createSession(studentId) {
+            const session = {
+                studentId,
+                createdAt: Date.now(),
+                expiresAt: Date.now() + (24 * 60 * 60 * 1000) // 24 hours from now
+            };
+            localStorage.setItem('studentSession', JSON.stringify(session));
+        }
+
+        function validateSession() {
+            const sessionData = localStorage.getItem('studentSession');
+            if (!sessionData) return false;
+            
+            try {
+                const session = JSON.parse(sessionData);
+                
+                // Check if session is expired
+                if (Date.now() > session.expiresAt) {
+                    destroySession();
+                    return false;
+                }
+                
+                return true;
+            } catch (e) {
+                destroySession();
+                return false;
+            }
+        }
+
+        function destroySession() {
+            localStorage.removeItem('studentSession');
+        }
+
+        // Check if already logged in (redirect to dashboard if true)
+        if (validateSession()) {
+            window.location.href = 'dashboard2.html';
+        }
+
+        // Handle form submission
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             
-            if (authenticateStudent(username, password)) {
-                // Store session
-                localStorage.setItem('loggedIn', 'true');
-                localStorage.setItem('studentId', username);
-                
-                // Redirect to dashboard
+            const student = studentDatabase[username];
+            
+            if (!student) {
+                document.getElementById('errorMsg').textContent = 'Invalid username or password';
+                return;
+            }
+            
+            // Hash the provided password
+            const hashedPassword = await sha256(password);
+            
+            // Compare with stored hash
+            if (student.password === hashedPassword) {
+                // Create session and redirect
+                createSession(username);
                 window.location.href = 'dashboard2.html';
             } else {
-                document.getElementById('errorMsg').textContent = 'Invalid credentials';
+                document.getElementById('errorMsg').textContent = 'Invalid username or password';
             }
         });
     </script>
