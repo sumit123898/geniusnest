@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genius Nest Q&A</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --secondary: #a29bfe;
+            --dark: #1e272e;
+            --darker: #0f1519;
+            --light: #f5f6fa;
+            --accent: #fd79a8;
+            --success: #00b894;
+            --danger: #d63031;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            transition: all 0.3s ease;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--darker);
+            color: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* Top Navigation */
+        .top-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 20px;
+            background-color: var(--dark);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .brand-icon {
+            width: 30px;
+            height: 30px;
+        }
+        
+        .brand-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        /* Chapter Heading */
+        .chapter-heading {
+            text-align: center;
+            padding: 15px;
+            background-color: rgba(108, 92, 231, 0.1);
+            border-bottom: 1px solid rgba(108, 92, 231, 0.3);
+            font-size: 1.3rem;
+            color: var(--secondary);
+            font-weight: 600;
+        }
+        
+        /* Main Container */
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+        
+        /* Search Bar */
+        .search-container {
+            margin-bottom: 25px;
+            position: relative;
+        }
+        
+        #searchInput {
+            width: 100%;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 30px;
+            font-size: 16px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--light);
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        #searchInput:focus {
+            outline: none;
+            background-color: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 4px 20px rgba(108, 92, 231, 0.3);
+        }
+        
+        #searchInput::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        /* Questions */
+        .questions-container {
+            display: grid;
+            gap: 15px;
+        }
+        
+        .question {
+            background-color: var(--dark);
+            border-radius: 10px;
+            padding: 18px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border-left: 4px solid var(--primary);
+            transform: translateY(0);
+            opacity: 1;
+            animation: fadeIn 0.5s ease forwards;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .question:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(108, 92, 231, 0.3);
+        }
+        
+        .question-number {
+            font-weight: bold;
+            color: var(--primary);
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+        
+        .question-text {
+            margin: 10px 0;
+            font-size: 1.1rem;
+            white-space: pre-line;
+        }
+        
+        .question-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        
+        .tag {
+            background-color: rgba(108, 92, 231, 0.2);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            color: var(--secondary);
+        }
+        
+        .solution-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .sol-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: white;
+            background-color: var(--dark);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .sol-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        .text-sol {
+            background-color: var(--primary);
+        }
+        
+        .text-sol:hover {
+            background-color: #5649c5;
+            box-shadow: 0 0 15px rgba(108, 92, 231, 0.5);
+        }
+        
+        .video-sol {
+            background-color: var(--danger);
+        }
+        
+        .video-sol:hover {
+            background-color: #c02a2a;
+            box-shadow: 0 0 15px rgba(214, 48, 49, 0.5);
+        }
+        
+        /* Modals */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            overflow: auto;
+            touch-action: pan-y;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .modal-content {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .close {
+            position: absolute;
+            right: 25px;
+            top: 25px;
+            font-size: 30px;
+            color: white;
+            cursor: pointer;
+            z-index: 1001;
+            background: rgba(255, 255, 255, 0.2);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+        
+        .close:hover {
+            transform: rotate(90deg);
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .solution-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background-color: black;
+        }
+        
+        .video-container {
+            position: relative;
+            width: 100%;
+            height: 0;
+            padding-bottom: 56.25%;
+        }
+        
+        .video-iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        /* No results */
+        .no-results {
+            text-align: center;
+            padding: 40px 20px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 10px;
+            }
+            
+            .question {
+                padding: 15px;
+            }
+            
+            .close {
+                right: 15px;
+                top: 15px;
+                width: 40px;
+                height: 40px;
+                font-size: 24px;
+            }
+            
+            .chapter-heading {
+                font-size: 1.1rem;
+                padding: 12px;
+            }
+        }
+        
+        /* Loading animation */
+        @keyframes pulse {
+            0% { opacity: 0.6; transform: scale(0.98); }
+            50% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0.6; transform: scale(0.98); }
+        }
+        
+        .loading {
+            animation: pulse 1.5s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+        <div class="brand">
+            <img src="https://i.ibb.co/mr45xwYD/Genius-Nest.png" alt="Genius Nest" class="brand-icon">
+            <span class="brand-name">Genius Nest</span>
+        </div>
+    </nav>
+    
+    <!-- Chapter Heading -->
+    <div class="chapter-heading">
+        কষে দেখি - 1.1
+    </div>
+    
+    <!-- Main Content -->
+    <div class="container">
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Search by Q number or tags...">
+        </div>
+        
+        <div id="questionsContainer" class="questions-container">
+            <!-- Questions will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <!-- Image Solution Modal -->
+    <div id="imageModal" class="modal">
+        <span class="close">&times;</span>
+        <div class="modal-content">
+            <img class="solution-image" id="solutionImage" src="" alt="Solution">
+        </div>
+    </div>
+
+    <!-- Video Solution Modal -->
+    <div id="videoModal" class="modal">
+        <span class="close">&times;</span>
+        <div class="modal-content">
+            <div class="video-container">
+                <iframe class="video-iframe" id="youtubeVideo" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample questions data
+        const questions = [
+            {
+                number: "Q1",
+                text: "1. নীচের বহুপদী সংখ্যামালার মধ্যে কোনটি/ কোনগুলি দ্বিঘাত বহুপদী সংখ্যামালা বুঝে লিখি।\n\n(i) x² - 7x + 2\n(ii) 7x⁵ - x(x + 2) = 7x⁵ - x² - 2x\n(iii) 2x(x + 5) + 1 = 2x² + 10x + 1\n(iv) 2x - 1 (2x - 1)",
+                tags: ["1i","1ii","1iii","1iv"],
+                imageSolution: "https://i.ibb.co/TM4Hzp5y/image.png",
+                videoSolution: {
+                    youtubeId: "e19cjW4VWE8",
+                    startTime: 200
+                }
+            },
+            {
+                number: "Q2",
+                text: "2. নীচের সমীকরণগুলির কোনটি ax² + bx + c = 0, যেখানে a, b, c বাস্তব সংখ্যা এবং a ≠ 0, আকারে লেখা যায় তা লিখি।\n\n(i) x - 1 + 1/x = 6, (x ≠ 0)\n(ii) x + 3/x = x², (x ≠ 0)\n(iii) x² - 6√x + 2 = 0\n(iv) (x - 2)² = x² - 4x + 4",
+                tags: ["2i", "2ii","2iii","2iv"],
+                imageSolution: "https://i.ibb.co/9H449rSh/image.png",
+                videoSolution: {
+                    youtubeId: "fPn8B6j8r10",
+                    startTime: 120
+                }
+            },
+            {
+                number: "Q3",
+                text: "Who painted the Mona Lisa?",
+                tags: ["art", "history"],
+                imageSolution: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/800px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg",
+                videoSolution: {
+                    youtubeId: "3RZHhHByq6A",
+                    startTime: 45
+                }
+            },
+            {
+                number: "Q4",
+                text: "What is the largest planet in our solar system?",
+                tags: ["astronomy", "science"],
+                imageSolution: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Jupiter%2C_image_taken_by_NASA%27s_Hubble_Space_Telescope%2C_June_2019_-_Edited.jpg/800px-Jupiter%2C_image_taken_by_NASA%27s_Hubble_Space_Telescope%2C_June_2019_-_Edited.jpg",
+                videoSolution: {
+                    youtubeId: "Xzn2sQ7JE1M",
+                    startTime: 90
+                }
+            },
+            {
+                number: "Q5",
+                text: "What is the powerhouse of the cell?",
+                tags: ["biology", "science"],
+                imageSolution: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Mitochondrion_%28cropped%29.jpg/800px-Mitochondrion_%28cropped%29.jpg",
+                videoSolution: {
+                    youtubeId: "BjRZ6v9lZvo",
+                    startTime: 60
+                }
+            }
+        ];
+
+        // DOM elements
+        const questionsContainer = document.getElementById('questionsContainer');
+        const searchInput = document.getElementById('searchInput');
+        const imageModal = document.getElementById('imageModal');
+        const videoModal = document.getElementById('videoModal');
+        const solutionImage = document.getElementById('solutionImage');
+        const youtubeVideo = document.getElementById('youtubeVideo');
+        const closeButtons = document.querySelectorAll('.close');
+
+        // Display all questions initially
+        displayQuestions(questions);
+
+        // Search functionality
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const filteredQuestions = questions.filter(question => 
+                question.number.toLowerCase().includes(searchTerm) || 
+                question.tags.some(tag => tag.toLowerCase().includes(searchTerm))
+            );
+            displayQuestions(filteredQuestions);
+        });
+
+        // Display questions function with animations
+        function displayQuestions(questionsToDisplay) {
+            questionsContainer.innerHTML = '';
+            
+            if (questionsToDisplay.length === 0) {
+                questionsContainer.innerHTML = `
+                    <div class="no-results">
+                        <i class="fas fa-search" style="font-size: 3rem; margin-bottom: 15px;"></i>
+                        <h3>No questions found</h3>
+                        <p>Try a different search term</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            questionsToDisplay.forEach((question, index) => {
+                const questionElement = document.createElement('div');
+                questionElement.className = 'question';
+                questionElement.style.animationDelay = `${index * 0.1}s`;
+                
+                questionElement.innerHTML = `
+                    <div class="question-number">${question.number}</div>
+                    <div class="question-text">${question.text}</div>
+                    <div class="question-tags">
+                        ${question.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                    </div>
+                    <div class="solution-buttons">
+                        <button class="sol-btn text-sol" data-question="${question.number}" title="Text Solution">
+                            <i class="fas fa-image"></i>
+                        </button>
+                        <button class="sol-btn video-sol" data-question="${question.number}" title="Video Solution">
+                            <i class="fas fa-play"></i>
+                        </button>
+                    </div>
+                `;
+                
+                questionsContainer.appendChild(questionElement);
+            });
+
+            // Add event listeners to buttons
+            document.querySelectorAll('.text-sol').forEach(button => {
+                button.addEventListener('click', function() {
+                    const questionNumber = this.getAttribute('data-question');
+                    showImageSolution(questionNumber);
+                });
+            });
+
+            document.querySelectorAll('.video-sol').forEach(button => {
+                button.addEventListener('click', function() {
+                    const questionNumber = this.getAttribute('data-question');
+                    showVideoSolution(questionNumber);
+                });
+            });
+        }
+
+        // Show image solution
+        function showImageSolution(questionNumber) {
+            const question = questions.find(q => q.number === questionNumber);
+            if (question) {
+                solutionImage.src = question.imageSolution;
+                solutionImage.alt = `Solution for ${questionNumber}`;
+                imageModal.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        // Show video solution
+        function showVideoSolution(questionNumber) {
+            const question = questions.find(q => q.number === questionNumber);
+            if (question) {
+                youtubeVideo.src = `https://www.youtube.com/embed/${question.videoSolution.youtubeId}?start=${question.videoSolution.startTime}&autoplay=1&rel=0&modestbranding=1`;
+                videoModal.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        // Close modals
+        closeButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                imageModal.style.display = 'none';
+                videoModal.style.display = 'none';
+                youtubeVideo.src = '';
+                document.body.style.overflow = 'auto';
+            });
+        });
+
+        // Close modals when clicking outside
+        window.addEventListener('click', function(event) {
+            if (event.target === imageModal) {
+                imageModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+            if (event.target === videoModal) {
+                videoModal.style.display = 'none';
+                youtubeVideo.src = '';
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Handle mobile viewport height
+        function setViewportHeight() {
+            let vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+        }
+        
+        setViewportHeight();
+        window.addEventListener('resize', setViewportHeight);
+        
+        // Add slight loading animation to questions
+        function simulateLoading() {
+            questionsContainer.classList.add('loading');
+            setTimeout(() => {
+                questionsContainer.classList.remove('loading');
+            }, 1000);
+        }
+        
+        // Initial loading effect
+        simulateLoading();
+    </script>
+</body>
+</html>
