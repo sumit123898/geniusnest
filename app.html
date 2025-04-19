@@ -154,39 +154,30 @@
             margin-bottom: 30px;
         }
 
-        /* Quote Section */
-        .quote-card {
+        /* Header Image Section */
+        .header-image-card {
             background: var(--gray);
             border-radius: 15px;
-            padding: 20px;
+            padding: 0;
             margin-bottom: 30px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            text-align: center;
             transition: all 0.3s ease;
             border-left: 4px solid var(--primary);
             position: relative;
             overflow: hidden;
-            min-height: 120px;
+            min-height: 180px;
         }
 
-        .quote-text {
+        .header-image-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
             transition: opacity 0.5s ease;
         }
 
-        .quote-card:hover {
+        .header-image-card:hover {
             transform: translateY(-3px);
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-        }
-
-        .quote-card p {
-            font-style: italic;
-            margin-bottom: 10px;
-            color: var(--lighter);
-        }
-
-        .quote-card .author {
-            font-weight: bold;
-            color: var(--primary);
         }
 
         /* Section Styles */
@@ -676,6 +667,7 @@
             display: flex;
             gap: 15px;
             align-items: center;
+            position: relative;
         }
 
         .note-card:hover {
@@ -720,6 +712,26 @@
         .note-card .btn:hover {
             background: var(--secondary);
             transform: scale(1.05);
+        }
+
+        .note-tag {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--primary);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+
+        .note-tag.free {
+            background: var(--success);
+        }
+
+        .note-tag.paid {
+            background: var(--danger);
         }
 
         /* Hidden screens */
@@ -810,6 +822,91 @@
             background-color: #ef476f;
             color: white;
         }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: var(--gray);
+            padding: 20px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h3 {
+            color: var(--light);
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: var(--light);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            margin-bottom: 20px;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .modal-btn {
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .modal-btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .modal-btn-primary:hover {
+            background: var(--secondary);
+        }
+
+        .modal-btn-secondary {
+            background: var(--gray);
+            color: var(--light);
+            border: 1px solid var(--light);
+        }
+
+        .modal-btn-secondary:hover {
+            background: var(--darker);
+        }
     </style>
 </head>
 <body>
@@ -824,11 +921,10 @@
     <div class="main-content">
         <!-- Home Screen -->
         <div class="screen active" id="home-screen">
-            <!-- Quote at the top -->
-            <div class="quote-card section-gap">
-                <div class="quote-text">
-                    <p><i>"The important thing is not to stop questioning. Curiosity has its own reason for existing."</i></p>
-                    <p class="author">- Albert Einstein</p>
+            <!-- Header Image at the top -->
+            <div class="header-image-card section-gap">
+                <div class="header-image">
+                    <img src="https://i.ibb.co/1tKyZWpJ/1600w-7uic-Zmx-Hmu-E.webp" alt="Learning Header Image">
                 </div>
             </div>
 
@@ -923,25 +1019,13 @@
                 <i class="fas fa-book-open"></i>
                 <h3>No Courses Added Yet</h3>
                 <p>Add courses to your learning list to get started</p>
-                <a href="#" class="btn" id="show-all-courses-btn">Browse Courses</a>
-            </div>
-
-            <div class="search-bar" id="search-bar">
-                <i class="fas fa-search"></i>
-                <input type="text" placeholder="Search courses...">
+                <a href="#" class="btn" id="add-course-manual-btn">Add Course</a>
             </div>
 
             <div class="my-courses" id="my-courses">
                 <h3 class="section-title">My Courses</h3>
                 <div class="course-grid" id="my-courses-grid">
                     <!-- My courses will be added here dynamically -->
-                </div>
-            </div>
-
-            <div class="all-courses" id="all-courses" style="display: none;">
-                <h3 class="section-title">All Available Courses</h3>
-                <div class="course-grid" id="all-courses-grid">
-                    <!-- All courses will be added here dynamically -->
                 </div>
             </div>
 
@@ -985,6 +1069,7 @@
             
             <div class="notes-grid" id="notes-grid">
                 <div class="note-card">
+                    <span class="note-tag free">Free</span>
                     <img src="https://i.ibb.co/RTVqGG1t/61l-K8r-R-t-GL-AC-UF1000-1000-QL80.jpg" alt="Physics Notes" class="note-image">
                     <div class="note-content">
                         <h3>Physics Formulas</h3>
@@ -993,6 +1078,7 @@
                 </div>
                 
                 <div class="note-card">
+                    <span class="note-tag paid">Paid</span>
                     <img src="https://i.ibb.co/TDVq2x6S/images.jpg" alt="Math Notes" class="note-image">
                     <div class="note-content">
                         <h3>Math Theorems</h3>
@@ -1001,6 +1087,7 @@
                 </div>
                 
                 <div class="note-card">
+                    <span class="note-tag free">Free</span>
                     <img src="https://i.ibb.co/gFPSx54g/WBTA-10-2025-scaled.jpg" alt="Chemistry Notes" class="note-image">
                     <div class="note-content">
                         <h3>Chemistry Reactions</h3>
@@ -1077,6 +1164,33 @@
         </a>
     </nav>
 
+    <!-- Add Course Modal -->
+    <div class="modal" id="add-course-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add Course</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="course-id">Enter Course ID</label>
+                    <input type="text" id="course-id" placeholder="e.g. 1, 2, 3...">
+                </div>
+                <div id="course-preview" style="display: none; margin-top: 20px;">
+                    <h4>Course Preview</h4>
+                    <div id="preview-content"></div>
+                </div>
+                <div id="course-not-found" style="color: var(--danger); display: none; margin-top: 10px;">
+                    Course not found. Please check the ID and try again.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-secondary close-modal">Cancel</button>
+                <button class="modal-btn modal-btn-primary" id="confirm-add-course" disabled>Add Course</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Sample course data
         const allCourses = [
@@ -1136,7 +1250,7 @@
             }
         ];
 
-        // Sample notes data
+        // Sample notes data with tags
         const sampleNotes = [
             {
                 id: 1,
@@ -1144,7 +1258,8 @@
                 content: "Important formulas for kinematics and dynamics",
                 date: "2 days ago",
                 image: "https://i.ibb.co/RTVqGG1t/61l-K8r-R-t-GL-AC-UF1000-1000-QL80.jpg",
-                link: "https://www.sumit2.online/pro/1.1"
+                link: "https://www.sumit2.online/pro/1.1",
+                isFree: true
             },
             {
                 id: 2,
@@ -1152,7 +1267,8 @@
                 content: "Key theorems for algebra and calculus",
                 date: "1 week ago",
                 image: "https://i.ibb.co/TDVq2x6S/images.jpg",
-                link: "https://www.sumit2.online/pro/1.2"
+                link: "https://www.sumit2.online/pro/1.2",
+                isFree: false
             },
             {
                 id: 3,
@@ -1160,32 +1276,15 @@
                 content: "Important chemical reactions and equations",
                 date: "3 days ago",
                 image: "https://i.ibb.co/gFPSx54g/WBTA-10-2025-scaled.jpg",
-                link: "https://www.sumit2.online/chemistry"
+                link: "https://www.sumit2.online/chemistry",
+                isFree: true
             }
         ];
 
-        // Quotes for rotation
-        const quotes = [
-            {
-                text: "The important thing is not to stop questioning. Curiosity has its own reason for existing.",
-                author: "Albert Einstein"
-            },
-            {
-                text: "Education is the most powerful weapon which you can use to change the world.",
-                author: "Nelson Mandela"
-            },
-            {
-                text: "Live as if you were to die tomorrow. Learn as if you were to live forever.",
-                author: "Mahatma Gandhi"
-            },
-            {
-                text: "The more that you read, the more things you will know. The more that you learn, the more places you'll go.",
-                author: "Dr. Seuss"
-            },
-            {
-                text: "Learning is not attained by chance, it must be sought for with ardor and attended to with diligence.",
-                author: "Abigail Adams"
-            }
+        // Header images for rotation
+        const headerImages = [
+            "https://i.ibb.co/1tKyZWpJ/1600w-7uic-Zmx-Hmu-E.webp",
+            "https://i.ibb.co/zh1pMS0S/1600w-z7u1-YG6-Sw-M.webp"
         ];
 
         // User's selected courses
@@ -1218,23 +1317,20 @@
             }
         }
 
-        // Rotate quotes every 3 seconds
-        function rotateQuotes() {
-            const quoteContainer = document.querySelector('.quote-text');
+        // Rotate header images every 3 seconds
+        function rotateHeaderImages() {
+            const headerImageContainer = document.querySelector('.header-image img');
             let currentIndex = 0;
             
             setInterval(() => {
-                currentIndex = (currentIndex + 1) % quotes.length;
-                const quote = quotes[currentIndex];
+                currentIndex = (currentIndex + 1) % headerImages.length;
+                const imageUrl = headerImages[currentIndex];
                 
-                quoteContainer.style.opacity = 0;
+                headerImageContainer.style.opacity = 0;
                 
                 setTimeout(() => {
-                    quoteContainer.innerHTML = `
-                        <p><i>"${quote.text}"</i></p>
-                        <p class="author">- ${quote.author}</p>
-                    `;
-                    quoteContainer.style.opacity = 1;
+                    headerImageContainer.src = imageUrl;
+                    headerImageContainer.style.opacity = 1;
                 }, 500);
                 
             }, 3000);
@@ -1330,7 +1426,11 @@
             card.className = 'note-card';
             card.dataset.id = note.id;
             
+            const tagClass = note.isFree ? 'free' : 'paid';
+            const tagText = note.isFree ? 'Free' : 'Paid';
+            
             card.innerHTML = `
+                <span class="note-tag ${tagClass}">${tagText}</span>
                 <img src="${note.image}" alt="${note.title}" class="note-image">
                 <div class="note-content">
                     <h3>${note.title}</h3>
@@ -1339,29 +1439,6 @@
             `;
             
             return card;
-        }
-
-        // Render all courses
-        function renderAllCourses() {
-            const allCoursesGrid = document.getElementById('all-courses-grid');
-            allCoursesGrid.innerHTML = '';
-            
-            allCourses.forEach(course => {
-                // Check if course is already in my courses
-                const isAdded = myCourses.some(c => c.id === course.id);
-                
-                if (!isAdded) {
-                    const card = renderCourseCard(course);
-                    allCoursesGrid.appendChild(card);
-                    
-                    // Add click event to add course
-                    const addBtn = card.querySelector('.btn');
-                    addBtn.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        addCourseToMyCourses(course);
-                    });
-                }
-            });
         }
 
         // Render my courses
@@ -1382,10 +1459,12 @@
                     
                     // Add click event to delete course
                     const deleteBtn = card.querySelector('.delete-btn');
-                    deleteBtn.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        removeCourseFromMyCourses(course.id);
-                    });
+                    if (deleteBtn) {
+                        deleteBtn.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            removeCourseFromMyCourses(course.id);
+                        });
+                    }
                 });
             }
         }
@@ -1407,10 +1486,6 @@
                 myCourses.push(course);
                 localStorage.setItem('myCourses', JSON.stringify(myCourses));
                 updateLearnScreen();
-                
-                // Hide all courses view if it's visible
-                document.getElementById('all-courses').style.display = 'none';
-                document.getElementById('search-bar').classList.remove('active');
             }
         }
 
@@ -1424,7 +1499,6 @@
         // Update learn screen based on current state
         function updateLearnScreen() {
             renderMyCourses();
-            renderAllCourses();
         }
 
         // Update notes screen
@@ -1487,10 +1561,19 @@
             }
         }
 
+        // Modal functions
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
         // Initialize the app
         document.addEventListener('DOMContentLoaded', () => {
             createParticles();
-            rotateQuotes();
+            rotateHeaderImages();
             setupNavigation();
             
             // Initialize screens
@@ -1500,39 +1583,79 @@
 
             // Add course button click handler
             document.getElementById('add-course-btn').addEventListener('click', () => {
-                const allCoursesSection = document.getElementById('all-courses');
-                const searchBar = document.getElementById('search-bar');
-                
-                if (allCoursesSection.style.display === 'none') {
-                    allCoursesSection.style.display = 'block';
-                    searchBar.classList.add('active');
-                } else {
-                    allCoursesSection.style.display = 'none';
-                    searchBar.classList.remove('active');
+                openModal('add-course-modal');
+            });
+
+            // Manual add course button
+            document.getElementById('add-course-manual-btn').addEventListener('click', (e) => {
+                e.preventDefault();
+                openModal('add-course-modal');
+            });
+
+            // Close modal buttons
+            document.querySelectorAll('.close-modal').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    closeModal('add-course-modal');
+                });
+            });
+
+            // Close modal when clicking outside
+            document.getElementById('add-course-modal').addEventListener('click', (e) => {
+                if (e.target === document.getElementById('add-course-modal')) {
+                    closeModal('add-course-modal');
                 }
             });
 
-            // Show all courses button click handler
-            document.getElementById('show-all-courses-btn').addEventListener('click', (e) => {
-                e.preventDefault();
-                document.getElementById('all-courses').style.display = 'block';
-                document.getElementById('search-bar').classList.add('active');
+            // Course ID input handler
+            document.getElementById('course-id').addEventListener('input', (e) => {
+                const courseId = parseInt(e.target.value);
+                const previewContainer = document.getElementById('course-preview');
+                const notFoundMsg = document.getElementById('course-not-found');
+                const confirmBtn = document.getElementById('confirm-add-course');
+                
+                if (isNaN(courseId)) {
+                    previewContainer.style.display = 'none';
+                    notFoundMsg.style.display = 'none';
+                    confirmBtn.disabled = true;
+                    return;
+                }
+                
+                const course = allCourses.find(c => c.id === courseId);
+                
+                if (course) {
+                    // Show course preview
+                    const previewContent = document.getElementById('preview-content');
+                    previewContent.innerHTML = '';
+                    
+                    const previewCard = renderCourseCard(course);
+                    previewCard.querySelector('.btn').textContent = 'Add Course';
+                    previewCard.querySelector('.btn').addEventListener('click', (e) => {
+                        e.preventDefault();
+                        addCourseToMyCourses(course);
+                        closeModal('add-course-modal');
+                    });
+                    
+                    previewContent.appendChild(previewCard);
+                    previewContainer.style.display = 'block';
+                    notFoundMsg.style.display = 'none';
+                    confirmBtn.disabled = false;
+                } else {
+                    previewContainer.style.display = 'none';
+                    notFoundMsg.style.display = 'block';
+                    confirmBtn.disabled = true;
+                }
             });
 
-            // Search functionality
-            const searchInput = document.querySelector('.search-bar input');
-            searchInput.addEventListener('input', (e) => {
-                const searchTerm = e.target.value.toLowerCase();
-                const cards = document.querySelectorAll('#all-courses-grid .course-card');
+            // Confirm add course button
+            document.getElementById('confirm-add-course').addEventListener('click', () => {
+                const courseId = parseInt(document.getElementById('course-id').value);
+                const course = allCourses.find(c => c.id === courseId);
                 
-                cards.forEach(card => {
-                    const title = card.querySelector('h3').textContent.toLowerCase();
-                    if (title.includes(searchTerm)) {
-                        card.style.display = 'block';
-                    } else {
-                        card.style.display = 'none';
-                    }
-                });
+                if (course) {
+                    addCourseToMyCourses(course);
+                    closeModal('add-course-modal');
+                    document.getElementById('course-id').value = '';
+                }
             });
 
             // Profile creation
