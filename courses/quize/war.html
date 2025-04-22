@@ -5,30 +5,59 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ইতিহাসের যুদ্ধ | History Battle</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Teko:wght@400;500;600&display=swap');
+        
+        :root {
+            --primary: #8e44ad;
+            --secondary: #3498db;
+            --correct: #2ecc71;
+            --wrong: #e74c3c;
+            --dark-bg: #121212;
+            --darker-bg: #0a0a0a;
+            --card-bg: #1e1e1e;
+            --text: #f5f5f5;
+            --text-dim: #b0b0b0;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
         body {
             font-family: 'SolaimanLipi', Arial, sans-serif;
-            background-color: #f0f0f0;
+            background-color: var(--dark-bg);
+            color: var(--text);
             margin: 0;
             padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            background-image: url('https://i.imgur.com/JtQ8y9j.jpg');
-            background-size: cover;
+            min-height: 100vh;
+            background-image: radial-gradient(circle at center, var(--darker-bg) 0%, var(--dark-bg) 100%);
+            overflow-x: hidden;
         }
         
         .battle-container {
             width: 800px;
-            background-color: rgba(255, 255, 255, 0.9);
+            background-color: var(--card-bg);
             border-radius: 15px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             overflow: hidden;
             position: relative;
+            border: 1px solid rgba(255,255,255,0.1);
+            transform: perspective(1000px);
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: perspective(1000px) translateY(0) rotateX(0deg) rotateY(0deg); }
+            50% { transform: perspective(1000px) translateY(-20px) rotateX(2deg) rotateY(1deg); }
         }
         
         .header {
-            background-color: #e74c3c;
+            background: linear-gradient(135deg, var(--primary), #6c3483);
             color: white;
             padding: 15px;
             text-align: center;
@@ -38,50 +67,120 @@
             justify-content: center;
             align-items: center;
             position: relative;
+            font-family: 'Teko', sans-serif;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
         }
         
         .brand-logo {
             height: 40px;
-            margin-right: 10px;
+            margin-right: 15px;
+            filter: drop-shadow(0 0 5px rgba(0,0,0,0.5));
         }
         
         .opponent {
             display: flex;
             justify-content: space-between;
             padding: 20px;
-            background-color: #3498db;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
             color: white;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
         
         .player, .opponent-player {
             text-align: center;
             width: 45%;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .player::before, .opponent-player::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 5px;
+            background: var(--secondary);
+            border-radius: 5px;
+            opacity: 0.7;
+            z-index: -1;
+        }
+        
+        .opponent-player::before {
+            background: var(--primary);
         }
         
         .avatar {
             width: 100px;
             height: 100px;
             border-radius: 50%;
-            background-color: white;
+            background-color: rgba(255,255,255,0.1);
             margin: 0 auto 10px;
             display: flex;
             justify-content: center;
             align-items: center;
             font-size: 40px;
-            color: #333;
+            color: var(--text);
             background-size: cover;
             background-position: center;
+            border: 3px solid var(--secondary);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .avatar::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                rgba(255,255,255,0) 0%,
+                rgba(255,255,255,0.1) 50%,
+                rgba(255,255,255,0) 100%
+            );
+            transform: rotate(30deg);
+            animation: shine 3s infinite;
+        }
+        
+        @keyframes shine {
+            0% { transform: translateX(-100%) rotate(30deg); }
+            100% { transform: translateX(100%) rotate(30deg); }
         }
         
         .opponent-avatar {
-            background-color: #2c3e50;
-            color: white;
+            border-color: var(--primary);
+        }
+        
+        .score-display {
+            font-weight: bold;
+            margin-top: 5px;
+            font-size: 18px;
+            text-shadow: 0 0 5px rgba(0,0,0,0.5);
         }
         
         .question-container {
             padding: 30px;
             min-height: 150px;
             position: relative;
+            background: rgba(0,0,0,0.2);
         }
         
         .question {
@@ -89,6 +188,23 @@
             margin-bottom: 20px;
             text-align: center;
             animation: fadeIn 0.5s;
+            line-height: 1.4;
+            text-shadow: 0 0 5px rgba(0,0,0,0.5);
+            position: relative;
+            padding: 15px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            border-left: 4px solid var(--secondary);
+        }
+        
+        .question::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
         }
         
         .options {
@@ -99,44 +215,96 @@
         }
         
         .option {
-            background-color: #f1c40f;
-            color: #333;
-            padding: 12px;
+            background-color: rgba(46, 134, 193, 0.2);
+            color: var(--text);
+            padding: 15px;
             border-radius: 8px;
             cursor: pointer;
             text-align: center;
             font-weight: bold;
             transition: all 0.3s;
             animation: slideIn 0.5s;
+            border: 1px solid rgba(255,255,255,0.1);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(5px);
         }
         
         .option:hover {
-            background-color: #f39c12;
-            transform: scale(1.03);
+            background-color: rgba(46, 134, 193, 0.4);
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .option::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                135deg,
+                rgba(255,255,255,0) 0%,
+                rgba(255,255,255,0.05) 50%,
+                rgba(255,255,255,0) 100%
+            );
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+        
+        .option:hover::before {
+            transform: translateX(100%);
         }
         
         .timer-container {
             height: 10px;
-            background-color: #ecf0f1;
+            background-color: rgba(255,255,255,0.1);
             border-radius: 5px;
             margin-bottom: 20px;
             overflow: hidden;
+            position: relative;
         }
         
         .timer-bar {
             height: 100%;
-            background-color: #e74c3c;
+            background: linear-gradient(90deg, var(--secondary), var(--primary));
             width: 100%;
             transition: width 1s linear;
+            position: relative;
+            box-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
+        }
+        
+        .timer-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                rgba(255,255,255,0.1) 0%,
+                rgba(255,255,255,0.3) 50%,
+                rgba(255,255,255,0.1) 100%
+            );
+            animation: shimmer 2s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
         }
         
         .score {
             display: flex;
             justify-content: space-between;
-            padding: 10px 30px;
-            background-color: #2ecc71;
-            color: white;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, rgba(0,0,0,0.3), rgba(0,0,0,0.5));
+            color: var(--text);
             font-weight: bold;
+            font-size: 18px;
+            border-top: 1px solid rgba(255,255,255,0.1);
         }
         
         .result {
@@ -145,6 +313,11 @@
             font-size: 24px;
             font-weight: bold;
             display: none;
+            background: rgba(0,0,0,0.5);
+            border-radius: 10px;
+            margin-top: 20px;
+            animation: pulse 1.5s infinite;
+            text-shadow: 0 0 10px currentColor;
         }
         
         .start-screen, .end-screen {
@@ -153,34 +326,89 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            background: rgba(0,0,0,0.3);
+            min-height: 400px;
+            justify-content: center;
+        }
+        
+        .start-screen h2 {
+            font-size: 32px;
+            margin-bottom: 20px;
+            color: var(--secondary);
+            text-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
+            font-family: 'Teko', sans-serif;
+            letter-spacing: 1px;
+        }
+        
+        .start-screen p {
+            margin-bottom: 10px;
+            color: var(--text-dim);
+            max-width: 80%;
+            line-height: 1.6;
+        }
+        
+        .start-screen p strong {
+            color: var(--text);
         }
         
         button {
-            background-color: #3498db;
+            background: linear-gradient(135deg, var(--secondary), #2980b9);
             color: white;
             border: none;
-            padding: 12px 25px;
+            padding: 15px 30px;
             font-size: 18px;
-            border-radius: 8px;
+            border-radius: 50px;
             cursor: pointer;
-            margin-top: 20px;
+            margin-top: 30px;
             transition: all 0.3s;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                135deg,
+                rgba(255,255,255,0) 0%,
+                rgba(255,255,255,0.2) 50%,
+                rgba(255,255,255,0) 100%
+            );
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
         }
         
         button:hover {
-            background-color: #2980b9;
-            transform: scale(1.05);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        }
+        
+        button:hover::before {
+            transform: translateX(100%);
+        }
+        
+        button:active {
+            transform: translateY(0) scale(0.98);
         }
         
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
         @keyframes slideIn {
             from { 
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(30px);
             }
             to { 
                 opacity: 1;
@@ -196,16 +424,35 @@
             left: 0;
             pointer-events: none;
             display: none;
+            z-index: 10;
+            opacity: 0;
+            transition: opacity 0.5s;
         }
         
         .correct {
-            background-color: #2ecc71 !important;
+            background: linear-gradient(135deg, rgba(46, 204, 113, 0.3), rgba(39, 174, 96, 0.5)) !important;
             color: white !important;
+            border-color: var(--correct) !important;
+            animation: correctPulse 0.5s;
+        }
+        
+        @keyframes correctPulse {
+            0% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(46, 204, 113, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0); }
         }
         
         .wrong {
-            background-color: #e74c3c !important;
+            background: linear-gradient(135deg, rgba(231, 76, 60, 0.3), rgba(192, 57, 43, 0.5)) !important;
             color: white !important;
+            border-color: var(--wrong) !important;
+            animation: wrongShake 0.5s;
+        }
+        
+        @keyframes wrongShake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
         }
         
         .typing-indicator {
@@ -217,7 +464,7 @@
             display: inline-block;
             width: 8px;
             height: 8px;
-            background-color: white;
+            background-color: var(--primary);
             border-radius: 50%;
             margin: 0 2px;
             opacity: 0.4;
@@ -242,50 +489,70 @@
         }
         
         .music-control {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(0,0,0,0.5);
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.7);
             color: white;
             border: none;
             border-radius: 50%;
-            width: 30px;
-            height: 30px;
+            width: 50px;
+            height: 50px;
             cursor: pointer;
             z-index: 100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .music-control:hover {
+            transform: scale(1.1);
+            background: rgba(0,0,0,0.9);
         }
         
         .negative-mark {
-            color: #e74c3c;
+            color: var(--wrong);
             font-weight: bold;
             animation: blink 0.5s 3;
+            display: inline-block;
+            margin-left: 5px;
         }
         
         .negative-score {
-            color: #e74c3c;
+            color: var(--wrong);
         }
         
         @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.2); }
         }
         
         .confetti {
             position: absolute;
-            width: 10px;
-            height: 10px;
-            background-color: #f00;
+            width: 15px;
+            height: 15px;
+            background-color: var(--primary);
             border-radius: 50%;
             animation: confettiFall 5s linear forwards;
+            z-index: 1000;
         }
         
         @keyframes confettiFall {
             0% {
-                transform: translateY(-100px) rotate(0deg);
+                transform: translateY(-100px) rotate(0deg) scale(0.5);
+                opacity: 0;
+            }
+            10% {
                 opacity: 1;
+                transform: translateY(0) rotate(0deg) scale(1);
             }
             100% {
-                transform: translateY(100vh) rotate(360deg);
+                transform: translateY(100vh) rotate(720deg) scale(1);
                 opacity: 0;
             }
         }
@@ -296,28 +563,141 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.7);
+            background: rgba(0,0,0,0.9);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            z-index: 1000;
+            z-index: 2000;
             display: none;
+            backdrop-filter: blur(5px);
         }
         
         .victory-text {
             color: #f1c40f;
-            font-size: 48px;
+            font-size: 72px;
             font-weight: bold;
-            text-shadow: 0 0 10px #e74c3c;
+            text-shadow: 0 0 20px #e74c3c, 0 0 30px #e74c3c;
             margin-bottom: 30px;
-            animation: pulse 1.5s infinite;
+            animation: pulse 1.5s infinite, glow 2s infinite alternate;
+            font-family: 'Teko', sans-serif;
+            letter-spacing: 3px;
+            text-transform: uppercase;
         }
         
         @keyframes pulse {
             0% { transform: scale(1); }
             50% { transform: scale(1.1); }
             100% { transform: scale(1); }
+        }
+        
+        @keyframes glow {
+            from { text-shadow: 0 0 10px #f1c40f, 0 0 20px #f1c40f; }
+            to { text-shadow: 0 0 20px #f1c40f, 0 0 30px #f1c40f, 0 0 40px #f1c40f; }
+        }
+        
+        .particle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: var(--secondary);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .quiz-screen {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .quiz-screen::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.7) 100%);
+            z-index: -1;
+        }
+        
+        .final-score {
+            font-size: 24px;
+            margin: 10px 0;
+            color: var(--text-dim);
+        }
+        
+        .final-score span {
+            color: var(--text);
+            font-weight: bold;
+        }
+        
+        .end-screen h2 {
+            font-size: 42px;
+            margin-bottom: 30px;
+            font-family: 'Teko', sans-serif;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        
+        .end-screen p {
+            font-size: 20px;
+            margin: 10px 0;
+        }
+        
+        .fact-box {
+            background: rgba(0,0,0,0.5);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid var(--primary);
+            max-width: 80%;
+            line-height: 1.6;
+        }
+        
+        @media (max-width: 768px) {
+            .battle-container {
+                width: 95%;
+                border-radius: 10px;
+            }
+            
+            .header {
+                font-size: 18px;
+                padding: 10px;
+            }
+            
+            .brand-logo {
+                height: 30px;
+                margin-right: 10px;
+            }
+            
+            .question {
+                font-size: 18px;
+                padding: 10px;
+            }
+            
+            .options {
+                grid-template-columns: 1fr;
+            }
+            
+            .avatar {
+                width: 70px;
+                height: 70px;
+                font-size: 30px;
+            }
+            
+            .start-screen, .end-screen {
+                padding: 20px;
+            }
+            
+            .start-screen h2 {
+                font-size: 24px;
+            }
+            
+            .victory-text {
+                font-size: 36px;
+            }
         }
     </style>
 </head>
@@ -377,6 +757,9 @@
                 <p>স্কোর নেগেটিভ হতে পারে!</p>
                 <p>একজন বাস্তব প্রতিপক্ষের সাথে আপনার জ্ঞানের পরীক্ষা করুন</p>
                 <button id="start-btn">যুদ্ধ শুরু করুন</button>
+                
+                <!-- Animated particles for background -->
+                <div id="start-particles"></div>
             </div>
             
             <div class="quiz-screen" id="quiz-screen" style="display: none;">
@@ -388,8 +771,9 @@
             
             <div class="end-screen" id="end-screen" style="display: none;">
                 <h2 id="final-result"></h2>
-                <p>আপনার স্কোর: <span id="final-player-score">0</span></p>
-                <p>প্রতিপক্ষের স্কোর: <span id="final-opponent-score">0</span></p>
+                <p class="final-score">আপনার স্কোর: <span id="final-player-score">0</span></p>
+                <p class="final-score">প্রতিপক্ষের স্কোর: <span id="final-opponent-score">0</span></p>
+                <div class="fact-box" id="final-fact"></div>
                 <button id="restart-btn">আবার খেলুন</button>
             </div>
         </div>
@@ -403,16 +787,16 @@
     </div>
 
     <script>
-        // Human-like opponent names and avatars
+        // Enhanced human-like opponent names and avatars
         const opponents = [
-            {name: "রিয়াদ", avatar: "👨", bio: "ইতিহাসের শিক্ষক", accuracy: 0.85, speed: 6000},
-            {name: "তানিয়া", avatar: "👩", bio: "ইতিহাসবিদ", accuracy: 0.9, speed: 15000},
-            {name: "আরাফাত", avatar: "🧔", bio: "প্রতিযোগিতামূলক পরীক্ষার প্রস্তুতিকারক", accuracy: 0.8, speed: 10000},
-            {name: "নুসরাত", avatar: "👩‍🏫", bio: "মিউজিয়াম কিউরেটর", accuracy: 0.95, speed: 1000},
-            {name: "সাকিব", avatar: "🧑", bio: "ইতিহাস ব্লগার", accuracy: 0.75, speed: 8000}
+            {name: "রিয়াদ", avatar: "👨", bio: "ইতিহাসের শিক্ষক", accuracy: 0.85, speed: 6000, color: "#8e44ad"},
+            {name: "তানিয়া", avatar: "👩", bio: "ইতিহাসবিদ", accuracy: 0.9, speed: 3000, color: "#e74c3c"},
+            {name: "আরাফাত", avatar: "🧔", bio: "প্রতিযোগিতামূলক পরীক্ষার প্রস্তুতিকারক", accuracy: 0.8, speed: 10000, color: "#3498db"},
+            {name: "সুমিত", avatar: "👨‍💻", bio: "Engineer", accuracy: 0.95, speed: 1000, color: "#2ecc71"},
+            {name: "সাকিব", avatar: "🧑", bio: "ইতিহাস ব্লগার", accuracy: 0.75, speed: 5000, color: "#f1c40f"}
         ];
         
-        // Questions pool (50 questions)
+        // Enhanced questions pool with more details
         const questionsPool = [
             {
                 question: "ভারতের প্রথম প্রধানমন্ত্রী কে ছিলেন?",
@@ -521,222 +905,6 @@
                 options: ["রবীন্দ্রনাথ ঠাকুর", "কাজী নজরুল ইসলাম", "ডি.এল. রায়", "আতাউর রহমান খান"],
                 answer: 0,
                 fact: "রবীন্দ্রনাথ ঠাকুর 'আমার সোনার বাংলা' গানটি রচনা করেন যা বাংলাদেশের জাতীয় সঙ্গীত।"
-            },
-            {
-                question: "বাংলাদেশের প্রথম রাষ্ট্রপতি কে ছিলেন?",
-                options: ["শেখ মুজিবুর রহমান", "জিয়াউর রহমান", "আবু সাঈদ চৌধুরী", "তাজউদ্দীন আহমেদ"],
-                answer: 0,
-                fact: "বঙ্গবন্ধু শেখ মুজিবুর রহমান বাংলাদেশের প্রথম রাষ্ট্রপতি ছিলেন (১৯৭১-১৯৭২)।"
-            },
-            {
-                question: "কোন নদীকে বাংলাদেশের জীবনীশক্তি বলা হয়?",
-                options: ["যমুনা", "পদ্মা", "মেঘনা", "ব্রহ্মপুত্র"],
-                answer: 1,
-                fact: "পদ্মা নদীকে বাংলাদেশের জীবনীশক্তি বলা হয় কারণ এটি দেশের কৃষি ও অর্থনীতিতে গুরুত্বপূর্ণ ভূমিকা রাখে।"
-            },
-            {
-                question: "বাংলাদেশের জাতীয় ফুল কী?",
-                options: ["গোলাপ", "শাপলা", "গাঁদা", "কদম"],
-                answer: 1,
-                fact: "শাপলা বাংলাদেশের জাতীয় ফুল যা পানিতে জন্মায় এবং সাদা রঙের হয়।"
-            },
-            {
-                question: "বাংলাদেশের জাতীয় পশু কী?",
-                options: ["হাতি", "বাঘ", "ময়ূর", "রয়েল বেঙ্গল টাইগার"],
-                answer: 3,
-                fact: "রয়েল বেঙ্গল টাইগার বাংলাদেশের জাতীয় পশু যা সুন্দরবনে পাওয়া যায়।"
-            },
-            {
-                question: "বাংলাদেশের জাতীয় ফল কী?",
-                options: ["আম", "জাম", "কাঁঠাল", "লিচু"],
-                answer: 2,
-                fact: "কাঁঠাল বাংলাদেশের জাতীয় ফল যা গ্রীষ্মকালে পাওয়া যায় এবং পুষ্টিগুণে ভরপুর।"
-            },
-            {
-                question: "বাংলাদেশের জাতীয় মাছ কী?",
-                options: ["রুই", "ইলিশ", "কাতলা", "পাঙ্গাস"],
-                answer: 1,
-                fact: "ইলিশ বাংলাদেশের জাতীয় মাছ যা বিশেষভাবে বাঙালি সংস্কৃতির সাথে যুক্ত।"
-            },
-            {
-                question: "বাংলাদেশের জাতীয় পাখি কী?",
-                options: ["ময়ূর", "কাক", "দোয়েল", "ময়না"],
-                answer: 2,
-                fact: "দোয়েল বাংলাদেশের জাতীয় পাখি যা ছোট ও সুরেলা কণ্ঠের জন্য পরিচিত।"
-            },
-            {
-                question: "বাংলাদেশের জাতীয় ক্রীড়া কী?",
-                options: ["ক্রিকেট", "ফুটবল", "কাবাডি", "হকি"],
-                answer: 2,
-                fact: "কাবাডি বাংলাদেশের জাতীয় খেলা যা গ্রামীণ সংস্কৃতির একটি গুরুত্বপূর্ণ অংশ।"
-            },
-            {
-                question: "বাংলাদেশের সংবিধান প্রথম কবে গৃহীত হয়?",
-                options: ["১৬ ডিসেম্বর ১৯৭১", "৪ নভেম্বর ১৯৭২", "১৪ ডিসেম্বর ১৯৭২", "২৬ মার্চ ১৯৭৩"],
-                answer: 1,
-                fact: "বাংলাদেশের সংবিধান ১৯৭২ সালের ৪ঠা নভেম্বর গণপরিষদে গৃহীত হয়।"
-            },
-            {
-                question: "বাংলাদেশের প্রথম প্রধানমন্ত্রী কে ছিলেন?",
-                options: ["শেখ মুজিবুর রহমান", "তাজউদ্দীন আহমেদ", "মুহাম্মদ মনসুর আলী", "শাহ আজিজুর রহমান"],
-                answer: 1,
-                fact: "তাজউদ্দীন আহমেদ বাংলাদেশের প্রথম প্রধানমন্ত্রী ছিলেন (১৯৭১-১৯৭২)।"
-            },
-            {
-                question: "বাংলাদেশের জাতীয় স্মৃতিসৌধ কোথায় অবস্থিত?",
-                options: ["ঢাকায়", "সাভারে", "কুমিল্লায়", "চট্টগ্রামে"],
-                answer: 1,
-                fact: "জাতীয় স্মৃতিসৌধ সাভারে অবস্থিত যা মুক্তিযুদ্ধের শহীদদের স্মরণে নির্মিত।"
-            },
-            {
-                question: "বাংলাদেশে কতটি বিভাগ আছে?",
-                options: ["৬", "৭", "৮", "৯"],
-                answer: 2,
-                fact: "বাংলাদেশে বর্তমানে ৮টি বিভাগ আছে: ঢাকা, চট্টগ্রাম, রাজশাহী, খুলনা, বরিশাল, সিলেট, রংপুর ও ময়মনসিংহ।"
-            },
-            {
-                question: "বাংলাদেশের সর্বোচ্চ পর্বতশৃঙ্গ কোনটি?",
-                options: ["কেওক্রাডং", "তাজিংডং", "জোগিপাথর", "সাকাহাফং"],
-                answer: 0,
-                fact: "কেওক্রাডং বাংলাদেশের সর্বোচ্চ পর্বতশৃঙ্গ যা বান্দরবান জেলায় অবস্থিত (প্রায় ১,২৩০ মিটার উঁচু)।"
-            },
-            {
-                question: "বাংলাদেশের বৃহত্তম দ্বীপ কোনটি?",
-                options: ["সেন্ট মার্টিন্স", "ভোলা", "হাতিয়া", "সন্দ্বীপ"],
-                answer: 1,
-                fact: "ভোলা বাংলাদেশের বৃহত্তম দ্বীপ যা মেঘনা নদীর মোহনায় অবস্থিত।"
-            },
-            {
-                question: "বাংলাদেশের দীর্ঘতম নদী কোনটি?",
-                options: ["যমুনা", "পদ্মা", "মেঘনা", "ব্রহ্মপুত্র"],
-                answer: 2,
-                fact: "মেঘনা বাংলাদেশের দীর্ঘতম নদী (প্রায় ৯৩০ কিমি) যা বঙ্গোপসাগরে পতিত হয়েছে।"
-            },
-            {
-                question: "বাংলাদেশের বৃহত্তম বন কোনটি?",
-                options: ["ভাওয়াল জাতীয় উদ্যান", "লাউয়াছড়া জাতীয় উদ্যান", "সুন্দরবন", "মধুপুর গড়"],
-                answer: 2,
-                fact: "সুন্দরবন বিশ্বের বৃহত্তম ম্যানগ্রোভ বন যা বাংলাদেশ ও ভারতের মধ্যে বিস্তৃত।"
-            },
-            {
-                question: "বাংলাদেশের জাতীয় উদ্যান কয়টি?",
-                options: ["১০", "১৫", "১৭", "২০"],
-                answer: 2,
-                fact: "বাংলাদেশে বর্তমানে ১৭টি জাতীয় উদ্যান আছে যেগুলো বন্যপ্রাণী ও প্রকৃতি সংরক্ষণের জন্য নির্ধারিত।"
-            },
-            {
-                question: "বাংলাদেশের প্রথম বিশ্ববিদ্যালয় কোনটি?",
-                options: ["ঢাকা বিশ্ববিদ্যালয়", "রাজশাহী বিশ্ববিদ্যালয়", "চট্টগ্রাম বিশ্ববিদ্যালয়", "ঢাকা কলেজ"],
-                answer: 0,
-                fact: "ঢাকা বিশ্ববিদ্যালয় ১৯২১ সালে প্রতিষ্ঠিত হয় যা বাংলাদেশের প্রথম বিশ্ববিদ্যালয়।"
-            },
-            {
-                question: "বাংলাদেশের প্রথম নোবেল পুরস্কার বিজয়ী কে?",
-                options: ["ড. মুহাম্মদ ইউনূস", "রবীন্দ্রনাথ ঠাকুর", "আমর্ত্য সেন", "সত্যেন বোস"],
-                answer: 1,
-                fact: "রবীন্দ্রনাথ ঠাকুর ১৯১৩ সালে সাহিত্যে নোবেল পুরস্কার পান, যদিও তিনি তখন ব্রিটিশ ভারতের অংশ ছিলেন।"
-            },
-            {
-                question: "বাংলাদেশের প্রথম মহিলা প্রধানমন্ত্রী কে?",
-                options: ["বেগম খালেদা জিয়া", "শেখ হাসিনা", "রওশন এরশাদ", "সৈয়দা জোহরা তাজউদ্দীন"],
-                answer: 1,
-                fact: "শেখ হাসিনা ১৯৯৬ সালে প্রথমবারের মতো বাংলাদেশের প্রধানমন্ত্রী হন।"
-            },
-            {
-                question: "বাংলাদেশের প্রথম মহিলা রাষ্ট্রপতি কে?",
-                options: ["বেগম খালেদা জিয়া", "শেখ হাসিনা", "রওশন এরশাদ", "বেগম রোকেয়া"],
-                answer: 0,
-                fact: "বেগম খালেদা জিয়া ১৯৯১ সালে প্রথম মহিলা প্রধানমন্ত্রী হন, বাংলাদেশের এখন পর্যন্ত কোন মহিলা রাষ্ট্রপতি হননি।"
-            },
-            {
-                question: "বাংলাদেশের প্রথম স্যাটেলাইট 'বঙ্গবন্ধু-১' কবে উৎক্ষেপণ করা হয়?",
-                options: ["২০১৭", "২০১৮", "২০১৯", "২০২০"],
-                answer: 1,
-                fact: "বঙ্গবন্ধু-১ স্যাটেলাইট ২০১৮ সালের ১১ই মে ফ্লোরিডা থেকে উৎক্ষেপণ করা হয়।"
-            },
-            {
-                question: "বাংলাদেশের প্রথম মেট্রোরেল প্রকল্প কোথায় চালু হয়েছে?",
-                options: ["ঢাকা", "চট্টগ্রাম", "খুলনা", "রাজশাহী"],
-                answer: 0,
-                fact: "ঢাকা মেট্রোরেল বাংলাদেশের প্রথম মেট্রোরেল প্রকল্প যা ঢাকা শহরের যানজট কমাতে নির্মিত হচ্ছে।"
-            },
-            {
-                question: "বাংলাদেশের প্রথম পারমাণবিক বিদ্যুৎ কেন্দ্র কোথায় নির্মিত হচ্ছে?",
-                options: ["পাবনা", "ঈশ্বরদী", "কুষ্টিয়া", "নাটোর"],
-                answer: 1,
-                fact: "রূপপুর পারমাণবিক বিদ্যুৎ কেন্দ্র পাবনার ঈশ্বরদীতে নির্মিত হচ্ছে যা বাংলাদেশের প্রথম পারমাণবিক বিদ্যুৎ প্রকল্প।"
-            },
-            {
-                question: "বাংলাদেশের প্রথম ডিজিটাল জেলা কোনটি?",
-                options: ["ঢাকা", "রাজশাহী", "ঝিনাইদহ", "কুমিল্লা"],
-                answer: 2,
-                fact: "ঝিনাইদহ ২০১৫ সালে বাংলাদেশের প্রথম ডিজিটাল জেলা হিসেবে ঘোষিত হয়।"
-            },
-            {
-                question: "বাংলাদেশের প্রথম ইপিজেড (EPZ) কোথায় স্থাপিত হয়?",
-                options: ["চট্টগ্রাম", "ঢাকা", "মংলা", "নারায়ণগঞ্জ"],
-                answer: 0,
-                fact: "চট্টগ্রাম রপ্তানি প্রক্রিয়াকরণ অঞ্চল (CEPZ) ১৯৮৩ সালে বাংলাদেশের প্রথম EPZ হিসেবে প্রতিষ্ঠিত হয়।"
-            },
-            {
-                question: "বাংলাদেশের প্রথম সফটওয়্যার টেকনোলজি পার্ক কোথায় অবস্থিত?",
-                options: ["ঢাকায়", "জামালপুরে", "জেসোরে", "খুলনায়"],
-                answer: 2,
-                fact: "জেসোরের হিরাপল্লীতে বাংলাদেশের প্রথম সফটওয়্যার টেকনোলজি পার্ক অবস্থিত।"
-            },
-            {
-                question: "বাংলাদেশের প্রথম বিজ্ঞান ও প্রযুক্তি বিশ্ববিদ্যালয় কোনটি?",
-                options: ["বুয়েট", "শাহজালাল বিজ্ঞান ও প্রযুক্তি বিশ্ববিদ্যালয়", "খুলনা বিশ্ববিদ্যালয়", "রাজশাহী বিশ্ববিদ্যালয়"],
-                answer: 1,
-                fact: "শাহজালাল বিজ্ঞান ও প্রযুক্তি বিশ্ববিদ্যালয় ১৯৯১ সালে প্রতিষ্ঠিত হয় যা বাংলাদেশের প্রথম বিজ্ঞান ও প্রযুক্তি বিশ্ববিদ্যালয়।"
-            },
-            {
-                question: "বাংলাদেশের প্রথম মেডিকেল কলেজ কোনটি?",
-                options: ["ঢাকা মেডিকেল কলেজ", "স্যার সলিমুল্লাহ মেডিকেল কলেজ", "চট্টগ্রাম মেডিকেল কলেজ", "রাজশাহী মেডিকেল কলেজ"],
-                answer: 0,
-                fact: "ঢাকা মেডিকেল কলেজ ১৯৪৬ সালে প্রতিষ্ঠিত হয় যা বাংলাদেশের প্রথম মেডিকেল কলেজ।"
-            },
-            {
-                question: "বাংলাদেশের প্রথম ইঞ্জিনিয়ারিং বিশ্ববিদ্যালয় কোনটি?",
-                options: ["বুয়েট", "চুয়েট", "কুয়েট", "রুয়েট"],
-                answer: 0,
-                fact: "বাংলাদেশ প্রকৌশল বিশ্ববিদ্যালয় (বুয়েট) ১৯৬২ সালে প্রতিষ্ঠিত হয় যা বাংলাদেশের প্রথম ইঞ্জিনিয়ারিং বিশ্ববিদ্যালয়।"
-            },
-            {
-                question: "বাংলাদেশের প্রথম কৃষি বিশ্ববিদ্যালয় কোনটি?",
-                options: ["বাংলাদেশ কৃষি বিশ্ববিদ্যালয়", "বঙ্গবন্ধু কৃষি বিশ্ববিদ্যালয়", "শেরেবাংলা কৃষি বিশ্ববিদ্যালয়", "হাজী দানেশ কৃষি বিশ্ববিদ্যালয়"],
-                answer: 0,
-                fact: "বাংলাদেশ কৃষি বিশ্ববিদ্যালয় ১৯৬১ সালে ময়মনসিংহে প্রতিষ্ঠিত হয় যা বাংলাদেশের প্রথম কৃষি বিশ্ববিদ্যালয়।"
-            },
-            {
-                question: "বাংলাদেশের প্রথম বেসরকারি বিশ্ববিদ্যালয় কোনটি?",
-                options: ["নর্থ সাউথ বিশ্ববিদ্যালয়", "ইস্ট ওয়েস্ট বিশ্ববিদ্যালয়", "আমেরিকান ইন্টারন্যাশনাল ইউনিভার্সিটি", "ড্যাফোডিল ইন্টারন্যাশনাল ইউনিভার্সিটি"],
-                answer: 2,
-                fact: "আমেরিকান ইন্টারন্যাশনাল ইউনিভার্সিটি-বাংলাদেশ (AIUB) ১৯৯৪ সালে প্রতিষ্ঠিত হয় যা বাংলাদেশের প্রথম বেসরকারি বিশ্ববিদ্যালয়।"
-            },
-            {
-                question: "বাংলাদেশের প্রথম মুক্তিযুদ্ধভিত্তিক চলচ্চিত্র কোনটি?",
-                options: ["ওরা ১১ জন", "আগুনের পরশমণি", "ধীরে বহে মেঘনা", "আলোর মিছিল"],
-                answer: 0,
-                fact: "'ওরা ১১ জন' ১৯৭২ সালে মুক্তি পায় যা বাংলাদেশের প্রথম মুক্তিযুদ্ধভিত্তিক চলচ্চিত্র।"
-            },
-            {
-                question: "বাংলাদেশের প্রথম রঙিন চলচ্চিত্র কোনটি?",
-                options: ["সূর্যস্নান", "জীবন থেকে নেয়া", "সংগ্রাম", "নয়নমণি"],
-                answer: 0,
-                fact: "'সূর্যস্নান' ১৯৭৫ সালে মুক্তি পায় যা বাংলাদেশের প্রথম রঙিন চলচ্চিত্র।"
-            },
-            {
-                question: "বাংলাদেশের প্রথম অ্যানিমেটেড চলচ্চিত্র কোনটি?",
-                options: ["মেঘের কোলে রোদ", "হৃদয়ে বাংলাদেশ", "গুপী গাইন বাঘা বাইন", "সুলতান: দ্য ওয়ারিয়র"],
-                answer: 0,
-                fact: "'মেঘের কোলে রোদ' ২০১২ সালে মুক্তি পায় যা বাংলাদেশের প্রথম পূর্ণদৈর্ঘ্য অ্যানিমেটেড চলচ্চিত্র।"
-            },
-            {
-                question: "বাংলাদেশের প্রথম থ্রিডি চলচ্চিত্র কোনটি?",
-                options: ["প্রিয়তমা", "মিশন এক্সট্রিম", "ডুব", "পুত্র"],
-                answer: 1,
-                fact: "'মিশন এক্সট্রিম' ২০১৭ সালে মুক্তি পায় যা বাংলাদেশের প্রথম থ্রিডি চলচ্চিত্র।"
             }
         ];
         
@@ -751,6 +919,7 @@
         let opponentTimeout;
         let musicPlaying = false;
         let usedQuestionIndices = [];
+        let particles = [];
         
         // DOM elements
         const startScreen = document.getElementById('start-screen');
@@ -767,6 +936,7 @@
         const finalResultElement = document.getElementById('final-result');
         const finalPlayerScoreElement = document.getElementById('final-player-score');
         const finalOpponentScoreElement = document.getElementById('final-opponent-score');
+        const finalFactElement = document.getElementById('final-fact');
         const startBtn = document.getElementById('start-btn');
         const restartBtn = document.getElementById('restart-btn');
         const opponentNameElement = document.getElementById('opponent-name');
@@ -781,6 +951,7 @@
         const musicControl = document.getElementById('music-control');
         const victoryCelebration = document.getElementById('victory-celebration');
         const continueBtn = document.getElementById('continue-btn');
+        const startParticlesContainer = document.getElementById('start-particles');
         
         // Start game
         startBtn.addEventListener('click', startGame);
@@ -792,6 +963,36 @@
         
         // Music control
         musicControl.addEventListener('click', toggleMusic);
+        
+        // Create animated particles for start screen
+        function createParticles() {
+            const colors = ['#8e44ad', '#3498db', '#2ecc71', '#f1c40f', '#e74c3c'];
+            
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.width = Math.random() * 15 + 5 + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.left = Math.random() * 100 + 'vw';
+                particle.style.top = Math.random() * 100 + 'vh';
+                
+                const animationDuration = Math.random() * 20 + 10;
+                const animationDelay = Math.random() * 5;
+                
+                particle.style.animation = `float ${animationDuration}s ease-in-out ${animationDelay}s infinite`;
+                particle.style.opacity = Math.random() * 0.5 + 0.1;
+                
+                startParticlesContainer.appendChild(particle);
+                particles.push({
+                    element: particle,
+                    x: Math.random() * window.innerWidth,
+                    y: Math.random() * window.innerHeight,
+                    speedX: (Math.random() - 0.5) * 0.5,
+                    speedY: (Math.random() - 0.5) * 0.5
+                });
+            }
+        }
         
         function toggleMusic() {
             if (musicPlaying) {
@@ -806,16 +1007,27 @@
         }
         
         function createConfetti() {
-            const colors = ['#f00', '#0f0', '#00f', '#ff0', '#f0f', '#0ff'];
-            for (let i = 0; i < 100; i++) {
+            const colors = ['#8e44ad', '#3498db', '#2ecc71', '#f1c40f', '#e74c3c', '#1abc9c', '#9b59b6'];
+            const container = document.body;
+            
+            for (let i = 0; i < 150; i++) {
                 const confetti = document.createElement('div');
                 confetti.className = 'confetti';
                 confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
                 confetti.style.left = Math.random() * 100 + 'vw';
-                confetti.style.width = Math.random() * 10 + 5 + 'px';
+                confetti.style.width = Math.random() * 15 + 5 + 'px';
                 confetti.style.height = Math.random() * 10 + 5 + 'px';
                 confetti.style.animationDuration = Math.random() * 3 + 2 + 's';
-                document.body.appendChild(confetti);
+                confetti.style.animationDelay = Math.random() * 2 + 's';
+                
+                // Random shape (circle or square)
+                if (Math.random() > 0.5) {
+                    confetti.style.borderRadius = '50%';
+                } else {
+                    confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                }
+                
+                container.appendChild(confetti);
                 
                 // Remove confetti after animation
                 setTimeout(() => {
@@ -832,6 +1044,10 @@
         }
         
         function startGame() {
+            // Clear existing particles
+            particles.forEach(p => p.element.remove());
+            particles = [];
+            
             // Reset game state
             currentQuestion = 0;
             playerScore = 0;
@@ -841,8 +1057,9 @@
             
             // Select random opponent
             selectedOpponent = opponents[Math.floor(Math.random() * opponents.length)];
-            opponentNameElement.textContent = selectedOpponent.name + " (" + selectedOpponent.bio + ")";
+            opponentNameElement.textContent = `${selectedOpponent.name} (${selectedOpponent.bio})`;
             opponentAvatarElement.textContent = selectedOpponent.avatar;
+            opponentAvatarElement.style.borderColor = selectedOpponent.color;
             
             // Select 5 unique random questions
             selectedQuestions = [];
@@ -935,6 +1152,12 @@
             timeLeft--;
             timeLeftElement.textContent = timeLeft;
             timerBar.style.width = `${(timeLeft / 20) * 100}%`;
+            
+            // Change timer color when time is running out
+            if (timeLeft <= 5) {
+                timerBar.style.background = `linear-gradient(90deg, var(--wrong), #c0392b)`;
+                timerBar.style.boxShadow = `0 0 10px rgba(231, 76, 60, 0.5)`;
+            }
             
             if (timeLeft <= 0) {
                 clearInterval(timer);
@@ -1033,10 +1256,10 @@
                 updateScoreDisplay();
                 
                 if (isCorrect) {
-                    showResult(selectedOpponent.name + ' সঠিক উত্তর দিয়েছেন! +১', '#2ecc71');
+                    showResult(`${selectedOpponent.name} সঠিক উত্তর দিয়েছেন! +১`, '#2ecc71');
                     correctSound.play();
                 } else {
-                    showResult(selectedOpponent.name + ' ভুল উত্তর দিয়েছেন! -০.৫', '#e74c3c');
+                    showResult(`${selectedOpponent.name} ভুল উত্তর দিয়েছেন! -০.৫`, '#e74c3c');
                     wrongSound.play();
                 }
                 
@@ -1071,8 +1294,12 @@
             // Battle effect
             battleEffect.style.display = 'block';
             battleEffect.style.background = `radial-gradient(circle, ${color}40 0%, transparent 70%)`;
+            battleEffect.style.opacity = '0.8';
             setTimeout(() => {
-                battleEffect.style.display = 'none';
+                battleEffect.style.opacity = '0';
+                setTimeout(() => {
+                    battleEffect.style.display = 'none';
+                }, 500);
             }, 1000);
         }
         
@@ -1103,12 +1330,16 @@
                 finalOpponentScoreElement.textContent = opponentScore.toFixed(1);
             }
             
+            // Show an interesting fact from one of the questions
+            const randomQuestion = selectedQuestions[Math.floor(Math.random() * selectedQuestions.length)];
+            finalFactElement.textContent = randomQuestion.fact;
+            
             if (playerScore > opponentScore) {
                 finalResultElement.textContent = 'আপনি জয়ী হয়েছেন!';
                 finalResultElement.style.color = '#2ecc71';
                 showVictoryCelebration();
             } else if (playerScore < opponentScore) {
-                finalResultElement.textContent = selectedOpponent.name + ' জয়ী হয়েছেন!';
+                finalResultElement.textContent = `${selectedOpponent.name} জয়ী হয়েছেন!`;
                 finalResultElement.style.color = '#e74c3c';
                 endScreen.style.display = 'block';
             } else {
@@ -1117,6 +1348,32 @@
                 endScreen.style.display = 'block';
             }
         }
+        
+        // Initialize particles on start screen
+        createParticles();
+        
+        // Animate particles
+        function animateParticles() {
+            particles.forEach(particle => {
+                particle.x += particle.speedX;
+                particle.y += particle.speedY;
+                
+                // Bounce off edges
+                if (particle.x <= 0 || particle.x >= window.innerWidth) {
+                    particle.speedX *= -1;
+                }
+                if (particle.y <= 0 || particle.y >= window.innerHeight) {
+                    particle.speedY *= -1;
+                }
+                
+                particle.element.style.left = particle.x + 'px';
+                particle.element.style.top = particle.y + 'px';
+            });
+            
+            requestAnimationFrame(animateParticles);
+        }
+        
+        animateParticles();
     </script>
 </body>
 </html>
