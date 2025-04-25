@@ -365,77 +365,158 @@
             opacity: 0.8;
         }
         
-        /* Team Section */
+      /* Team Section */
         .team {
             padding: 5rem 5%;
             background: linear-gradient(135deg, rgba(138, 43, 226, 0.05) 0%, rgba(0, 212, 255, 0.05) 100%);
-        }
-        
-        .team-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-        
-        .team-member {
-            background: var(--gray);
-            border-radius: 15px;
-            overflow: hidden;
-            transition: all 0.3s;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
             text-align: center;
-            border: 1px solid rgba(138, 43, 226, 0.1);
         }
-        
-        .team-member:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(138, 43, 226, 0.3);
-            border: 1px solid rgba(138, 43, 226, 0.3);
-        }
-        
-        .member-photo {
-            width: 100%;
-            height: 250px;
-            object-fit: cover;
-            border-bottom: 3px solid var(--primary);
-        }
-        
-        .member-info {
-            padding: 1.5rem;
-        }
-        
-        .member-name {
-            font-size: 1.3rem;
-            color: var(--lighter);
-            margin-bottom: 0.5rem;
-        }
-        
-        .member-role {
-            color: var(--secondary);
-            font-weight: 500;
-            margin-bottom: 1rem;
-            display: block;
-        }
-        
-        .member-bio {
-            color: var(--light);
-            font-size: 0.9rem;
-            line-height: 1.6;
-            opacity: 0.8;
-            margin-bottom: 1.5rem;
-        }
-        
-        .member-social {
+
+        .team-members-container {
             display: flex;
             justify-content: center;
-            gap: 1rem;
+            flex-wrap: wrap;
+            gap: 3rem;
+            margin-top: 3rem;
         }
-        
-        .member-social a {
+
+        .team-member {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.3s;
+            width: 150px;
+        }
+
+        .team-member:hover {
+            transform: translateY(-5px);
+        }
+
+        .member-photo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--primary);
+            box-shadow: 0 5px 15px rgba(138, 43, 226, 0.3);
+            transition: all 0.3s;
+        }
+
+        .team-member:hover .member-photo {
+            border-color: var(--secondary);
+            box-shadow: 0 8px 25px rgba(0, 212, 255, 0.4);
+        }
+
+        .member-name {
+            margin-top: 1rem;
+            font-size: 1.1rem;
+            color: var(--lighter);
+            font-weight: 600;
+        }
+
+        .member-role {
+            color: var(--secondary);
+            font-size: 0.9rem;
+            margin-top: 0.3rem;
+        }
+
+        /* Popup Styles */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .popup-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .popup-content {
+            background: var(--gray);
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            padding: 2rem;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--primary);
+            transform: scale(0.9);
+            transition: all 0.3s;
+        }
+
+        .popup-overlay.active .popup-content {
+            transform: scale(1);
+        }
+
+        .popup-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
             color: var(--light);
-            width: 35px;
-            height: 35px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .popup-close:hover {
+            color: var(--secondary);
+        }
+
+        .popup-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .popup-photo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--primary);
+            margin-right: 1.5rem;
+        }
+
+        .popup-info h3 {
+            font-size: 1.5rem;
+            color: var(--lighter);
+            margin-bottom: 0.3rem;
+        }
+
+        .popup-info .member-role {
+            font-size: 1rem;
+        }
+
+        .popup-bio {
+            color: var(--light);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .popup-social {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .popup-social a {
+            color: var(--light);
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -444,11 +525,60 @@
             transition: all 0.3s;
             text-decoration: none;
         }
-        
-        .member-social a:hover {
+
+        .popup-social a:hover {
             background: var(--primary);
             color: white;
             transform: translateY(-3px);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .team-members-container {
+                gap: 2rem;
+            }
+            
+            .team-member {
+                width: 120px;
+            }
+            
+            .member-photo {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .popup-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .popup-photo {
+                margin-right: 0;
+                margin-bottom: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .team-members-container {
+                gap: 1.5rem;
+            }
+            
+            .team-member {
+                width: 100px;
+            }
+            
+            .member-photo {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .member-name {
+                font-size: 1rem;
+            }
+            
+            .member-role {
+                font-size: 0.8rem;
+            }
         }
         
         /* Testimonials */
@@ -965,67 +1095,59 @@
         </div>
     </section>
 
-    <!-- Team Section -->
+   <!-- Team Section -->
     <section class="team" id="team">
         <div class="section-title">
             <h2>Meet Our Brilliant Team</h2>
             <p>The passionate educators and innovators behind Genius Nest</p>
         </div>
-        <div class="team-grid">
-            <div class="team-member">
+        <div class="team-members-container">
+            <!-- Team Member 1 -->
+            <div class="team-member" onclick="showPopup(0)">
                 <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Dr. Sarah Chen" class="member-photo">
-                <div class="member-info">
-                    <h3 class="member-name">Dr. Sarah Chen</h3>
-                    <span class="member-role">Chief Learning Officer</span>
-                    <p class="member-bio">Neuroscience PhD with 10+ years experience in cognitive learning research and curriculum design.</p>
-                    <div class="member-social">
-                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fas fa-envelope"></i></a>
-                    </div>
-                </div>
+                <h3 class="member-name">Dr. Sarah Chen</h3>
+                <span class="member-role">Learning Officer</span>
             </div>
-            <div class="team-member">
+            
+            <!-- Team Member 2 -->
+            <div class="team-member" onclick="showPopup(1)">
                 <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Michael Rodriguez" class="member-photo">
-                <div class="member-info">
-                    <h3 class="member-name">Michael Rodriguez</h3>
-                    <span class="member-role">Lead Developer</span>
-                    <p class="member-bio">Full-stack developer specializing in interactive educational platforms and AI learning systems.</p>
-                    <div class="member-social">
-                        <a href="#"><i class="fab fa-github"></i></a>
-                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="#"><i class="fas fa-code"></i></a>
-                    </div>
-                </div>
+                <h3 class="member-name">Michael Rodriguez</h3>
+                <span class="member-role">Lead Developer</span>
             </div>
-            <div class="team-member">
+            
+            <!-- Team Member 3 -->
+            <div class="team-member" onclick="showPopup(2)">
                 <img src="https://images.unsplash.com/photo-1542190891-2093d38760f2?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Priya Patel" class="member-photo">
-                <div class="member-info">
-                    <h3 class="member-name">Priya Patel</h3>
-                    <span class="member-role">Math Curriculum Director</span>
-                    <p class="member-bio">Former math professor specializing in visualization techniques for abstract mathematical concepts.</p>
-                    <div class="member-social">
-                        <a href="#"><i class="fas fa-graduation-cap"></i></a>
-                        <a href="#"><i class="fab fa-researchgate"></i></a>
-                        <a href="#"><i class="fas fa-book"></i></a>
-                    </div>
-                </div>
+                <h3 class="member-name">Priya Patel</h3>
+                <span class="member-role">Math Director</span>
             </div>
-            <div class="team-member">
+            
+            <!-- Team Member 4 -->
+            <div class="team-member" onclick="showPopup(3)">
                 <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="David Kim" class="member-photo">
-                <div class="member-info">
-                    <h3 class="member-name">David Kim</h3>
-                    <span class="member-role">Science Education Specialist</span>
-                    <p class="member-bio">Physics and chemistry educator with expertise in virtual lab development and simulation.</p>
-                    <div class="member-social">
-                        <a href="#"><i class="fas fa-flask"></i></a>
-                        <a href="#"><i class="fab fa-youtube"></i></a>
-                        <a href="#"><i class="fas fa-atom"></i></a>
-                    </div>
-                </div>
+                <h3 class="member-name">David Kim</h3>
+                <span class="member-role">Science Specialist</span>
             </div>
         </div>
     </section>
+
+    <!-- Team Member Popups -->
+    <div class="popup-overlay" id="popupOverlay">
+        <div class="popup-content">
+            <button class="popup-close" onclick="closePopup()">&times;</button>
+            <div class="popup-header">
+                <img id="popupPhoto" src="" alt="" class="popup-photo">
+                <div class="popup-info">
+                    <h3 id="popupName"></h3>
+                    <span class="member-role" id="popupRole"></span>
+                </div>
+            </div>
+            <p class="popup-bio" id="popupBio"></p>
+            <div class="popup-social" id="popupSocial"></div>
+        </div>
+    </div>
+
 
     <!-- Testimonials Section -->
     <section class="testimonials" id="testimonials">
@@ -1124,6 +1246,97 @@
     </footer>
 
     <script>
+         // Team data
+        const teamMembers = [
+            {
+                name: "Dr. Sarah Chen",
+                role: "Chief Learning Officer",
+                photo: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                bio: "Neuroscience PhD with 10+ years experience in cognitive learning research and curriculum design. Sarah leads our educational strategy to ensure maximum learning effectiveness.",
+                social: [
+                    {icon: "fab fa-linkedin-in", url: "#"},
+                    {icon: "fab fa-twitter", url: "#"},
+                    {icon: "fas fa-envelope", url: "#"}
+                ]
+            },
+            {
+                name: "Michael Rodriguez",
+                role: "Lead Developer",
+                photo: "https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                bio: "Full-stack developer specializing in interactive educational platforms and AI learning systems. Michael oversees all technical development and platform architecture.",
+                social: [
+                    {icon: "fab fa-github", url: "#"},
+                    {icon: "fab fa-linkedin-in", url: "#"},
+                    {icon: "fas fa-code", url: "#"}
+                ]
+            },
+            {
+                name: "Priya Patel",
+                role: "Math Curriculum Director",
+                photo: "https://images.unsplash.com/photo-1542190891-2093d38760f2?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                bio: "Former math professor specializing in visualization techniques for abstract mathematical concepts. Priya designs our innovative math learning pathways.",
+                social: [
+                    {icon: "fas fa-graduation-cap", url: "#"},
+                    {icon: "fab fa-researchgate", url: "#"},
+                    {icon: "fas fa-book", url: "#"}
+                ]
+            },
+            {
+                name: "David Kim",
+                role: "Science Education Specialist",
+                photo: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                bio: "Physics and chemistry educator with expertise in virtual lab development and simulation. David creates our immersive science learning experiences.",
+                social: [
+                    {icon: "fas fa-flask", url: "#"},
+                    {icon: "fab fa-youtube", url: "#"},
+                    {icon: "fas fa-atom", url: "#"}
+                ]
+            }
+        ];
+
+        // Show popup function
+        function showPopup(index) {
+            const member = teamMembers[index];
+            document.getElementById('popupPhoto').src = member.photo;
+            document.getElementById('popupPhoto').alt = member.name;
+            document.getElementById('popupName').textContent = member.name;
+            document.getElementById('popupRole').textContent = member.role;
+            document.getElementById('popupBio').textContent = member.bio;
+            
+            // Clear and rebuild social links
+            const socialContainer = document.getElementById('popupSocial');
+            socialContainer.innerHTML = '';
+            member.social.forEach(social => {
+                const link = document.createElement('a');
+                link.href = social.url;
+                link.innerHTML = `<i class="${social.icon}"></i>`;
+                socialContainer.appendChild(link);
+            });
+            
+            // Show popup
+            document.getElementById('popupOverlay').classList.add('active');
+            document.body.style.overflow = 'hidden'; // Prevent scrolling
+        }
+
+        // Close popup function
+        function closePopup() {
+            document.getElementById('popupOverlay').classList.remove('active');
+            document.body.style.overflow = ''; // Re-enable scrolling
+        }
+
+        // Close popup when clicking outside content
+        document.getElementById('popupOverlay').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closePopup();
+            }
+        });
+
+        // Close popup with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && document.getElementById('popupOverlay').classList.contains('active')) {
+                closePopup();
+            }
+        });
         // Header Scroll Effect
         window.addEventListener('scroll', function() {
             const header = document.getElementById('header');
