@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CourseHub - Dark Theme</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #8a2be2;
+            --primary-dark: #6a1b9a;
+            --secondary: #03dac6;
+            --dark-bg: #121212;
+            --dark-surface: #1e1e1e;
+            --dark-surface-hover: #2a2a2a;
+            --text-primary: #e1e1e1;
+            --text-secondary: #a0a0a0;
+            --danger: #ff5555;
+            --success: #4caf50;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            padding-top: 80px;
+            background-color: var(--dark-bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            transition: all 0.5s ease;
+        }
+        
+        /* Fixed Navigation */
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--dark-surface);
+            color: var(--text-primary);
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .brand-icon {
+            font-size: 24px;
+            color: var(--primary);
+            animation: pulse 2s infinite;
+        }
+        
+        .brand-name {
+            font-size: 20px;
+            font-weight: bold;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        /* Search Section */
+        .search-section {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 25px;
+            background-color: var(--dark-surface);
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transform: translateY(20px);
+            opacity: 0;
+            animation: fadeInUp 0.8s 0.3s forwards;
+        }
+        
+        .search-bar {
+            width: 100%;
+            padding: 15px 25px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            background-color: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .search-bar:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px var(--primary);
+            background-color: rgba(255, 255, 255, 0.08);
+        }
+        
+        .search-bar::placeholder {
+            color: var(--text-secondary);
+        }
+        
+        /* Animated Button */
+        .animated-btn {
+            background: linear-gradient(45deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            box-shadow: 0 4px 15px rgba(138, 43, 226, 0.3);
+            z-index: 1;
+        }
+        
+        .animated-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, var(--primary-dark), var(--primary));
+            z-index: -1;
+            transition: opacity 0.4s ease;
+            opacity: 0;
+        }
+        
+        .animated-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(138, 43, 226, 0.4);
+        }
+        
+        .animated-btn:hover::before {
+            opacity: 1;
+        }
+        
+        .animated-btn:active {
+            transform: translateY(1px);
+        }
+        
+        /* Courses Section */
+        .courses-section {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 25px;
+            opacity: 0;
+            animation: fadeIn 0.8s 0.6s forwards;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+            color: var(--text-primary);
+            font-size: 28px;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 3px;
+        }
+        
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+        
+        .course-card {
+            background-color: var(--dark-surface);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            transition: all 0.4s ease;
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transform: perspective(1000px) rotateY(15deg);
+            opacity: 0;
+            animation: cardAppear 0.6s forwards;
+        }
+        
+        @keyframes cardAppear {
+            to {
+                transform: perspective(1000px) rotateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .course-card:nth-child(1) { animation-delay: 0.7s; }
+        .course-card:nth-child(2) { animation-delay: 0.8s; }
+        .course-card:nth-child(3) { animation-delay: 0.9s; }
+        .course-card:nth-child(4) { animation-delay: 1.0s; }
+        
+        .course-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            border-color: rgba(138, 43, 226, 0.3);
+        }
+        
+        .course-image {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .course-card:hover .course-image {
+            transform: scale(1.05);
+        }
+        
+        .course-info {
+            padding: 20px;
+        }
+        
+        .course-title {
+            font-size: 18px;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+            transition: color 0.3s ease;
+        }
+        
+        .course-card:hover .course-title {
+            color: var(--primary);
+        }
+        
+        .course-description {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        
+        .course-price {
+            font-weight: bold;
+            color: var(--success);
+            font-size: 16px;
+        }
+        
+        .redirect-btn {
+            display: block;
+            text-align: center;
+            background: rgba(138, 43, 226, 0.1);
+            color: var(--primary);
+            padding: 10px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 14px;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(138, 43, 226, 0.3);
+        }
+        
+        .redirect-btn:hover {
+            background: rgba(138, 43, 226, 0.2);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        /* Remove Button for Paid Courses */
+        .remove-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 30px;
+            height: 30px;
+            background-color: var(--danger);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 2;
+            box-shadow: 0 2px 10px rgba(255, 85, 85, 0.3);
+        }
+        
+        .course-card:hover .remove-btn {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+        
+        .remove-btn:hover {
+            background-color: #ff3333;
+            transform: scale(1.2) !important;
+        }
+        
+        /* Modal for Paid Courses */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .modal-content {
+            background-color: var(--dark-surface);
+            padding: 30px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            transform: scale(0.9);
+            opacity: 0;
+            animation: modalOpen 0.4s 0.1s forwards;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        @keyframes modalOpen {
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        
+        .modal-title {
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            text-align: center;
+            font-size: 24px;
+        }
+        
+        .modal-input {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            background-color: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+        
+        .modal-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px var(--primary);
+            background-color: rgba(255, 255, 255, 0.08);
+        }
+        
+        .modal-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+        }
+        
+        .close-btn {
+            background-color: var(--danger);
+            flex: 1;
+        }
+        
+        /* Floating Particles Background */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .particle {
+            position: absolute;
+            background: rgba(138, 43, 226, 0.3);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-1000px) rotate(720deg);
+                opacity: 0;
+            }
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .courses-grid {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            }
+            
+            .search-section, .courses-section {
+                padding: 20px;
+            }
+        }
+        
+        /* Theme Toggle */
+        .theme-toggle {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(138, 43, 226, 0.4);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        
+        .theme-toggle:hover {
+            transform: scale(1.1) rotate(30deg);
+        }
+        
+        /* Loading Animation */
+        .loader-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--dark-bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+        
+        .loader {
+            width: 48px;
+            height: 48px;
+            border: 5px solid var(--primary);
+            border-bottom-color: transparent;
+            border-radius: 50%;
+            display: inline-block;
+            box-sizing: border-box;
+            animation: rotation 1s linear infinite;
+        }
+        
+        @keyframes rotation {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loader-wrapper" id="loader">
+        <span class="loader"></span>
+    </div>
+    
+    <!-- Floating Particles -->
+    <div class="particles" id="particles"></div>
+    
+    <!-- Fixed Top Navigation -->
+    <nav class="top-nav">
+        <div class="brand">
+            <span class="brand-icon"><i class="fas fa-graduation-cap"></i></span>
+            <span class="brand-name">CourseHub</span>
+        </div>
+    </nav>
+    
+    <!-- Paid Courses Section -->
+    <section class="courses-section" id="paidCoursesSection" style="display: none;">
+        <h2 class="section-title">Your Paid Courses</h2>
+        <div class="courses-grid" id="paidCoursesGrid"></div>
+    </section>
+    
+    <!-- Search Section -->
+    <section class="search-section">
+        <input type="text" class="search-bar" placeholder="Search for courses...">
+        <button class="animated-btn" id="paidCoursesBtn">
+            <i class="fas fa-plus-circle"></i> Add Paid Course
+        </button>
+    </section>
+    
+    <!-- Free Courses Section -->
+    <section class="courses-section">
+        <h2 class="section-title">Free Courses</h2>
+        <div class="courses-grid" id="freeCoursesGrid"></div>
+    </section>
+    
+    <!-- Paid Courses Modal -->
+    <div class="modal" id="paidCoursesModal">
+        <div class="modal-content">
+            <h2 class="modal-title">Add Paid Course</h2>
+            <input type="text" class="modal-input" id="courseIdInput" placeholder="Enter Course ID">
+            <div class="modal-buttons">
+                <button class="animated-btn close-btn" id="closeModalBtn">
+                    <i class="fas fa-times"></i> Close
+                </button>
+                <button class="animated-btn" id="addCourseBtn">
+                    <i class="fas fa-check"></i> Add Course
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Theme Toggle -->
+    <div class="theme-toggle" id="themeToggle">
+        <i class="fas fa-moon"></i>
+    </div>
+    
+    <script>
+        // Sample free courses data with redirect links
+        const freeCourses = [
+            {
+                id: 'free1',
+                title: 'Introduction to HTML',
+                description: 'Learn the basics of HTML and create your first web page.',
+                image: 'https://images.unsplash.com/photo-1547658719-da2b51169166?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80',
+                redirectUrl: 'https://www.sumit2.online/1'
+            },
+            {
+                id: 'free2',
+                title: 'CSS Fundamentals',
+                description: 'Master CSS styling to make beautiful websites.',
+                image: 'https://images.unsplash.com/photo-1621839673705-6617adf9e890?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80',
+                redirectUrl: 'https://www.sumit2.online/2'
+            },
+            {
+                id: 'free3',
+                title: 'JavaScript Basics',
+                description: 'Get started with JavaScript programming.',
+                image: 'https://images.unsplash.com/photo-1579468118864-1b9ea3c0db4a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80',
+                redirectUrl: 'https://www.sumit2.online/3'
+            },
+            {
+                id: 'free4',
+                title: 'Responsive Design',
+                description: 'Learn how to make websites that work on all devices.',
+                image: 'https://images.unsplash.com/photo-1559028012-481c04fa702d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80',
+                redirectUrl: 'https://www.sumit2.online/4'
+            }
+        ];
+        
+        // Sample paid courses data with redirect links
+        const paidCoursesDatabase = [
+            {
+                id: 'paid1',
+                title: 'Advanced JavaScript',
+                description: 'Deep dive into advanced JavaScript concepts and modern ES6+ features.',
+                image: 'https://images.unsplash.com/photo-1589652717521-10c0d09aafd3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80',
+                price: '$49.99',
+                redirectUrl: 'https://www.sumit2.online/101'
+            },
+            {
+                id: 'paid2',
+                title: 'React Masterclass',
+                description: 'Build modern web apps with React framework and Redux state management.',
+                image: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80',
+                price: '$59.99',
+                redirectUrl: 'https://www.sumit2.online/102'
+            },
+            {
+                id: 'paid3',
+                title: 'Node.js Backend Development',
+                description: 'Create server-side applications with Node.js and Express framework.',
+                image: 'https://images.unsplash.com/photo-1541462608143-67571c6738dd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80',
+                price: '$54.99',
+                redirectUrl: 'https://www.sumit2.online/103'
+            },
+            {
+                id: 'paid4',
+                title: 'Full Stack Development',
+                description: 'Complete course covering frontend and backend development with MERN stack.',
+                image: 'https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80',
+                price: '$99.99',
+                redirectUrl: 'https://www.sumit2.online/104'
+            }
+        ];
+        
+        // User's paid courses (stored in localStorage)
+        let userPaidCourses = JSON.parse(localStorage.getItem('userPaidCourses')) || [];
+        
+        // DOM Elements
+        const loader = document.getElementById('loader');
+        const particles = document.getElementById('particles');
+        const freeCoursesGrid = document.getElementById('freeCoursesGrid');
+        const paidCoursesGrid = document.getElementById('paidCoursesGrid');
+        const paidCoursesSection = document.getElementById('paidCoursesSection');
+        const paidCoursesBtn = document.getElementById('paidCoursesBtn');
+        const paidCoursesModal = document.getElementById('paidCoursesModal');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const addCourseBtn = document.getElementById('addCourseBtn');
+        const courseIdInput = document.getElementById('courseIdInput');
+        const searchBar = document.querySelector('.search-bar');
+        const themeToggle = document.getElementById('themeToggle');
+        
+        // Initialize the page
+        function init() {
+            createParticles();
+            displayFreeCourses();
+            displayPaidCourses();
+            
+            // Simulate loading
+            setTimeout(() => {
+                loader.style.opacity = '0';
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                }, 500);
+            }, 1500);
+        }
+        
+        // Create floating particles
+        function createParticles() {
+            const particleCount = 30;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Random properties
+                const size = Math.random() * 10 + 5;
+                const posX = Math.random() * window.innerWidth;
+                const posY = Math.random() * window.innerHeight;
+                const delay = Math.random() * 15;
+                const duration = Math.random() * 10 + 10;
+                
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${posX}px`;
+                particle.style.top = `${posY}px`;
+                particle.style.animationDelay = `${delay}s`;
+                particle.style.animationDuration = `${duration}s`;
+                
+                particles.appendChild(particle);
+            }
+        }
+        
+        // Display free courses with redirect buttons
+        function displayFreeCourses() {
+            freeCoursesGrid.innerHTML = '';
+            
+            freeCourses.forEach((course, index) => {
+                const courseCard = document.createElement('div');
+                courseCard.className = 'course-card';
+                courseCard.style.animationDelay = `${0.7 + index * 0.1}s`;
+                courseCard.innerHTML = `
+                    <img src="${course.image}" alt="${course.title}" class="course-image">
+                    <div class="course-info">
+                        <h3 class="course-title">${course.title}</h3>
+                        <p class="course-description">${course.description}</p>
+                        <span class="course-price">FREE</span>
+                        <a href="${course.redirectUrl}" target="_blank" class="redirect-btn" data-course-id="${course.id}">
+                            <i class="fas fa-external-link-alt"></i> Enroll Now
+                        </a>
+                    </div>
+                `;
+                freeCoursesGrid.appendChild(courseCard);
+            });
+        }
+        
+        // Display user's paid courses with redirect buttons and remove buttons
+        function displayPaidCourses() {
+            paidCoursesGrid.innerHTML = '';
+            
+            if (userPaidCourses.length > 0) {
+                // Show the paid courses section at the top
+                paidCoursesSection.style.display = 'block';
+                
+                userPaidCourses.forEach((course, index) => {
+                    const courseCard = document.createElement('div');
+                    courseCard.className = 'course-card';
+                    courseCard.style.animationDelay = `${0.5 + index * 0.1}s`;
+                    courseCard.innerHTML = `
+                        <button class="remove-btn" data-course-id="${course.id}">
+                            <i class="fas fa-times"></i>
+                        </button>
+                        <img src="${course.image}" alt="${course.title}" class="course-image">
+                        <div class="course-info">
+                            <h3 class="course-title">${course.title}</h3>
+                            <p class="course-description">${course.description}</p>
+                            <span class="course-price">${course.price}</span>
+                            <a href="${course.redirectUrl}" target="_blank" class="redirect-btn" data-course-id="${course.id}">
+                                <i class="fas fa-external-link-alt"></i> Access Course
+                            </a>
+                        </div>
+                    `;
+                    paidCoursesGrid.appendChild(courseCard);
+                });
+                
+                // Add event listeners to all remove buttons
+                document.querySelectorAll('.remove-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const courseId = btn.getAttribute('data-course-id');
+                        removePaidCourse(courseId);
+                    });
+                });
+            } else {
+                // Hide the paid courses section if no paid courses
+                paidCoursesSection.style.display = 'none';
+            }
+        }
+        
+        // Remove a paid course with animation
+        function removePaidCourse(courseId) {
+            if (confirm('Are you sure you want to remove this course?')) {
+                const courseCard = document.querySelector(`.remove-btn[data-course-id="${courseId}"]`).closest('.course-card');
+                
+                // Add removal animation
+                courseCard.style.transform = 'scale(0.9)';
+                courseCard.style.opacity = '0';
+                courseCard.style.transition = 'all 0.3s ease';
+                
+                setTimeout(() => {
+                    userPaidCourses = userPaidCourses.filter(course => course.id !== courseId);
+                    localStorage.setItem('userPaidCourses', JSON.stringify(userPaidCourses));
+                    displayPaidCourses();
+                }, 300);
+            }
+        }
+        
+        // Open modal for adding paid courses
+        paidCoursesBtn.addEventListener('click', () => {
+            paidCoursesModal.style.display = 'flex';
+            courseIdInput.focus();
+        });
+        
+        // Close modal
+        closeModalBtn.addEventListener('click', () => {
+            paidCoursesModal.style.display = 'none';
+            courseIdInput.value = '';
+        });
+        
+        // Close modal when clicking outside
+        paidCoursesModal.addEventListener('click', (e) => {
+            if (e.target === paidCoursesModal) {
+                paidCoursesModal.style.display = 'none';
+                courseIdInput.value = '';
+            }
+        });
+        
+        // Add paid course when valid ID is entered
+        addCourseBtn.addEventListener('click', addPaidCourse);
+        
+        // Also add course when Enter key is pressed in the input field
+        courseIdInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                addPaidCourse();
+            }
+        });
+        
+        function addPaidCourse() {
+            const courseId = courseIdInput.value.trim();
+            
+            if (!courseId) {
+                showAlert('Please enter a course ID', 'error');
+                return;
+            }
+            
+            // Check if course exists in database
+            const courseToAdd = paidCoursesDatabase.find(course => course.id === courseId);
+            
+            if (courseToAdd) {
+                // Check if user already has this course
+                if (!userPaidCourses.some(course => course.id === courseId)) {
+                    userPaidCourses.push(courseToAdd);
+                    localStorage.setItem('userPaidCourses', JSON.stringify(userPaidCourses));
+                    
+                    // Show success animation
+                    const addBtn = document.getElementById('addCourseBtn');
+                    addBtn.innerHTML = '<i class="fas fa-check"></i> Added!';
+                    addBtn.style.backgroundColor = 'var(--success)';
+                    
+                    setTimeout(() => {
+                        addBtn.innerHTML = '<i class="fas fa-check"></i> Add Course';
+                        addBtn.style.backgroundColor = '';
+                        paidCoursesModal.style.display = 'none';
+                        courseIdInput.value = '';
+                        displayPaidCourses();
+                    }, 1000);
+                } else {
+                    showAlert('You already have this course!', 'warning');
+                }
+            } else {
+                showAlert('Invalid course ID. Please check and try again.', 'error');
+            }
+        }
+        
+        // Show alert message
+        function showAlert(message, type) {
+            const alert = document.createElement('div');
+            alert.className = `alert-${type}`;
+            alert.textContent = message;
+            alert.style.position = 'fixed';
+            alert.style.bottom = '20px';
+            alert.style.left = '50%';
+            alert.style.transform = 'translateX(-50%)';
+            alert.style.padding = '15px 25px';
+            alert.style.borderRadius = '8px';
+            alert.style.color = 'white';
+            alert.style.zIndex = '3000';
+            alert.style.animation = 'fadeInUp 0.3s ease';
+            
+            if (type === 'error') {
+                alert.style.backgroundColor = 'var(--danger)';
+            } else if (type === 'warning') {
+                alert.style.backgroundColor = '#ff9800';
+            } else {
+                alert.style.backgroundColor = 'var(--success)';
+            }
+            
+            document.body.appendChild(alert);
+            
+            setTimeout(() => {
+                alert.style.animation = 'fadeInUp 0.3s ease reverse';
+                setTimeout(() => {
+                    alert.remove();
+                }, 300);
+            }, 3000);
+        }
+        
+        // Search functionality
+        searchBar.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            
+            // Filter both free and paid courses
+            const filteredFreeCourses = freeCourses.filter(course => 
+                course.title.toLowerCase().includes(searchTerm) || 
+                course.description.toLowerCase().includes(searchTerm)
+            );
+            
+            const filteredPaidCourses = userPaidCourses.filter(course => 
+                course.title.toLowerCase().includes(searchTerm) || 
+                course.description.toLowerCase().includes(searchTerm)
+            );
+            
+            // Display filtered free courses
+            freeCoursesGrid.innerHTML = '';
+            filteredFreeCourses.forEach(course => {
+                const courseCard = document.createElement('div');
+                courseCard.className = 'course-card';
+                courseCard.innerHTML = `
+                    <img src="${course.image}" alt="${course.title}" class="course-image">
+                    <div class="course-info">
+                        <h3 class="course-title">${course.title}</h3>
+                        <p class="course-description">${course.description}</p>
+                        <span class="course-price">FREE</span>
+                        <a href="${course.redirectUrl}" target="_blank" class="redirect-btn">
+                            <i class="fas fa-external-link-alt"></i> Enroll Now
+                        </a>
+                    </div>
+                `;
+                freeCoursesGrid.appendChild(courseCard);
+            });
+            
+            // Display filtered paid courses
+            paidCoursesGrid.innerHTML = '';
+            if (filteredPaidCourses.length > 0 || searchTerm === '') {
+                // Show section if there are results or if search is empty
+                displayPaidCourses();
+            } else {
+                paidCoursesSection.style.display = 'none';
+            }
+        });
+        
+        // Theme toggle functionality
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('light-theme');
+            
+            if (document.body.classList.contains('light-theme')) {
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                document.documentElement.style.setProperty('--dark-bg', '#f5f5f5');
+                document.documentElement.style.setProperty('--dark-surface', '#ffffff');
+                document.documentElement.style.setProperty('--dark-surface-hover', '#f0f0f0');
+                document.documentElement.style.setProperty('--text-primary', '#333333');
+                document.documentElement.style.setProperty('--text-secondary', '#666666');
+            } else {
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                document.documentElement.style.setProperty('--dark-bg', '#121212');
+                document.documentElement.style.setProperty('--dark-surface', '#1e1e1e');
+                document.documentElement.style.setProperty('--dark-surface-hover', '#2a2a2a');
+                document.documentElement.style.setProperty('--text-primary', '#e1e1e1');
+                document.documentElement.style.setProperty('--text-secondary', '#a0a0a0');
+            }
+        });
+        
+        // Initialize the page
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
