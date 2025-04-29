@@ -73,86 +73,6 @@
             color: transparent;
         }
         
-        /* Search Section */
-        .search-section {
-            max-width: 800px;
-            margin: 30px auto;
-            padding: 25px;
-            background-color: var(--dark-surface);
-            border-radius: 12px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transform: translateY(20px);
-            opacity: 0;
-            animation: fadeInUp 0.8s 0.3s forwards;
-        }
-        
-        .search-bar {
-            width: 100%;
-            padding: 15px 25px;
-            font-size: 16px;
-            border: none;
-            border-radius: 8px;
-            margin-bottom: 25px;
-            background-color: rgba(255, 255, 255, 0.05);
-            color: var(--text-primary);
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        
-        .search-bar:focus {
-            outline: none;
-            box-shadow: 0 0 0 2px var(--primary);
-            background-color: rgba(255, 255, 255, 0.08);
-        }
-        
-        .search-bar::placeholder {
-            color: var(--text-secondary);
-        }
-        
-        /* Animated Button */
-        .animated-btn {
-            background: linear-gradient(45deg, var(--primary), var(--primary-dark));
-            color: white;
-            border: none;
-            padding: 15px 35px;
-            font-size: 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.4s ease;
-            box-shadow: 0 4px 15px rgba(138, 43, 226, 0.3);
-            z-index: 1;
-        }
-        
-        .animated-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, var(--primary-dark), var(--primary));
-            z-index: -1;
-            transition: opacity 0.4s ease;
-            opacity: 0;
-        }
-        
-        .animated-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(138, 43, 226, 0.4);
-        }
-        
-        .animated-btn:hover::before {
-            opacity: 1;
-        }
-        
-        .animated-btn:active {
-            transform: translateY(1px);
-        }
-        
         /* Courses Section */
         .courses-section {
             max-width: 1100px;
@@ -384,90 +304,34 @@
             flex: 1;
         }
         
-        /* Floating Particles Background */
-        .particles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            overflow: hidden;
-        }
-        
-        .particle {
-            position: absolute;
-            background: rgba(138, 43, 226, 0.3);
-            border-radius: 50%;
-            animation: float 15s infinite linear;
-        }
-        
-        @keyframes float {
-            0% {
-                transform: translateY(0) rotate(0deg);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-1000px) rotate(720deg);
-                opacity: 0;
-            }
-        }
-        
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-        
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .courses-grid {
-                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            }
-            
-            .search-section, .courses-section {
-                padding: 20px;
-            }
-        }
-        
-        /* Theme Toggle */
-        .theme-toggle {
+        /* Floating Add Button */
+        .floating-add-btn {
             position: fixed;
             bottom: 30px;
             right: 30px;
-            width: 50px;
-            height: 50px;
-            background-color: var(--primary);
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, var(--primary), var(--primary-dark));
             color: white;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(138, 43, 226, 0.4);
+            box-shadow: 0 4px 20px rgba(138, 43, 226, 0.4);
             z-index: 1000;
             transition: all 0.3s ease;
+            border: none;
+            font-size: 24px;
         }
         
-        .theme-toggle:hover {
-            transform: scale(1.1) rotate(30deg);
+        .floating-add-btn:hover {
+            transform: scale(1.1) rotate(90deg);
+            box-shadow: 0 6px 25px rgba(138, 43, 226, 0.6);
+        }
+        
+        .floating-add-btn:active {
+            transform: scale(0.95) rotate(90deg);
         }
         
         /* Loading Animation */
@@ -500,6 +364,29 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .courses-grid {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            }
+            
+            .courses-section {
+                padding: 20px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -507,9 +394,6 @@
     <div class="loader-wrapper" id="loader">
         <span class="loader"></span>
     </div>
-    
-    <!-- Floating Particles -->
-    <div class="particles" id="particles"></div>
     
     <!-- Fixed Top Navigation -->
     <nav class="top-nav">
@@ -525,19 +409,16 @@
         <div class="courses-grid" id="paidCoursesGrid"></div>
     </section>
     
-    <!-- Search Section -->
-    <section class="search-section">
-        <input type="text" class="search-bar" placeholder="Search for courses...">
-        <button class="animated-btn" id="paidCoursesBtn">
-            <i class="fas fa-plus-circle"></i> Add Paid Course
-        </button>
-    </section>
-    
     <!-- Free Courses Section -->
     <section class="courses-section">
         <h2 class="section-title">Free Courses</h2>
         <div class="courses-grid" id="freeCoursesGrid"></div>
     </section>
+    
+    <!-- Floating Add Button -->
+    <button class="floating-add-btn" id="paidCoursesBtn">
+        <i class="fas fa-plus"></i>
+    </button>
     
     <!-- Paid Courses Modal -->
     <div class="modal" id="paidCoursesModal">
@@ -553,11 +434,6 @@
                 </button>
             </div>
         </div>
-    </div>
-    
-    <!-- Theme Toggle -->
-    <div class="theme-toggle" id="themeToggle">
-        <i class="fas fa-moon"></i>
     </div>
     
     <script>
@@ -634,7 +510,6 @@
         
         // DOM Elements
         const loader = document.getElementById('loader');
-        const particles = document.getElementById('particles');
         const freeCoursesGrid = document.getElementById('freeCoursesGrid');
         const paidCoursesGrid = document.getElementById('paidCoursesGrid');
         const paidCoursesSection = document.getElementById('paidCoursesSection');
@@ -643,12 +518,9 @@
         const closeModalBtn = document.getElementById('closeModalBtn');
         const addCourseBtn = document.getElementById('addCourseBtn');
         const courseIdInput = document.getElementById('courseIdInput');
-        const searchBar = document.querySelector('.search-bar');
-        const themeToggle = document.getElementById('themeToggle');
         
         // Initialize the page
         function init() {
-            createParticles();
             displayFreeCourses();
             displayPaidCourses();
             
@@ -659,32 +531,6 @@
                     loader.style.display = 'none';
                 }, 500);
             }, 1500);
-        }
-        
-        // Create floating particles
-        function createParticles() {
-            const particleCount = 30;
-            
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.classList.add('particle');
-                
-                // Random properties
-                const size = Math.random() * 10 + 5;
-                const posX = Math.random() * window.innerWidth;
-                const posY = Math.random() * window.innerHeight;
-                const delay = Math.random() * 15;
-                const duration = Math.random() * 10 + 10;
-                
-                particle.style.width = `${size}px`;
-                particle.style.height = `${size}px`;
-                particle.style.left = `${posX}px`;
-                particle.style.top = `${posY}px`;
-                particle.style.animationDelay = `${delay}s`;
-                particle.style.animationDuration = `${duration}s`;
-                
-                particles.appendChild(particle);
-            }
         }
         
         // Display free courses with redirect buttons
@@ -870,71 +716,6 @@
                 }, 300);
             }, 3000);
         }
-        
-        // Search functionality
-        searchBar.addEventListener('input', (e) => {
-            const searchTerm = e.target.value.toLowerCase();
-            
-            // Filter both free and paid courses
-            const filteredFreeCourses = freeCourses.filter(course => 
-                course.title.toLowerCase().includes(searchTerm) || 
-                course.description.toLowerCase().includes(searchTerm)
-            );
-            
-            const filteredPaidCourses = userPaidCourses.filter(course => 
-                course.title.toLowerCase().includes(searchTerm) || 
-                course.description.toLowerCase().includes(searchTerm)
-            );
-            
-            // Display filtered free courses
-            freeCoursesGrid.innerHTML = '';
-            filteredFreeCourses.forEach(course => {
-                const courseCard = document.createElement('div');
-                courseCard.className = 'course-card';
-                courseCard.innerHTML = `
-                    <img src="${course.image}" alt="${course.title}" class="course-image">
-                    <div class="course-info">
-                        <h3 class="course-title">${course.title}</h3>
-                        <p class="course-description">${course.description}</p>
-                        <span class="course-price">FREE</span>
-                        <a href="${course.redirectUrl}" target="_blank" class="redirect-btn">
-                            <i class="fas fa-external-link-alt"></i> Enroll Now
-                        </a>
-                    </div>
-                `;
-                freeCoursesGrid.appendChild(courseCard);
-            });
-            
-            // Display filtered paid courses
-            paidCoursesGrid.innerHTML = '';
-            if (filteredPaidCourses.length > 0 || searchTerm === '') {
-                // Show section if there are results or if search is empty
-                displayPaidCourses();
-            } else {
-                paidCoursesSection.style.display = 'none';
-            }
-        });
-        
-        // Theme toggle functionality
-        themeToggle.addEventListener('click', () => {
-            document.body.classList.toggle('light-theme');
-            
-            if (document.body.classList.contains('light-theme')) {
-                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-                document.documentElement.style.setProperty('--dark-bg', '#f5f5f5');
-                document.documentElement.style.setProperty('--dark-surface', '#ffffff');
-                document.documentElement.style.setProperty('--dark-surface-hover', '#f0f0f0');
-                document.documentElement.style.setProperty('--text-primary', '#333333');
-                document.documentElement.style.setProperty('--text-secondary', '#666666');
-            } else {
-                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
-                document.documentElement.style.setProperty('--dark-bg', '#121212');
-                document.documentElement.style.setProperty('--dark-surface', '#1e1e1e');
-                document.documentElement.style.setProperty('--dark-surface-hover', '#2a2a2a');
-                document.documentElement.style.setProperty('--text-primary', '#e1e1e1');
-                document.documentElement.style.setProperty('--text-secondary', '#a0a0a0');
-            }
-        });
         
         // Initialize the page
         window.addEventListener('DOMContentLoaded', init);
