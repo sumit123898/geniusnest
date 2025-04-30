@@ -984,11 +984,49 @@
                 grid-template-columns: 1fr;
             }
         }
+ /* Floating Action Button */
+.floating-btn {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(100deg, var(--primary) 0%, var(--secondary) 100%);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    box-shadow: 0 4px 20px rgba(138, 43, 226, 0.4);
+    z-index: 99;
+    cursor: grab;
+    transition: all 0.3s;
+    border: none;
+    text-decoration: none;
+    user-select: none;
+    touch-action: none;
+}
+
+.floating-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 25px rgba(138, 43, 226, 0.6);
+}
+
+.floating-btn:active {
+    cursor: grabbing;
+    transform: scale(1.05);
+}
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
+<!-- Floating Button -->
+<a href="https://www.sumit2.online" class="floating-btn" id="draggableBtn" target="_blank">
+    <i class="fab fa-whatsapp"></i>
+</a>
+</div>
     <!-- Header -->
     <header id="header">
         <div class="logo">
@@ -1019,8 +1057,9 @@
             <h1><span class="animated-text"> World of Learning</span></h1>
             <p>Discover a revolutionary learning platform designed to help you master STEM subjects through interactive, scientifically-proven methods.</p>
             <div class="hero-buttons">
-                <a href="https://sites.google.com/view/wavemath?usp=sharing" class="cta-button">Start Learning</a>
-                <a href="#" class="secondary-button">Explore Courses</a>
+                <a href="https://www.sumit2.online/courses/learn" class="cta-button">Start Learning</a>
+                <a href="https://www.sumit2.online/courses/1" class="secondary-button">Explore Courses</a>
+                <a href="https://sites.google.com/view/wavemath?usp=sharing" class="secondary-button">InZoon</a>
             </div>
         </div>
         <div class="hero-image">
@@ -1447,10 +1486,66 @@
                     window.scrollTo({
                         top: targetElement.offsetTop - 80,
                         behavior: 'smooth'
+                      
                     });
                 }
             });
         });
+          // Make floating button draggable
+const floatingBtn = document.getElementById('draggableBtn');
+let isDragging = false;
+let offsetX, offsetY;
+
+// Touch events for mobile
+floatingBtn.addEventListener('touchstart', (e) => {
+    isDragging = true;
+    const touch = e.touches[0];
+    const rect = floatingBtn.getBoundingClientRect();
+    offsetX = touch.clientX - rect.left;
+    offsetY = touch.clientY - rect.top;
+    e.preventDefault();
+});
+
+floatingBtn.addEventListener('touchmove', (e) => {
+    if (!isDragging) return;
+    const touch = e.touches[0];
+    floatingBtn.style.left = `${touch.clientX - offsetX}px`;
+    floatingBtn.style.top = `${touch.clientY - offsetY}px`;
+    floatingBtn.style.right = 'auto';
+    floatingBtn.style.bottom = 'auto';
+    e.preventDefault();
+});
+
+floatingBtn.addEventListener('touchend', () => {
+    isDragging = false;
+});
+
+// Mouse events for desktop
+floatingBtn.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    offsetX = e.clientX - floatingBtn.getBoundingClientRect().left;
+    offsetY = e.clientY - floatingBtn.getBoundingClientRect().top;
+    floatingBtn.style.cursor = 'grabbing';
+    e.preventDefault();
+});
+
+document.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    floatingBtn.style.left = `${e.clientX - offsetX}px`;
+    floatingBtn.style.top = `${e.clientY - offsetY}px`;
+    floatingBtn.style.right = 'auto';
+    floatingBtn.style.bottom = 'auto';
+});
+
+document.addEventListener('mouseup', () => {
+    isDragging = false;
+    floatingBtn.style.cursor = 'grab';
+});
+
+// Prevent default drag behavior
+floatingBtn.addEventListener('dragstart', (e) => {
+    e.preventDefault();
+});
     </script>
 </body>
 </html>
