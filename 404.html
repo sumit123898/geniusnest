@@ -1,17 +1,119 @@
-<!-- 404.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Page Not Found</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 - Page Not Found | Genius Nest</title>
   <style>
-    body { font-family: sans-serif; text-align: center; padding: 50px; }
-    h1 { font-size: 50px; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+      background: #0f172a;
+      color: #fff;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      overflow: auto;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 500px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .logo {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      font-weight: bold;
+      color: #38bdf8;
+      font-size: 1.2rem;
+    }
+
+    .character-img {
+      width: 100%;
+      max-width: 300px;
+      height: auto;
+      margin-bottom: 20px;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    h1 {
+      font-size: 4rem;
+      margin-bottom: 10px;
+      animation: float 2s ease-in-out infinite;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 1rem;
+      color: #cbd5e1;
+      margin-bottom: 25px;
+    }
+
+    a {
+      text-decoration: none;
+      background: #3b82f6;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 6px;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+
+    a:hover {
+      background: #2563eb;
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(-10px);
+      }
+      50% {
+        transform: translateY(10px);
+      }
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 3rem;
+      }
+
+      h2 {
+        font-size: 1.2rem;
+      }
+
+      p {
+        font-size: 0.9rem;
+      }
+    }
   </style>
 </head>
 <body>
-  <h1>404</h1>
-  <p>Oops! The page you're looking for doesn't exist.</p>
-  <a href="/">Go to Home</a>
+  <div class="logo">Genius Nest</div>
+
+  <div class="container">
+    <img src="https://i.ibb.co/6Rw26N9M/image.png" alt="Cartoon Character" class="character-img" />
+    <h1>404</h1>
+    <h2>Oops! Page not found</h2>
+    <p>The page you're looking for doesn’t seem to exist.</p>
+    <a href="/">Back to Home</a>
+  </div>
 </body>
 </html>
