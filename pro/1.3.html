@@ -81,6 +81,7 @@
             max-width: 800px;
             margin: 20px auto;
             padding: 0 15px;
+            padding-bottom: 80px; /* Add space for the floating button */
         }
         
         /* Search Bar */
@@ -215,6 +216,62 @@
         .video-sol:hover {
             background-color: #c02a2a;
             box-shadow: 0 0 15px rgba(214, 48, 49, 0.5);
+        }
+
+        /* Mark Button Styles */
+        .mark-btn {
+            background-color: var(--success);
+            margin-right: auto;
+        }
+        
+        .mark-btn:hover {
+            background-color: #00a884;
+            box-shadow: 0 0 15px rgba(0, 184, 148, 0.5);
+        }
+        
+        .marked {
+            background-color: rgba(0, 184, 148, 0.2);
+            border-left: 4px solid var(--success);
+        }
+        
+        .marked .mark-btn {
+            background-color: var(--dark);
+            color: var(--success);
+        }
+        
+        /* Marked Questions Floating Button */
+        .marked-questions-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--success);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            z-index: 999;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .marked-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--danger);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         /* Modals */
@@ -434,6 +491,12 @@
         </div>
     </div>
 
+    <!-- Marked Questions Floating Button -->
+    <button class="marked-questions-btn" id="toggleMarkedQuestions">
+        <i class="fas fa-bookmark"></i>
+        <span class="marked-count" id="markedCount">0</span>
+    </button>
+
     <script>
         // Sample questions data
         const questions =  [
@@ -632,6 +695,8 @@
         const zoomOutBtn = document.getElementById('zoomOutBtn');
         const resetZoomBtn = document.getElementById('resetZoomBtn');
         const solutionImageContainer = document.querySelector('.solution-image-container');
+        const toggleMarkedQuestionsBtn = document.getElementById('toggleMarkedQuestions');
+        const markedCount = document.getElementById('markedCount');
 
         // Zoom and pan variables
         let scale = 1;
@@ -640,6 +705,10 @@
         let isDragging = false;
         let startX, startY;
         let lastTouchEnd = 0;
+
+        // Marked questions
+        let markedQuestions = JSON.parse(localStorage.getItem('markedQuestions')) || [];
+        let showingMarkedOnly = false;
 
         // Display all questions initially
         displayQuestions(questions);
@@ -681,6 +750,9 @@
                         ${question.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
                     </div>
                     <div class="solution-buttons">
+                        <button class="sol-btn mark-btn" data-question="${question.number}" title="Mark Question">
+                            <i class="far fa-bookmark"></i>
+                        </button>
                         <button class="sol-btn text-sol" data-question="${question.number}" title="Text Solution">
                             <i class="fas fa-image"></i>
                         </button>
@@ -691,7 +763,16 @@
                 `;
                 
                 questionsContainer.appendChild(questionElement);
+
+                // Set initial marked state
+                if (markedQuestions.includes(question.number)) {
+                    questionElement.classList.add('marked');
+                    questionElement.querySelector('.mark-btn i').className = 'fas fa-bookmark';
+                }
             });
+
+            // Update marked questions display
+            updateMarkedQuestionsDisplay();
 
             // Add event listeners to buttons
             document.querySelectorAll('.text-sol').forEach(button => {
@@ -707,6 +788,45 @@
                     showVideoSolution(questionNumber);
                 });
             });
+        }
+
+        // Update marked questions display
+        function updateMarkedQuestionsDisplay() {
+            markedCount.textContent = markedQuestions.length;
+            localStorage.setItem('markedQuestions', JSON.stringify(markedQuestions));
+            
+            document.querySelectorAll('.question').forEach(question => {
+                const questionNumber = question.querySelector('.question-number').textContent;
+                const markBtn = question.querySelector('.mark-btn');
+                
+                if (markedQuestions.includes(questionNumber)) {
+                    question.classList.add('marked');
+                    markBtn.querySelector('i').className = 'fas fa-bookmark';
+                } else {
+                    question.classList.remove('marked');
+                    markBtn.querySelector('i').className = 'far fa-bookmark';
+                }
+            });
+        }
+
+        // Toggle marked questions view
+        function toggleMarkedQuestionsView() {
+            showingMarkedOnly = !showingMarkedOnly;
+            
+            if (showingMarkedOnly) {
+                // Show only marked questions
+                document.querySelectorAll('.question').forEach(question => {
+                    const questionNumber = question.querySelector('.question-number').textContent;
+                    question.style.display = markedQuestions.includes(questionNumber) ? '' : 'none';
+                });
+                toggleMarkedQuestionsBtn.innerHTML = '<i class="fas fa-list"></i><span class="marked-count" id="markedCount">' + markedQuestions.length + '</span>';
+            } else {
+                // Show all questions
+                document.querySelectorAll('.question').forEach(question => {
+                    question.style.display = '';
+                });
+                toggleMarkedQuestionsBtn.innerHTML = '<i class="fas fa-bookmark"></i><span class="marked-count" id="markedCount">' + markedQuestions.length + '</span>';
+            }
         }
 
         // Show image solution
@@ -788,6 +908,34 @@
         function updateImageTransform() {
             solutionImage.style.transform = `translate(${posX}px, ${posY}px) scale(${scale})`;
         }
+
+        // Mark question button click handler
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.mark-btn')) {
+                const btn = e.target.closest('.mark-btn');
+                const questionNumber = btn.getAttribute('data-question');
+                const questionElement = btn.closest('.question');
+                
+                if (markedQuestions.includes(questionNumber)) {
+                    // Unmark the question
+                    markedQuestions = markedQuestions.filter(q => q !== questionNumber);
+                } else {
+                    // Mark the question
+                    markedQuestions.push(questionNumber);
+                }
+                
+                // Update display
+                updateMarkedQuestionsDisplay();
+                
+                // If we're in marked-only view and just unmarked the last question, exit the view
+                if (showingMarkedOnly && markedQuestions.length === 0) {
+                    toggleMarkedQuestionsView();
+                }
+            }
+        });
+
+        // Toggle marked questions view
+        toggleMarkedQuestionsBtn.addEventListener('click', toggleMarkedQuestionsView);
 
         // Touch and mouse events for panning
         solutionImage.addEventListener('mousedown', startDrag);
