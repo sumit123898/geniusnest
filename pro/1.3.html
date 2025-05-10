@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Genius Nest Q&A</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -22,6 +22,7 @@
             margin: 0;
             padding: 0;
             transition: all 0.3s ease;
+            touch-action: none;
         }
         
         body {
@@ -226,7 +227,7 @@
             height: 100%;
             background-color: rgba(0, 0, 0, 0.9);
             overflow: auto;
-            touch-action: pan-y;
+            touch-action: none;
             animation: fadeIn 0.3s ease;
         }
         
@@ -236,6 +237,8 @@
             height: 100%;
             display: flex;
             flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
         
         .close {
@@ -261,11 +264,25 @@
             background: rgba(255, 255, 255, 0.3);
         }
         
-        .solution-image {
+        .solution-image-container {
             width: 100%;
             height: 100%;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            touch-action: none;
+        }
+        
+        .solution-image {
+            max-width: 100%;
+            max-height: 100%;
             object-fit: contain;
             background-color: black;
+            transform-origin: center center;
+            transition: transform 0.1s ease;
+            touch-action: none;
+            user-select: none;
         }
         
         .video-container {
@@ -273,6 +290,7 @@
             width: 100%;
             height: 0;
             padding-bottom: 56.25%;
+            touch-action: none;
         }
         
         .video-iframe {
@@ -282,6 +300,37 @@
             width: 100%;
             height: 100%;
             border: none;
+            touch-action: none;
+        }
+        
+        /* Zoom controls */
+        .zoom-controls {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1001;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .zoom-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+            border: none;
+            color: white;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        
+        .zoom-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
         }
         
         /* No results */
@@ -312,6 +361,17 @@
             .chapter-heading {
                 font-size: 1.1rem;
                 padding: 12px;
+            }
+            
+            .zoom-controls {
+                bottom: 10px;
+                right: 10px;
+            }
+            
+            .zoom-btn {
+                width: 35px;
+                height: 35px;
+                font-size: 16px;
             }
         }
         
@@ -356,7 +416,14 @@
     <div id="imageModal" class="modal">
         <span class="close">&times;</span>
         <div class="modal-content">
-            <img class="solution-image" id="solutionImage" src="" alt="Solution">
+            <div class="solution-image-container">
+                <img class="solution-image" id="solutionImage" src="" alt="Solution">
+            </div>
+            <div class="zoom-controls">
+                <button class="zoom-btn" id="zoomInBtn"><i class="fas fa-search-plus"></i></button>
+                <button class="zoom-btn" id="zoomOutBtn"><i class="fas fa-search-minus"></i></button>
+                <button class="zoom-btn" id="resetZoomBtn"><i class="fas fa-expand"></i></button>
+            </div>
         </div>
     </div>
 
@@ -564,6 +631,17 @@
         const solutionImage = document.getElementById('solutionImage');
         const youtubeVideo = document.getElementById('youtubeVideo');
         const closeButtons = document.querySelectorAll('.close');
+        const zoomInBtn = document.getElementById('zoomInBtn');
+        const zoomOutBtn = document.getElementById('zoomOutBtn');
+        const resetZoomBtn = document.getElementById('resetZoomBtn');
+        const solutionImageContainer = document.querySelector('.solution-image-container');
+
+        // Zoom and pan variables
+        let scale = 1;
+        let posX = 0;
+        let posY = 0;
+        let isDragging = false;
+        let startX, startY;
 
         // Display all questions initially
         displayQuestions(questions);
@@ -641,6 +719,12 @@
                 solutionImage.alt = `Solution for ${questionNumber}`;
                 imageModal.style.display = 'block';
                 document.body.style.overflow = 'hidden';
+                
+                // Reset zoom and position
+                scale = 1;
+                posX = 0;
+                posY = 0;
+                updateImageTransform();
             }
         }
 
@@ -676,6 +760,113 @@
                 document.body.style.overflow = 'auto';
             }
         });
+
+        // Zoom in button
+        zoomInBtn.addEventListener('click', function() {
+            scale *= 1.2;
+            updateImageTransform();
+        });
+
+        // Zoom out button
+        zoomOutBtn.addEventListener('click', function() {
+            scale /= 1.2;
+            if (scale < 1) {
+                scale = 1;
+                posX = 0;
+                posY = 0;
+            }
+            updateImageTransform();
+        });
+
+        // Reset zoom button
+        resetZoomBtn.addEventListener('click', function() {
+            scale = 1;
+            posX = 0;
+            posY = 0;
+            updateImageTransform();
+        });
+
+        // Update image transform
+        function updateImageTransform() {
+            solutionImage.style.transform = `translate(${posX}px, ${posY}px) scale(${scale})`;
+        }
+
+        // Touch and mouse events for panning
+        solutionImageContainer.addEventListener('mousedown', startDrag);
+        solutionImageContainer.addEventListener('touchstart', startDrag, { passive: false });
+        
+        document.addEventListener('mousemove', drag);
+        document.addEventListener('touchmove', drag, { passive: false });
+        
+        document.addEventListener('mouseup', endDrag);
+        document.addEventListener('touchend', endDrag);
+
+        function startDrag(e) {
+            if (scale <= 1) return;
+            
+            isDragging = true;
+            const clientX = e.clientX || e.touches[0].clientX;
+            const clientY = e.clientY || e.touches[0].clientY;
+            
+            startX = clientX - posX;
+            startY = clientY - posY;
+            
+            e.preventDefault();
+        }
+
+        function drag(e) {
+            if (!isDragging) return;
+            
+            const clientX = e.clientX || e.touches[0].clientX;
+            const clientY = e.clientY || e.touches[0].clientY;
+            
+            posX = clientX - startX;
+            posY = clientY - startY;
+            
+            updateImageTransform();
+            e.preventDefault();
+        }
+
+        function endDrag() {
+            isDragging = false;
+        }
+
+        // Pinch zoom for touch devices
+        let initialDistance = null;
+
+        solutionImageContainer.addEventListener('touchstart', function(e) {
+            if (e.touches.length === 2) {
+                initialDistance = getDistance(e.touches[0], e.touches[1]);
+            }
+        }, { passive: false });
+
+        solutionImageContainer.addEventListener('touchmove', function(e) {
+            if (e.touches.length === 2) {
+                e.preventDefault();
+                const currentDistance = getDistance(e.touches[0], e.touches[1]);
+                
+                if (initialDistance !== null) {
+                    const newScale = scale * (currentDistance / initialDistance);
+                    if (newScale > 0.5 && newScale < 5) {
+                        scale = newScale;
+                        updateImageTransform();
+                    }
+                }
+                
+                initialDistance = currentDistance;
+            }
+        }, { passive: false });
+
+        solutionImageContainer.addEventListener('touchend', function() {
+            initialDistance = null;
+        });
+
+        function getDistance(touch1, touch2) {
+            return Math.hypot(
+                touch2.clientX - touch1.clientX,
+                touch2.clientY - touch1.clientY
+            );
+        }
 
         // Handle mobile viewport height
         function setViewportHeight() {
