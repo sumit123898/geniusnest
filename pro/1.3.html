@@ -22,7 +22,6 @@
             margin: 0;
             padding: 0;
             transition: all 0.3s ease;
-            touch-action: none;
         }
         
         body {
@@ -31,6 +30,7 @@
             color: var(--light);
             line-height: 1.6;
             overflow-x: hidden;
+            touch-action: pan-y;
         }
         
         /* Top Navigation */
@@ -115,6 +115,7 @@
         .questions-container {
             display: grid;
             gap: 15px;
+            touch-action: pan-y;
         }
         
         .question {
@@ -227,7 +228,6 @@
             height: 100%;
             background-color: rgba(0, 0, 0, 0.9);
             overflow: auto;
-            touch-action: none;
             animation: fadeIn 0.3s ease;
         }
         
@@ -267,11 +267,11 @@
         .solution-image-container {
             width: 100%;
             height: 100%;
-            overflow: hidden;
+            overflow: auto;
             display: flex;
             justify-content: center;
             align-items: center;
-            touch-action: none;
+            -webkit-overflow-scrolling: touch;
         }
         
         .solution-image {
@@ -281,7 +281,6 @@
             background-color: black;
             transform-origin: center center;
             transition: transform 0.1s ease;
-            touch-action: none;
             user-select: none;
         }
         
@@ -290,7 +289,6 @@
             width: 100%;
             height: 0;
             padding-bottom: 56.25%;
-            touch-action: none;
         }
         
         .video-iframe {
@@ -300,7 +298,6 @@
             width: 100%;
             height: 100%;
             border: none;
-            touch-action: none;
         }
         
         /* Zoom controls */
@@ -642,6 +639,7 @@
         let posY = 0;
         let isDragging = false;
         let startX, startY;
+        let lastTouchEnd = 0;
 
         // Display all questions initially
         displayQuestions(questions);
@@ -792,11 +790,11 @@
         }
 
         // Touch and mouse events for panning
-        solutionImageContainer.addEventListener('mousedown', startDrag);
-        solutionImageContainer.addEventListener('touchstart', startDrag, { passive: false });
+        solutionImage.addEventListener('mousedown', startDrag);
+        solutionImage.addEventListener('touchstart', handleTouchStart, { passive: false });
         
         document.addEventListener('mousemove', drag);
-        document.addEventListener('touchmove', drag, { passive: false });
+        document.addEventListener('touchmove', handleTouchMove, { passive: false });
         
         document.addEventListener('mouseup', endDrag);
         document.addEventListener('touchend', endDrag);
@@ -805,23 +803,41 @@
             if (scale <= 1) return;
             
             isDragging = true;
-            const clientX = e.clientX || e.touches[0].clientX;
-            const clientY = e.clientY || e.touches[0].clientY;
-            
-            startX = clientX - posX;
-            startY = clientY - posY;
+            startX = e.clientX - posX;
+            startY = e.clientY - posY;
             
             e.preventDefault();
+        }
+
+        function handleTouchStart(e) {
+            if (e.touches.length === 1) {
+                if (scale <= 1) return;
+                
+                isDragging = true;
+                const touch = e.touches[0];
+                startX = touch.clientX - posX;
+                startY = touch.clientY - posY;
+                
+                e.preventDefault();
+            }
         }
 
         function drag(e) {
             if (!isDragging) return;
             
-            const clientX = e.clientX || e.touches[0].clientX;
-            const clientY = e.clientY || e.touches[0].clientY;
+            posX = e.clientX - startX;
+            posY = e.clientY - startY;
             
-            posX = clientX - startX;
-            posY = clientY - startY;
+            updateImageTransform();
+            e.preventDefault();
+        }
+
+        function handleTouchMove(e) {
+            if (!isDragging || e.touches.length !== 1) return;
+            
+            const touch = e.touches[0];
+            posX = touch.clientX - startX;
+            posY = touch.clientY - startY;
             
             updateImageTransform();
             e.preventDefault();
@@ -831,42 +847,24 @@
             isDragging = false;
         }
 
-        // Pinch zoom for touch devices
-        let initialDistance = null;
-
-        solutionImageContainer.addEventListener('touchstart', function(e) {
-            if (e.touches.length === 2) {
-                initialDistance = getDistance(e.touches[0], e.touches[1]);
+        // Prevent double-tap zoom on mobile
+        solutionImage.addEventListener('touchend', function(event) {
+            const now = new Date().getTime();
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault();
             }
+            lastTouchEnd = now;
         }, { passive: false });
 
+        // Enable native scrolling on mobile when not zoomed
         solutionImageContainer.addEventListener('touchmove', function(e) {
-            if (e.touches.length === 2) {
-                e.preventDefault();
-                const currentDistance = getDistance(e.touches[0], e.touches[1]);
-                
-                if (initialDistance !== null) {
-                    const newScale = scale * (currentDistance / initialDistance);
-                    if (newScale > 0.5 && newScale < 5) {
-                        scale = newScale;
-                        updateImageTransform();
-                    }
-                }
-                
-                initialDistance = currentDistance;
+            if (scale <= 1) {
+                // Allow native scrolling
+                return;
             }
+            // Prevent default for zoomed-in state
+            e.preventDefault();
         }, { passive: false });
-
-        solutionImageContainer.addEventListener('touchend', function() {
-            initialDistance = null;
-        });
-
-        function getDistance(touch1, touch2) {
-            return Math.hypot(
-                touch2.clientX - touch1.clientX,
-                touch2.clientY - touch1.clientY
-            );
-        }
 
         // Handle mobile viewport height
         function setViewportHeight() {
