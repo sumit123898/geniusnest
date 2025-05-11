@@ -1,0 +1,1551 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>জিনিয়াস নেস্ট - যেখানে প্রতিভা ডানা মেলে</title>
+    <style>
+        /* Base Styles */
+        :root {
+            --primary: #8a2be2; /* Vibrant purple */
+            --secondary: #00d4ff; /* Electric blue */
+            --accent: #ff2d75; /* Hot pink */
+            --dark: #121212;
+            --darker: #0a0a0a;
+            --light: #e0e0e0;
+            --lighter: #ffffff;
+            --gray: #2a2a2a;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Tiro Bangla', 'Inter', sans-serif;
+        }
+        
+        body {
+            background-color: var(--dark);
+            color: var(--light);
+            overflow-x: hidden;
+        }
+        
+        /* Header & Navigation */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+            transition: all 0.3s ease;
+            background-color: rgba(18, 18, 18, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid var(--primary);
+        }
+        
+        header.scrolled {
+            padding: 1rem 5%;
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-shadow: 0 0 10px rgba(138, 43, 226, 0.5);
+        }
+        
+        .logo-icon {
+            margin-right: 10px;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 2rem;
+        }
+        
+        nav ul li a {
+            text-decoration: none;
+            color: var(--light);
+            font-weight: 500;
+            transition: all 0.3s;
+            position: relative;
+            padding-bottom: 5px;
+        }
+        
+        nav ul li a:hover {
+            color: var(--secondary);
+            text-shadow: 0 0 8px rgba(0, 212, 255, 0.5);
+        }
+        
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background: var(--secondary);
+            bottom: 0;
+            left: 0;
+            transition: width 0.3s;
+        }
+        
+        nav ul li a:hover::after {
+            width: 100%;
+        }
+        
+        .cta-button {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: white;
+            padding: 0.6rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(138, 43, 226, 0.4);
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(138, 43, 226, 0.6);
+            background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
+        }
+        
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 0 5%;
+            padding-top: 80px;
+            position: relative;
+            overflow: hidden;
+            background: radial-gradient(circle at 70% 30%, var(--darker) 0%, var(--dark) 70%);
+        }
+        
+        .hero-content {
+            flex: 1;
+            z-index: 10;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            position: relative;
+        }
+        
+        .hero h1 .animated-text {
+            display: inline-block;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+            padding: 0 5px;
+        }
+        
+        .hero h1 .animated-text::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            z-index: -1;
+            transform: scaleX(0);
+            transform-origin: left;
+            animation: highlighter 2s cubic-bezier(0.19, 1, 0.22, 1) infinite;
+            border-radius: 4px;
+            opacity: 0.5;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            color: var(--light);
+            opacity: 0.9;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .secondary-button {
+            background: transparent;
+            color: var(--secondary);
+            border: 2px solid var(--secondary);
+            padding: 0.6rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .secondary-button:hover {
+            background: rgba(0, 212, 255, 0.1);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0, 212, 255, 0.3);
+        }
+        
+        .hero-image {
+            flex: 1;
+            position: relative;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .math-animation {
+            width: 500px;
+            height: 500px;
+            position: relative;
+        }
+        
+        .atom {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 300px;
+        }
+        
+        .nucleus {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 30px;
+            height: 30px;
+            background: var(--accent);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 20px var(--accent);
+        }
+        
+        .electron {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: var(--secondary);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--secondary);
+        }
+        
+        .electron-path {
+            position: absolute;
+            border: 1px dashed rgba(0, 212, 255, 0.3);
+            border-radius: 50%;
+        }
+        
+        .equation {
+            position: absolute;
+            color: var(--light);
+            font-size: 1.2rem;
+            font-family: 'Courier New', monospace;
+            opacity: 0.7;
+            animation: float 5s ease-in-out infinite;
+        }
+        
+        .fractal {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, transparent 50%, var(--primary) 100%);
+            opacity: 0.1;
+            border-radius: 50%;
+            animation: pulse 8s ease-in-out infinite alternate;
+        }
+        
+        /* Features Section */
+        .features {
+            padding: 5rem 5%;
+            background: var(--darker);
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--lighter);
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, var(--secondary), var(--primary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .section-title p {
+            color: var(--light);
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.8;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .feature-card {
+            background: var(--gray);
+            border-radius: 15px;
+            padding: 2rem;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(138, 43, 226, 0.1);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(138, 43, 226, 0.2);
+            border: 1px solid rgba(138, 43, 226, 0.3);
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 0;
+            background: linear-gradient(to bottom, var(--primary), var(--secondary));
+            transition: height 0.3s;
+        }
+        
+        .feature-card:hover::before {
+            height: 100%;
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(138, 43, 226, 0.1);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            color: var(--secondary);
+            font-size: 1.5rem;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+        }
+        
+        .feature-card h3 {
+            margin-bottom: 1rem;
+            color: var(--lighter);
+        }
+        
+        .feature-card p {
+            color: var(--light);
+            line-height: 1.6;
+            opacity: 0.8;
+        }
+        
+      /* Team Section */
+        .team {
+            padding: 5rem 5%;
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.05) 0%, rgba(0, 212, 255, 0.05) 100%);
+            text-align: center;
+        }
+
+        .team-members-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .team-member {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.3s;
+            width: 150px;
+        }
+
+        .team-member:hover {
+            transform: translateY(-5px);
+        }
+
+        .member-photo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--primary);
+            box-shadow: 0 5px 15px rgba(138, 43, 226, 0.3);
+            transition: all 0.3s;
+        }
+
+        .team-member:hover .member-photo {
+            border-color: var(--secondary);
+            box-shadow: 0 8px 25px rgba(0, 212, 255, 0.4);
+        }
+
+        .member-name {
+            margin-top: 1rem;
+            font-size: 1.1rem;
+            color: var(--lighter);
+            font-weight: 600;
+        }
+
+        .member-role {
+            color: var(--secondary);
+            font-size: 0.9rem;
+            margin-top: 0.3rem;
+        }
+
+        /* Popup Styles */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .popup-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .popup-content {
+            background: var(--gray);
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            padding: 2rem;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--primary);
+            transform: scale(0.9);
+            transition: all 0.3s;
+        }
+
+        .popup-overlay.active .popup-content {
+            transform: scale(1);
+        }
+
+        .popup-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: var(--light);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .popup-close:hover {
+            color: var(--secondary);
+        }
+
+        .popup-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .popup-photo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--primary);
+            margin-right: 1.5rem;
+        }
+
+        .popup-info h3 {
+            font-size: 1.5rem;
+            color: var(--lighter);
+            margin-bottom: 0.3rem;
+        }
+
+        .popup-info .member-role {
+            font-size: 1rem;
+        }
+
+        .popup-bio {
+            color: var(--light);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .popup-social {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .popup-social a {
+            color: var(--light);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(138, 43, 226, 0.1);
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .popup-social a:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .team-members-container {
+                gap: 2rem;
+            }
+            
+            .team-member {
+                width: 120px;
+            }
+            
+            .member-photo {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .popup-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .popup-photo {
+                margin-right: 0;
+                margin-bottom: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .team-members-container {
+                gap: 1.5rem;
+            }
+            
+            .team-member {
+                width: 100px;
+            }
+            
+            .member-photo {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .member-name {
+                font-size: 1rem;
+            }
+            
+            .member-role {
+                font-size: 0.8rem;
+            }
+        }
+        
+        /* Testimonials */
+        .testimonials {
+            padding: 5rem 5%;
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.05) 0%, rgba(0, 212, 255, 0.05) 100%);
+        }
+        
+        .testimonial-slider {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .testimonial {
+            background: var(--gray);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            display: none;
+            border: 1px solid rgba(138, 43, 226, 0.1);
+        }
+        
+        .testimonial.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .testimonial-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            overflow: hidden;
+            border: 3px solid var(--primary);
+            box-shadow: 0 0 20px rgba(138, 43, 226, 0.3);
+        }
+        
+        .testimonial-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .testimonial-content {
+            font-style: italic;
+            color: var(--light);
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+        
+        .testimonial-author {
+            font-weight: 600;
+            color: var(--lighter);
+        }
+        
+        .testimonial-role {
+            color: var(--secondary);
+            font-size: 0.9rem;
+        }
+        
+        .slider-controls {
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
+            gap: 1rem;
+        }
+        
+        .slider-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--gray);
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid var(--secondary);
+        }
+        
+        .slider-dot.active {
+            background: var(--secondary);
+            transform: scale(1.2);
+            box-shadow: 0 0 10px var(--secondary);
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            padding: 5rem 5%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 L0,100 Z" fill="none" stroke="white" stroke-width="0.5" stroke-dasharray="5,5" opacity="0.1"/></svg>');
+            opacity: 0.2;
+        }
+        
+        .cta-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .cta-section p {
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .cta-button.large {
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            display: inline-block;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--darker);
+            color: white;
+            padding: 3rem 5%;
+            border-top: 1px solid rgba(138, 43, 226, 0.1);
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-column h3 {
+            color: var(--lighter);
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            width: 50%;
+            height: 2px;
+            background: var(--secondary);
+            bottom: -5px;
+            left: 0;
+        }
+        
+        .footer-column ul {
+            list-style: none;
+        }
+        
+        .footer-column ul li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-column ul li a {
+            color: var(--light);
+            text-decoration: none;
+            transition: all 0.3s;
+            opacity: 0.8;
+        }
+        
+        .footer-column ul li a:hover {
+            color: var(--secondary);
+            opacity: 1;
+            padding-left: 5px;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--light);
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        
+        .social-links a:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(138, 43, 226, 0.3);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--light);
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+        
+        /* Animations */
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+        
+        @keyframes electron-orbit {
+            0% {
+                transform: rotate(0deg) translateX(150px) rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg) translateX(150px) rotate(-360deg);
+            }
+        }
+        
+        @keyframes electron-orbit-2 {
+            0% {
+                transform: rotate(120deg) translateX(120px) rotate(-120deg);
+            }
+            100% {
+                transform: rotate(480deg) translateX(120px) rotate(-480deg);
+            }
+        }
+        
+        @keyframes electron-orbit-3 {
+            0% {
+                transform: rotate(240deg) translateX(180px) rotate(-240deg);
+            }
+            100% {
+                transform: rotate(600deg) translateX(180px) rotate(-600deg);
+            }
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 0.1;
+            }
+            100% {
+                transform: scale(1.2);
+                opacity: 0.2;
+            }
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes equation-float {
+            0%, 100% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            25% {
+                transform: translate(10px, -10px) rotate(2deg);
+            }
+            50% {
+                transform: translate(-5px, 5px) rotate(-1deg);
+            }
+            75% {
+                transform: translate(5px, -5px) rotate(1deg);
+            }
+        }
+        
+        @keyframes highlighter {
+            0% {
+                transform: scaleX(0);
+                transform-origin: left;
+            }
+            50% {
+                transform: scaleX(1);
+                transform-origin: left;
+            }
+            51% {
+                transform-origin: right;
+            }
+            100% {
+                transform: scaleX(0);
+                transform-origin: right;
+            }
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .hero {
+                flex-direction: column;
+                text-align: center;
+                padding-top: 100px;
+                height: auto;
+                min-height: 100vh;
+            }
+            
+            .hero-content {
+                margin-bottom: 3rem;
+            }
+            
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+            
+            .hero p {
+                margin: 0 auto 2rem;
+            }
+            
+            .hero-buttons {
+                justify-content: center;
+            }
+            
+            .math-animation {
+                width: 350px;
+                height: 350px;
+                margin-bottom: 2rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem 5%;
+            }
+            
+            .logo {
+                font-size: 1.5rem;
+            }
+            
+            nav {
+                position: fixed;
+                top: 80px;
+                left: -100%;
+                width: 80%;
+                height: calc(100vh - 80px);
+                background: var(--darker);
+                flex-direction: column;
+                padding: 2rem;
+                box-shadow: 5px 0 20px rgba(0, 0, 0, 0.3);
+                transition: left 0.3s;
+                border-right: 1px solid var(--primary);
+            }
+            
+            nav.active {
+                left: 0;
+            }
+            
+            nav ul {
+                flex-direction: column;
+            }
+            
+            nav ul li {
+                margin: 1rem 0;
+            }
+            
+            .menu-toggle {
+                display: block;
+                cursor: pointer;
+                font-size: 1.5rem;
+                color: var(--light);
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .section-title h2 {
+                font-size: 2rem;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .team-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .team-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+ /* Floating Action Button */
+.floating-btn {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(100deg, var(--primary) 0%, var(--secondary) 100%);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    box-shadow: 0 4px 20px rgba(138, 43, 226, 0.4);
+    z-index: 99;
+    cursor: grab;
+    transition: all 0.3s;
+    border: none;
+    text-decoration: none;
+    user-select: none;
+    touch-action: none;
+}
+
+.floating-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 25px rgba(138, 43, 226, 0.6);
+}
+
+.floating-btn:active {
+    cursor: grabbing;
+    transform: scale(1.05);
+}
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+<!-- Floating Button -->
+<a href="https://www.sumit2.online" class="floating-btn" id="draggableBtn" target="_blank">
+    <i class="fab fa-whatsapp"></i>
+</a>
+</div>
+    <!-- Header -->
+    <header id="header">
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-atom"></i>
+            </div>
+            <span>জিনিয়াস নেস্ট</span>
+        </div>
+        <nav id="nav">
+            <ul>
+                <li><a href="#home">হোম</a></li>
+                <li><a href="#features">বৈশিষ্ট্য</a></li>
+                <li><a href="#team">টিম</a></li>
+                <li><a href="https://sites.google.com/view/wavemath?usp=sharing">কোর্স</a></li>
+                <li><a href="#testimonials">পর্যালোচনা</a></li>
+                <li><a href="#contact">যোগাযোগ</a></li>
+                <li><a href="#" class="cta-button">শুরু করুন</a></li>
+            </ul>
+        </nav>
+        <div class="menu-toggle" id="menuToggle">
+            <i class="fas fa-bars"></i>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1><span class="animated-text">শেখার জগতে স্বাগতম</span></h1>
+            <p>ইন্টারেক্টিভ, বৈজ্ঞানিকভাবে প্রমাণিত পদ্ধতির মাধ্যমে STEM বিষয়গুলো আয়ত্ত করতে সাহায্য করার জন্য ডিজাইন করা একটি বিপ্লবী লার্নিং প্ল্যাটফর্ম আবিষ্কার করুন।</p>
+            <div class="hero-buttons">
+                <a href="https://www.sumit2.online/courses/learn" class="cta-button">শেখা শুরু করুন</a>
+                <a href="https://www.sumit2.online/courses/1" class="secondary-button">কোর্স এক্সপ্লোর করুন</a>
+                <a href="https://sites.google.com/view/wavemath?usp=sharing" class="secondary-button">ইনজুন</a>
+            </div>
+        </div>
+        <div class="hero-image">
+            <div class="math-animation">
+                <div class="atom">
+                    <div class="nucleus"></div>
+                    <div class="electron-path" style="width: 300px; height: 300px;"></div>
+                    <div class="electron-path" style="width: 240px; height: 240px;"></div>
+                    <div class="electron-path" style="width: 360px; height: 360px;"></div>
+                    <div class="electron" style="animation: electron-orbit 8s linear infinite;"></div>
+                    <div class="electron" style="animation: electron-orbit-2 6s linear infinite; width: 8px; height: 8px;"></div>
+                    <div class="electron" style="animation: electron-orbit-3 10s linear infinite; width: 12px; height: 12px;"></div>
+                </div>
+                <div class="fractal"></div>
+                <div class="equation" style="top: 20%; left: 10%; animation-delay: 0s;">E=mc²</div>
+                <div class="equation" style="top: 80%; right: 15%; animation-delay: 1s;">F=ma</div>
+                <div class="equation" style="top: 40%; right: 5%; animation-delay: 2s;">a²+b²=c²</div>
+                <div class="equation" style="bottom: 10%; left: 20%; animation-delay: 3s;">e^{iπ}+1=0</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="section-title">
+            <h2>জিনিয়াস নেস্ট কেন বেছে নেবেন?</h2>
+            <p>আপনার STEM লার্নিং অভিজ্ঞতা উন্নত করতে আমাদের প্ল্যাটফর্মটি অত্যাধুনিক বৈশিষ্ট্য দিয়ে ডিজাইন করা হয়েছে</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-plus"></i>
+                </div>
+                <h3>গণিত ভিজ্যুয়ালাইজেশন</h3>
+                <p>ইন্টারেক্টিভ গ্রাফ এবং 3D মডেল আপনাকে জটিল গাণিতিক ধারণাগুলো স্বজ্ঞাতভাবে বুঝতে সাহায্য করে।</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-flask"></i>
+                </div>
+                <h3>ভার্চুয়াল ল্যাব</h3>
+                <p>বাস্তবসম্মত সিমুলেশন সহ আমাদের পদার্থবিদ্যা এবং রসায়ন ভার্চুয়াল ল্যাবে পরীক্ষা-নিরীক্ষা করুন।</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <h3>এআই টিউটর</h3>
+                <p>আমাদের এআই টিউটর থেকে তাৎক্ষণিক সাহায্য পান যা আপনার শেখার শৈলী এবং গতি অনুযায়ী মানিয়ে নেয়।</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-project-diagram"></i>
+                </div>
+                <h3>ধারণা মানচিত্র</h3>
+                <p>ইন্টারেক্টিভ নলেজ গ্রাফের সাথে বিভিন্ন STEM ধারণাগুলো কীভাবে সংযুক্ত হয় তা ভিজ্যুয়ালাইজ করুন।</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-code"></i>
+                </div>
+                <h3>কোডিং স্যান্ডবক্স</h3>
+                <p>একাধিক প্রোগ্রামিং ভাষা সমর্থন করে আমাদের বিল্ট-ইন আইডিই দিয়ে কোডিং অনুশীলন করুন।</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <h3>নিউরোসায়েন্স-ভিত্তিক</h3>
+                <p>ভালো ধারণ রাখার জন্য জ্ঞানীয় বিজ্ঞান গবেষণার উপর ভিত্তি করে অপ্টিমাইজড শেখার পদ্ধতি।</p>
+            </div>
+        </div>
+    </section>
+
+   <!-- Team Section -->
+    <section class="team" id="team">
+        <div class="section-title">
+            <h2>আমাদের প্রতিভাবান টিমের সাথে পরিচিত হোন</h2>
+            <p>জিনিয়াস নেস্টের পিছনে থাকা উত্সাহী শিক্ষাবিদ এবং উদ্ভাবকরা</p>
+        </div>
+        <div class="team-members-container">
+            <!-- Team Member 1 -->
+            <div class="team-member" onclick="showPopup(0)">
+                <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="ড. সারাহ চেন" class="member-photo">
+                <h3 class="member-name">ড. সারাহ চেন</h3>
+                <span class="member-role">লার্নিং অফিসার</span>
+            </div>
+            
+            <!-- Team Member 2 -->
+            <div class="team-member" onclick="showPopup(1)">
+                <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="মাইকেল রদ্রিগেজ" class="member-photo">
+                <h3 class="member-name">মাইকেল রদ্রিগেজ</h3>
+                <span class="member-role">লিড ডেভেলপার</span>
+            </div>
+            
+            <!-- Team Member 3 -->
+            <div class="team-member" onclick="showPopup(2)">
+                <img src="https://images.unsplash.com/photo-1542190891-2093d38760f2?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="প্রিয়া প্যাটেল" class="member-photo">
+                <h3 class="member-name">প্রিয়া প্যাটেল</h3>
+                <span class="member-role">গণিত পরিচালক</span>
+            </div>
+            
+            <!-- Team Member 4 -->
+            <div class="team-member" onclick="showPopup(3)">
+                <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="ডেভিড কিম" class="member-photo">
+                <h3 class="member-name">ডেভিড কিম</h3>
+                <span class="member-role">বিজ্ঞান বিশেষজ্ঞ</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Member Popups -->
+    <div class="popup-overlay" id="popupOverlay">
+        <div class="popup-content">
+            <button class="popup-close" onclick="closePopup()">&times;</button>
+            <div class="popup-header">
+                <img id="popupPhoto" src="" alt="" class="popup-photo">
+                <div class="popup-info">
+                    <h3 id="popupName"></h3>
+                    <span class="member-role" id="popupRole"></span>
+                </div>
+            </div>
+            <p class="popup-bio" id="popupBio"></p>
+            <div class="popup-social" id="popupSocial"></div>
+        </div>
+    </div>
+
+
+    <!-- Testimonials Section -->
+    <section class="testimonials" id="testimonials">
+        <div class="section-title">
+            <h2>আমাদের জিনিয়াসরা কী বলছেন</h2>
+            <p>আমাদের শিক্ষার্থী সম্প্রদায়ের কাছ থেকে শুনুন যারা জিনিয়াস নেস্টের সাথে তাদের STEM দক্ষতা রূপান্তর করেছেন</p>
+        </div>
+        <div class="testimonial-slider">
+            <div class="testimonial active">
+                <div class="testimonial-avatar">
+                    <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="ড. এমিলি ঝাং">
+                </div>
+                <p class="testimonial-content">"একজন পদার্থবিদ্যার অধ্যাপক হিসাবে, আমি অনলাইন লার্নিং প্ল্যাটফর্ম সম্পর্কে সন্দিহান ছিলাম, কিন্তু জিনিয়াস নেস্টের কোয়ান্টাম মেকানিক্স সিমুলেশনগুলি ক্লাসে আমি যা প্রদর্শন করতে পারি তার চেয়ে ভাল। আমার শিক্ষার্থীদের বোঝাপড়া নাটকীয়ভাবে উন্নত হয়েছে।"</p>
+                <h4 class="testimonial-author">ড. এমিলি ঝাং</h4>
+                <p class="testimonial-role">পদার্থবিদ্যার অধ্যাপক, MIT</p>
+            </div>
+            <div class="testimonial">
+                <div class="testimonial-avatar">
+                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="রাজ প্যাটেল">
+                </div>
+                <p class="testimonial-content">"ইন্টারেক্টিভ ক্যালকুলাস পাঠগুলি অবশেষে আমার জন্য ডেরিভেটিভ এবং ইন্টিগ্রাল ক্লিক করেছিল। কলেজে দুবার ক্যালকুলাসে ব্যর্থ হওয়ার পর, জিনিয়াস নেস্টের ভিজ্যুয়াল পদ্ধতির জন্য আমি আমার পরীক্ষায় সফল হয়েছি।"</p>
+                <h4 class="testimonial-author">রাজ প্যাটেল</h4>
+                <p class="testimonial-role">ইঞ্জিনিয়ারিং ছাত্র</p>
+            </div>
+            <div class="testimonial">
+                <div class="testimonial-avatar">
+                    <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="সোফিয়া রদ্রিগেজ">
+                </div>
+                <p class="testimonial-content">"আমি রসায়নকে ঘৃণা করা থেকে এটিকে ভালবাসতে চলে গেছি! আণবিক মডেলিং টুলস এবং ভার্চুয়াল ল্যাব পরীক্ষাগুলি বিমূর্ত ধারণাগুলিকে স্পর্শযোগ্য এবং উত্তেজনাপূর্ণ করে তুলেছে।"</p>
+                <h4 class="testimonial-author">সোফিয়া রদ্রিগেজ</h4>
+                <p class="testimonial-role">হাই স্কুল ছাত্রী</p>
+            </div>
+            <div class="slider-controls">
+                <div class="slider-dot active" data-index="0"></div>
+                <div class="slider-dot" data-index="1"></div>
+                <div class="slider-dot" data-index="2"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <h2>STEM আয়ত্ত করতে প্রস্তুত?</h2>
+        <p>হাজার হাজার শিক্ষার্থী এবং পেশাদারদের সাথে যোগ দিন যারা জিনিয়াস নেস্টের সাথে তাদের সম্ভাবনা উন্মুক্ত করছেন। আজই 7-দিনের বিনামূল্যে ট্রায়াল দিয়ে আপনার যাত্রা শুরু করুন।</p>
+        <a href="book.html" class="cta-button large">বিনামূল্যে ট্রায়াল শুরু করুন</a>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>জিনিয়াস নেস্ট</h3>
+                <p>যেখানে প্রতিভাবান মনেরা একসাথে শিখতে, পরীক্ষা করতে এবং উদ্ভাবন করতে আসে।</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#"><i class="fab fa-github"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                    <a href="#"><i class="fab fa-discord"></i></a>
+                </div>
+            </div>
+            <div class="footer-column">
+                <h3>বিষয়</h3>
+                <ul>
+                    <li><a href="#">গণিত</a></li>
+                    <li><a href="#">পদার্থবিদ্যা</a></li>
+                    <li><a href="#">রসায়ন</a></li>
+                    <li><a href="#">জীববিদ্যা</a></li>
+                    <li><a href="#">কম্পিউটার বিজ্ঞান</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>সম্পদ</h3>
+                <ul>
+                    <li><a href="#">ইন্টারেক্টিভ টুলস</a></li>
+                    <li><a href="#">অনুশীলন সমস্যা</a></li>
+                    <li><a href="#">গবেষণা পত্র</a></li>
+                    <li><a href="#">STEM ক্যারিয়ার পথ</a></li>
+                    <li><a href="#">শিক্ষক সম্পদ</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>কোম্পানি</h3>
+                <ul>
+                    <li><a href="#">আমাদের সম্পর্কে</a></li>
+                    <li><a href="#">ক্যারিয়ার</a></li>
+                    <li><a href="#">গবেষণা</a></li>
+                    <li><a href="#">প্রেস</a></li>
+                    <li><a href="#">যোগাযোগ</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; ২০২৫ জিনিয়াস নেস্ট। সর্বস্বত্ব সংরক্ষিত। | <a href="#">গোপনীয়তা নীতি</a> | <a href="#">সেবার শর্তাবলী</a></p>
+        </div>
+    </footer>
+
+    <script>
+         // Team data
+        const teamMembers = [
+            {
+                name: "ড. সারাহ চেন",
+                role: "চিফ লার্নিং অফিসার",
+                photo: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                bio: "নিউরোসায়েন্স পিএইচডি সহ ১০+ বছর অভিজ্ঞতা জ্ঞানীয় শেখার গবেষণা এবং পাঠ্যক্রম নকশায়। সারাহ সর্বাধিক শেখার কার্যকারিতা নিশ্চিত করতে আমাদের শিক্ষামূলক কৌশল পরিচালনা করেন।",
+                social: [
+                    {icon: "fab fa-linkedin-in", url: "#"},
+                    {icon: "fab fa-twitter", url: "#"},
+                    {icon: "fas fa-envelope", url: "#"}
+                ]
+            },
+            {
+                name: "মাইকেল রদ্রিগেজ",
+                role: "লিড ডেভেলপার",
+                photo: "https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                bio: "ইন্টারেক্টিভ শিক্ষামূলক প্ল্যাটফর্ম এবং AI শেখার সিস্টেমে বিশেষজ্ঞ ফুল-স্ট্যাক ডেভেলপার। মাইকেল সমস্ত প্রযুক্তিগত উন্নয়ন এবং প্ল্যাটফর্ম আর্কিটেকচার তত্ত্বাবধান করেন।",
+                social: [
+                    {icon: "fab fa-github", url: "#"},
+                    {icon: "fab fa-linkedin-in", url: "#"},
+                    {icon: "fas fa-code", url: "#"}
+                ]
+            },
+            {
+                name: "প্রিয়া প্যাটেল",
+                role: "গণিত পাঠ্যক্রম পরিচালক",
+                photo: "https://images.unsplash.com/photo-1542190891-2093d38760f2?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                bio: "সাবেক গণিত অধ্যাপক যিনি বিমূর্ত গাণিতিক ধারণাগুলোর জন্য ভিজ্যুয়ালাইজেশন কৌশলে বিশেষজ্ঞ। প্রিয়া আমাদের উদ্ভাবনী গণিত শেখার পথ নকশা করেন।",
+                social: [
+                    {icon: "fas fa-graduation-cap", url: "#"},
+                    {icon: "fab fa-researchgate", url: "#"},
+                    {icon: "fas fa-book", url: "#"}
+                ]
+            },
+            {
+                name: "ডেভিড কিম",
+                role: "বিজ্ঞান শিক্ষা বিশেষজ্ঞ",
+                photo: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                bio: "পদার্থবিদ্যা এবং রসায়ন শিক্ষাবিদ যিনি ভার্চুয়াল ল্যাব উন্নয়ন এবং সিমুলেশনে বিশেষজ্ঞ। ডেভিড আমাদের নিমগ্ন বিজ্ঞান শেখার অভিজ্ঞতা তৈরি করেন।",
+                social: [
+                    {icon: "fas fa-flask", url: "#"},
+                    {icon: "fab fa-youtube", url: "#"},
+                    {icon: "fas fa-atom", url: "#"}
+                ]
+            }
+        ];
+
+        // Show popup function
+        function showPopup(index) {
+            const member = teamMembers[index];
+            document.getElementById('popupPhoto').src = member.photo;
+            document.getElementById('popupPhoto').alt = member.name;
+            document.getElementById('popupName').textContent = member.name;
+            document.getElementById('popupRole').textContent = member.role;
+            document.getElementById('popupBio').textContent = member.bio;
+            
+            // Clear and rebuild social links
+            const socialContainer = document.getElementById('popupSocial');
+            socialContainer.innerHTML = '';
+            member.social.forEach(social => {
+                const link = document.createElement('a');
+                link.href = social.url;
+                link.innerHTML = `<i class="${social.icon}"></i>`;
+                socialContainer.appendChild(link);
+            });
+            
+            // Show popup
+            document.getElementById('popupOverlay').classList.add('active');
+            document.body.style.overflow = 'hidden'; // Prevent scrolling
+        }
+
+        // Close popup function
+        function closePopup() {
+            document.getElementById('popupOverlay').classList.remove('active');
+            document.body.style.overflow = ''; // Re-enable scrolling
+        }
+
+        // Close popup when clicking outside content
+        document.getElementById('popupOverlay').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closePopup();
+            }
+        });
+
+        // Close popup with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && document.getElementById('popupOverlay').classList.contains('active')) {
+                closePopup();
+            }
+        });
+        // Header Scroll Effect
+        window.addEventListener('scroll', function() {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile Menu Toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const nav = document.getElementById('nav');
+        
+        menuToggle.addEventListener('click', function() {
+            nav.classList.toggle('active');
+        });
+
+        // Close menu when clicking on a link
+        const navLinks = document.querySelectorAll('nav ul li a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                nav.classList.remove('active');
+            });
+        });
+
+        // Testimonial Slider
+        const testimonials = document.querySelectorAll('.testimonial');
+        const dots = document.querySelectorAll('.slider-dot');
+        let currentTestimonial = 0;
+        
+        function showTestimonial(index) {
+            testimonials.forEach(testimonial => testimonial.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('active'));
+            
+            testimonials[index].classList.add('active');
+            dots[index].classList.add('active');
+            currentTestimonial = index;
+        }
+        
+        dots.forEach(dot => {
+            dot.addEventListener('click', function() {
+                const index = parseInt(this.getAttribute('data-index'));
+                showTestimonial(index);
+            });
+        });
+        
+        // Auto-rotate testimonials
+        setInterval(() => {
+            currentTestimonial = (currentTestimonial + 1) % testimonials.length;
+            showTestimonial(currentTestimonial);
+        }, 5000);
+
+        // Create floating equations
+        const mathAnimation = document.querySelector('.math-animation');
+        const equations = [
+            "PV=nRT", "sinθ", "cosθ", 
+            "F=G(m₁m₂)/r²", "PV=nRT", "Znso4",
+            "H", "x=(-b±√(b²-4ac))/2a",
+            "DNA", "RNA", "i²=-1"
+        ];
+        
+        function createEquation() {
+            const equation = document.createElement('div');
+            equation.classList.add('equation');
+            equation.textContent = equations[Math.floor(Math.random() * equations.length)];
+            
+            const size = 0.8 + Math.random() * 0.7;
+            equation.style.fontSize = `${size}rem`;
+            
+            const x = Math.random() * 80 + 10;
+            const y = Math.random() * 80 + 10;
+            equation.style.left = `${x}%`;
+            equation.style.top = `${y}%`;
+            
+            const duration = 10 + Math.random() * 20;
+            const delay = Math.random() * 5;
+            equation.style.animation = `equation-float ${duration}s ease-in-out ${delay}s infinite`;
+            
+            equation.style.opacity = 0.3 + Math.random() * 0.5;
+            
+            mathAnimation.appendChild(equation);
+            
+            // Remove old equations to prevent DOM overload
+            if (mathAnimation.children.length > 15) {
+                mathAnimation.removeChild(mathAnimation.children[8]);
+            }
+        }
+        
+        // Create initial equations
+        for (let i = 0; i < 8; i++) {
+            createEquation();
+        }
+        
+        // Add new equations periodically
+        setInterval(createEquation, 3000);
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                      
+                    });
+                }
+            });
+        });
+          // Make floating button draggable
+const floatingBtn = document.getElementById('draggableBtn');
+let isDragging = false;
+let offsetX, offsetY;
+
+// Touch events for mobile
+floatingBtn.addEventListener('touchstart', (e) => {
+    isDragging = true;
+    const touch = e.touches[0];
+    const rect = floatingBtn.getBoundingClientRect();
+    offsetX = touch.clientX - rect.left;
+    offsetY = touch.clientY - rect.top;
+    e.preventDefault();
+});
+
+floatingBtn.addEventListener('touchmove', (e) => {
+    if (!isDragging) return;
+    const touch = e.touches[0];
+    floatingBtn.style.left = `${touch.clientX - offsetX}px`;
+    floatingBtn.style.top = `${touch.clientY - offsetY}px`;
+    floatingBtn.style.right = 'auto';
+    floatingBtn.style.bottom = 'auto';
+    e.preventDefault();
+});
+
+floatingBtn.addEventListener('touchend', () => {
+    isDragging = false;
+});
+
+// Mouse events for desktop
+floatingBtn.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    offsetX = e.clientX - floatingBtn.getBoundingClientRect().left;
+    offsetY = e.clientY - floatingBtn.getBoundingClientRect().top;
+    floatingBtn.style.cursor = 'grabbing';
+    e.preventDefault();
+});
+
+document.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    floatingBtn.style.left = `${e.clientX - offsetX}px`;
+    floatingBtn.style.top = `${e.clientY - offsetY}px`;
+    floatingBtn.style.right = 'auto';
+    floatingBtn.style.bottom = 'auto';
+});
+
+document.addEventListener('mouseup', () => {
+    isDragging = false;
+    floatingBtn.style.cursor = 'grab';
+});
+
+// Prevent default drag behavior
+floatingBtn.addEventListener('dragstart', (e) => {
+    e.preventDefault();
+});
+    </script>
+</body>
+</html>
