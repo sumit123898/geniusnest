@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>App Access Only</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Segoe UI", sans-serif;
+      background-color: #121212;
+      color: #f0f0f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+    }
+
+    .container {
+      background: #1e1e1e;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+      max-width: 90%;
+      width: 400px;
+    }
+
+    h1 {
+      font-size: 1.4rem;
+      margin-bottom: 0.5rem;
+      color: #ffffff;
+    }
+
+    p {
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      color: #cccccc;
+    }
+
+    .sorry {
+      font-weight: bold;
+      color: #ff6b6b;
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+    }
+
+    .download-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 20px;
+      font-size: 1rem;
+      background: #007bff;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: transform 0.3s ease, background 0.3s ease;
+      animation: pulse 2s infinite;
+    }
+
+    .download-btn:hover {
+      transform: scale(1.05);
+      background: #0056b3;
+    }
+
+    .download-btn img {
+      width: 20px;
+      height: 20px;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.07); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="sorry">😔 Sorry! দুঃখিত!</div>
+    <h1>This content is only accessible in the mobile app</h1>
+    <p>এই বিষয়বস্তু শুধুমাত্র মোবাইল অ্যাপে ব্যবহারযোগ্য।</p>
+    <a href="https://yourappdownloadlink.com" class="download-btn">
+      <img src="https://img.icons8.com/ios-filled/50/ffffff/download--v1.png" alt="Download Icon" />
+      Download App
+    </a>
+  </div>
+</body>
+</html>
